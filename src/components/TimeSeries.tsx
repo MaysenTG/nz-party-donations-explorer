@@ -135,7 +135,8 @@ export function TimeSeries({ points }: Props) {
         range with no matching donations are left at zero. Only gifts over $20,000 are included, and
         a return can be published after the month the party received the money.
       </figcaption>
-      <table className="visually-hidden">
+      <div className="visually-hidden">
+      <table>
         <caption>Monthly totals for the current filters</caption>
         <thead>
           <tr>
@@ -156,6 +157,7 @@ export function TimeSeries({ points }: Props) {
           ))}
         </tbody>
       </table>
+      </div>
     </figure>
   );
 }

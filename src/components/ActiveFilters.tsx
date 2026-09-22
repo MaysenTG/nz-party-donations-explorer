@@ -27,8 +27,13 @@ export function ActiveFilters({ filters, onChange, onReset }: Props) {
       chips.push({
         key: `party-${party}`,
         label: party,
-        onRemove: () =>
-          onChange({ ...filters, parties: filters.parties.filter((item) => item !== party) }),
+        onRemove: () => {
+          const remaining = filters.parties.filter((item) => item !== party);
+          onChange({
+            ...filters,
+            parties: remaining.length === 0 ? [...ALL_PARTIES] : remaining,
+          });
+        },
       });
     }
     if (selectedParties.length === 0) {

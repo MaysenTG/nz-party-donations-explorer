@@ -18,7 +18,10 @@ const COLUMNS: { key: SortKey; label: string }[] = [
 
 export function DonationsTable({ rows, sort, onSort }: Props) {
   return (
-    <div className="table-scroll">
+    <>
+      <p className="table-hint">On a small screen, scroll the table sideways to see every column.</p>
+      <div className="table-scroll">
+      <div className="table-min">
       <table>
         <caption className="visually-hidden">
           Donations matching the current filters, {rows.length} rows
@@ -73,6 +76,8 @@ export function DonationsTable({ rows, sort, onSort }: Props) {
           })}
         </tbody>
       </table>
+      </div>
     </div>
+    </>
   );
 }
