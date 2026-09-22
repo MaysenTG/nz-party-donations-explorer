@@ -8,9 +8,15 @@ This is not an Electoral Commission website. It does not add, estimate, or merge
 
 https://maysentg.github.io/nz-party-donations-explorer/
 
-GitHub Pages serves the production build from the `main` branch. Each push to `main` runs [`.github/workflows/pages.yml`](.github/workflows/pages.yml), which installs dependencies, runs `npm run build`, and deploys the `dist` folder with GitHub Actions (`actions/upload-pages-artifact` and `actions/deploy-pages`). The same workflow can be started by hand from the Actions tab (“Deploy to GitHub Pages”).
+Publishing uses GitHub Actions, not a `gh-pages` branch. [`.github/workflows/pages.yml`](.github/workflows/pages.yml) runs on every push to `main` (and from the Actions tab, “Deploy to GitHub Pages”). It installs dependencies, runs `npm run build`, uploads `dist` with `actions/upload-pages-artifact`, and publishes it with `actions/deploy-pages`.
 
-The Pages source is GitHub Actions, not a `gh-pages` branch. The app is one page and does not use client-side routes, so a `404.html` fallback is not required. Opening or refreshing the URL above loads the explorer.
+GitHub Pages is not switched on for this repository yet. Creating the site needs repository administration access, and the Actions token is not allowed to do that (`Create Pages site failed: Resource not accessible by integration`). A repository admin needs to set it once:
+
+1. Open **Settings → Pages**.
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+3. Re-run the latest “Deploy to GitHub Pages” workflow, or push any commit to `main`.
+
+After that, pushes to `main` publish the site on their own. The app is a single page with no client-side routes, so a `404.html` fallback is not required. Opening or refreshing the URL above loads the explorer.
 
 ## Run
 
