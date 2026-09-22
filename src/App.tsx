@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { ActiveFilters } from "./components/ActiveFilters.tsx";
 import { DonationsTable } from "./components/DonationsTable.tsx";
 import { Filters } from "./components/Filters.tsx";
-import { HorizontalBars } from "./components/HorizontalBars.tsx";
+import { RankChart } from "./components/RankChart.tsx";
 import { SummaryStrip } from "./components/SummaryStrip.tsx";
 import { TimeSeries } from "./components/TimeSeries.tsx";
 import { donationsToCsv, downloadCsv } from "./lib/csv.ts";
@@ -135,7 +135,7 @@ export default function App() {
                   <h2 id="party-chart-title">Amount by party</h2>
                   <p>Select a bar to show only that party. Select it again to show every party.</p>
                 </div>
-                <HorizontalBars
+                <RankChart
                   items={parties.map((party) => ({
                     id: party.id,
                     label: party.label,
@@ -159,7 +159,7 @@ export default function App() {
                         : "Top 12 donors by total given. The same name is added together."}
                   </p>
                 </div>
-                <HorizontalBars
+                <RankChart
                   items={donors.map((donor) => ({
                     id: donor.id,
                     label: donor.label,

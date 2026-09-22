@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { formatIsoLong } from "../lib/dates.ts";
 import {
   activeFilterCount,
@@ -28,6 +29,9 @@ export function Filters({
 }: Props) {
   const active = activeFilterCount(filters);
   const allSelected = filters.parties.length === ALL_PARTIES.length;
+  const [open, setOpen] = useState(() =>
+    typeof window === "undefined" ? true : window.matchMedia("(min-width: 761px)").matches,
+  );
 
   function toggleParty(party: string) {
     const selected = filters.parties.includes(party)
@@ -37,7 +41,11 @@ export function Filters({
   }
 
   return (
-    <details className="filters" open>
+    <details
+      className="filters"
+      open={open}
+      onToggle={(event) => setOpen(event.currentTarget.open)}
+    >
       <summary>
         <span>Filters</span>
         <span className="summary-meta">
