@@ -4,6 +4,14 @@ Unofficial, single-page visualisation of political party donations exceeding $20
 
 This is not an Electoral Commission website. It does not add, estimate, or merge donations. Every row comes from the Commission’s published returns.
 
+## Live site
+
+https://maysentg.github.io/nz-party-donations-explorer/
+
+GitHub Pages serves the production build from the `main` branch. Each push to `main` runs [`.github/workflows/pages.yml`](.github/workflows/pages.yml), which installs dependencies, runs `npm run build`, and deploys the `dist` folder with GitHub Actions (`actions/upload-pages-artifact` and `actions/deploy-pages`). The same workflow can be started by hand from the Actions tab (“Deploy to GitHub Pages”).
+
+The Pages source is GitHub Actions, not a `gh-pages` branch. The app is one page and does not use client-side routes, so a `404.html` fallback is not required. Opening or refreshing the URL above loads the explorer.
+
 ## Run
 
 Requires Node.js 20 or newer.
@@ -13,13 +21,13 @@ npm install
 npm run dev
 ```
 
-Open the URL Vite prints (usually http://localhost:5173).
+The dev server uses the GitHub Pages project base path. Open http://localhost:5173/nz-party-donations-explorer/ .
 
 Other scripts:
 
 ```bash
 npm run build    # typecheck and production build
-npm run preview  # serve the production build
+npm run preview  # serve the production build at /nz-party-donations-explorer/
 npm run lint
 ```
 
