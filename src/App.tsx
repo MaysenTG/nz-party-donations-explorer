@@ -254,15 +254,36 @@ export default function App() {
                   </div>
                   <ul className="legend">
                     <li>
-                      <i className="swatch swatch-bar" aria-hidden="true" />{" "}
+                      <i
+                        className="swatch swatch-bar"
+                        aria-hidden="true"
+                        style={
+                          focusedParty
+                            ? { background: partyColour(focusedParty) }
+                            : undefined
+                        }
+                      />{" "}
                       {timeSeries.grain === "year" ? "Year" : "Month"}
                     </li>
                     <li>
-                      <i className="swatch swatch-line" aria-hidden="true" /> Cumulative
+                      <i
+                        className="swatch swatch-line"
+                        aria-hidden="true"
+                        style={
+                          focusedParty
+                            ? { background: partyColour(focusedParty) }
+                            : undefined
+                        }
+                      />{" "}
+                      Cumulative
                     </li>
                   </ul>
                 </div>
-                <TimeSeries points={timeSeries.points} grain={timeSeries.grain} />
+                <TimeSeries
+                  points={timeSeries.points}
+                  grain={timeSeries.grain}
+                  colour={focusedParty ? partyColour(focusedParty) : undefined}
+                />
               </section>
 
               <ElectionCycles cycles={ELECTION_CYCLE_SUMMARIES} />
