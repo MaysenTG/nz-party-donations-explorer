@@ -154,10 +154,169 @@ button:disabled {
 }
 
 .summary {
+  margin: 1.4rem 0 1.25rem;
+}
+
+.summary-range {
+  margin: 0 0 0.85rem;
+  color: var(--muted);
+  font-size: 0.98rem;
+  max-width: 70ch;
+}
+
+.summary-range strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.summary-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.75rem;
-  margin: 1.4rem 0 1.25rem;
+}
+
+.year-filter {
+  margin: 1.25rem 0 0;
+  padding: 1rem 1.05rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.year-filter-head h2 {
+  font-size: 1.15rem;
+}
+
+.year-filter-head p {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.year-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+
+.year-chips button {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.year-chips button:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.year-chips button.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.year-filter-note {
+  margin-top: 0.65rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.election-cycles {
+  grid-column: 1 / -1;
+}
+
+.election-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+  margin-top: 0.85rem;
+}
+
+.election-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.9rem 0.95rem 1rem;
+  background: white;
+}
+
+.election-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.election-card-head h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.election-card-head p {
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.winner-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.election-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0 0 0.75rem;
+}
+
+.election-stats div {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+}
+
+.election-stats dt {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.election-stats dd {
+  margin: 0.2rem 0 0;
+  font-weight: 700;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.rank-row.static {
+  cursor: default;
+  width: 100%;
+}
+
+.rank-row.static.is-winner {
+  background: var(--accent-soft);
+}
+
+.rank-row.static:hover,
+.rank-row.static:focus-visible {
+  background: transparent;
+}
+
+.rank-row.static.is-winner:hover,
+.rank-row.static.is-winner:focus-visible {
+  background: var(--accent-soft);
 }
 
 .stat {
@@ -648,11 +807,11 @@ input[type="date"] {
   width: 100%;
   height: 320px;
   min-width: 0;
+  min-height: 320px;
 }
 
-.series .recharts-responsive-container,
-.series .recharts-wrapper {
-  max-width: 100%;
+.series-plot .recharts-wrapper {
+  max-width: none;
 }
 
 .grid-line {
@@ -912,6 +1071,30 @@ input[type="date"] {
   font-size: 0.88rem;
 }
 
+.donations-viewport {
+  max-height: min(28rem, 55vh);
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: white;
+}
+
+.donations-viewport .donation-cards {
+  padding: 0.65rem;
+}
+
+.donations-viewport.table-scroll {
+  overflow: auto;
+}
+
+.donations-viewport thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface);
+  box-shadow: 0 1px 0 var(--line);
+}
+
 .table-scroll {
   display: block;
   width: 100%;
@@ -1009,6 +1192,60 @@ th.num button {
   color: var(--faint);
 }
 
+.table-more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.table-more p,
+.table-more-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.table-more-note {
+  margin-top: 0.85rem;
+}
+
+.more-button {
+  background: transparent;
+  color: var(--accent-ink);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  font-weight: 700;
+}
+
+.more-button:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.scroll-top {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 20;
+  background: var(--accent);
+  color: white;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.65rem 1rem;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+}
+
+.scroll-top:hover {
+  background: var(--accent-ink);
+}
+
 .site-footer {
   border-top: 1px solid var(--line);
   padding: 1.6rem 0 2.5rem;
@@ -1043,12 +1280,12 @@ th.num button {
 
 @media (max-width: 980px) {
   .layout,
-  .chart-grid,
-  .summary {
+  .chart-grid {
     grid-template-columns: 1fr;
   }
 
-  .summary {
+  .summary-grid,
+  .election-stats {
     grid-template-columns: 1fr 1fr;
   }
 
@@ -1086,6 +1323,11 @@ th.num button {
   .summary {
     gap: 0.5rem;
     margin: 0.85rem 0 0.9rem;
+  }
+
+  .summary-grid,
+  .election-stats {
+    grid-template-columns: 1fr;
   }
 
   .stat {
@@ -1171,6 +1413,10 @@ th.num button {
   .bar-fill {
     transition: none;
   }
+
+  .scroll-top {
+    transition: none;
+  }
 }
 
 @media print {
@@ -1181,14 +1427,23 @@ th.num button {
   .filters,
   .skip,
   .export-button,
+  .more-button,
+  .scroll-top,
   .chips {
     display: none !important;
   }
 
   .layout,
   .chart-grid,
-  .summary {
+  .summary-grid,
+  .election-grid {
     display: block;
+  }
+
+  .year-filter,
+  .year-chips,
+  .scroll-top {
+    display: none !important;
   }
 
   .card,

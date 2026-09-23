@@ -119,7 +119,8 @@ export function Filters({
         <fieldset className="field">
           <legend>Party</legend>
           <p className="field-help">
-            Names are shown as published. Similar names are not merged.
+            Common renames and spelling variants are combined (for example Greens, National, ACT, Te
+            Pāti Māori / Māori Party, NZ First, TOP, and Internet Party / Internet MANA).
           </p>
           <div className="inline-actions">
             <button
@@ -216,7 +217,10 @@ export function Filters({
               />
             </label>
           </div>
-          <p className="field-help">Commas are optional. Amounts in this list are over $20,000.</p>
+          <p className="field-help">
+            Commas are optional. Amounts here crossed the Commission’s $20,000 or $30,000 disclosure
+            thresholds.
+          </p>
         </fieldset>
 
         {problem && (

@@ -1,5 +1,5 @@
 import rawDonations from "../data/donations.json";
-import { monthKey, monthLabels, nextMonthKey, nzDateToIso } from "./dates.ts";
+import { formatIsoLong, monthKey, monthLabels, nextMonthKey, nzDateToIso } from "./dates.ts";
 import { classifyDonor } from "./donors.ts";
 import { toCents } from "./format.ts";
 import type {
@@ -12,6 +12,41 @@ import type {
   SortState,
   Summary,
 } from "../types.ts";
+
+/** Same party published under slightly different names in Commission returns. */
+const PARTY_ALIASES: Record<string, string> = {
+  // ACT
+  "The ACT Party": "ACT New Zealand",
+  "The Act Party": "ACT New Zealand",
+
+  // National
+  "New Zealand National Party": "The New Zealand National Party",
+
+  // Greens
+  "The Greens, Green Party": "The Green Party of Aotearoa New Zealand",
+  "The Green Party of Aotearoa NZ": "The Green Party of Aotearoa New Zealand",
+  "Green Party of Aotearoa New Zealand": "The Green Party of Aotearoa New Zealand",
+  "The Green Party of Aotearoa": "The Green Party of Aotearoa New Zealand",
+  "Green Party": "The Green Party of Aotearoa New Zealand",
+
+  // Te Pāti Māori (formerly Māori Party)
+  "Māori Party": "Te Pāti Māori",
+  "Maori Party": "Te Pāti Māori",
+
+  // NZ First
+  "New Zealand First": "New Zealand First Party",
+
+  // TOP
+  "Opportunity Party": "The Opportunities Party",
+  "The Opportunities Party (TOP)": "The Opportunities Party",
+
+  // Internet Party / 2014 Internet MANA alliance returns
+  "Internet MANA": "Internet Party",
+};
+
+export function normalizeParty(party: string): string {
+  return PARTY_ALIASES[party] ?? party;
+}
 
 function isRawDonation(value: unknown): value is RawDonation {
   if (typeof value !== "object" || value === null) return false;
@@ -38,6 +73,7 @@ function loadDonations(value: unknown): Donation[] {
     }
     return {
       ...row,
+      party: normalizeParty(row.party),
       id: String(index),
       receivedIso: nzDateToIso(row.donation_received_date),
       returnIso: nzDateToIso(row.return_received_date),
@@ -61,6 +97,46 @@ export const RECEIVED_MAX = donations.reduce(
   (max, row) => (row.receivedIso > max ? row.receivedIso : max),
   donations[0]?.receivedIso ?? "",
 );
+
+export const ALL_YEARS: string[] = [
+  ...new Set(donations.map((row) => row.receivedIso.slice(0, 4))),
+].sort((a, b) => a.localeCompare(b));
+
+export function yearBounds(year: string): { from: string; to: string } {
+  return { from: `${year}-01-01`, to: `${year}-12-31` };
+}
+
+/** Empty string = all years; null = custom from/to that is not a full calendar year. */
+export function selectedYear(filters: Filters): string | null {
+  if (!filters.from && !filters.to) return "";
+  for (const year of ALL_YEARS) {
+    const bounds = yearBounds(year);
+    if (filters.from === bounds.from && filters.to === bounds.to) return year;
+  }
+  return null;
+}
+
+export function withYearFilter(filters: Filters, year: string): Filters {
+  if (year === "") return { ...filters, from: "", to: "" };
+  const bounds = yearBounds(year);
+  return { ...filters, from: bounds.from, to: bounds.to };
+}
+
+export function filterRangeLabel(filters: Filters): string {
+  const year = selectedYear(filters);
+  const minYear = RECEIVED_MIN.slice(0, 4);
+  const maxYear = RECEIVED_MAX.slice(0, 4);
+  if (year === "") {
+    return minYear === maxYear ? `all of ${minYear}` : `all years ${minYear}–${maxYear}`;
+  }
+  if (year) return year;
+  if (filters.from && filters.to) {
+    return `${formatIsoLong(filters.from)} to ${formatIsoLong(filters.to)}`;
+  }
+  if (filters.from) return `from ${formatIsoLong(filters.from)}`;
+  if (filters.to) return `to ${formatIsoLong(filters.to)}`;
+  return minYear === maxYear ? `all of ${minYear}` : `all years ${minYear}–${maxYear}`;
+}
 
 export function createDefaultFilters(): Filters {
   return {
@@ -242,37 +318,94 @@ export function donorCount(rows: readonly Donation[]): number {
   return new Set(rows.map((row) => row.donor_name)).size;
 }
 
-export function monthlySeries(rows: readonly Donation[]): MonthPoint[] {
-  if (rows.length === 0) return [];
-  const buckets = new Map<string, { cents: number; count: number }>();
-  let min = monthKey(rows[0].receivedIso);
-  let max = min;
-  for (const row of rows) {
-    const key = monthKey(row.receivedIso);
-    if (key < min) min = key;
-    if (key > max) max = key;
-    const current = buckets.get(key) ?? { cents: 0, count: 0 };
-    current.cents += toCents(row.amount);
-    current.count += 1;
-    buckets.set(key, current);
-  }
+const MONTH_SERIES_LIMIT = 24;
 
-  const points: MonthPoint[] = [];
-  let cumulative = 0;
-  for (let key = min; key <= max; key = nextMonthKey(key)) {
-    const bucket = buckets.get(key) ?? { cents: 0, count: 0 };
-    cumulative += bucket.cents;
-    const labels = monthLabels(key);
-    points.push({
+function monthPoint(
+  key: string,
+  bucket: { cents: number; count: number },
+  cumulative: number,
+  grain: "month" | "year",
+): MonthPoint {
+  if (grain === "year") {
+    return {
       key,
-      label: labels.short,
-      fullLabel: labels.full,
+      label: key,
+      fullLabel: key,
       amount: bucket.cents / 100,
       cumulative: cumulative / 100,
       count: bucket.count,
-    });
+    };
   }
-  return points;
+  const [year] = key.split("-").map(Number);
+  const shortMonth = monthLabels(key).short;
+  return {
+    key,
+    label: `${shortMonth} ${String(year).slice(2)}`,
+    fullLabel: monthLabels(key).full,
+    amount: bucket.cents / 100,
+    cumulative: cumulative / 100,
+    count: bucket.count,
+  };
+}
+
+function nextYearKey(year: string): string {
+  return String(Number(year) + 1);
+}
+
+export type DonationSeries = {
+  points: MonthPoint[];
+  grain: "month" | "year";
+};
+
+/** Month bars for short ranges; year bars when the span would be too dense to read. */
+export function donationSeries(rows: readonly Donation[]): DonationSeries {
+  if (rows.length === 0) return { points: [], grain: "month" };
+
+  const monthBuckets = new Map<string, { cents: number; count: number }>();
+  let minMonth = monthKey(rows[0].receivedIso);
+  let maxMonth = minMonth;
+  for (const row of rows) {
+    const key = monthKey(row.receivedIso);
+    if (key < minMonth) minMonth = key;
+    if (key > maxMonth) maxMonth = key;
+    const current = monthBuckets.get(key) ?? { cents: 0, count: 0 };
+    current.cents += toCents(row.amount);
+    current.count += 1;
+    monthBuckets.set(key, current);
+  }
+
+  let monthCount = 0;
+  for (let key = minMonth; key <= maxMonth; key = nextMonthKey(key)) monthCount += 1;
+  const grain: "month" | "year" = monthCount > MONTH_SERIES_LIMIT ? "year" : "month";
+
+  const points: MonthPoint[] = [];
+  let cumulative = 0;
+
+  if (grain === "year") {
+    const yearBuckets = new Map<string, { cents: number; count: number }>();
+    for (const [month, bucket] of monthBuckets) {
+      const year = month.slice(0, 4);
+      const current = yearBuckets.get(year) ?? { cents: 0, count: 0 };
+      current.cents += bucket.cents;
+      current.count += bucket.count;
+      yearBuckets.set(year, current);
+    }
+    const minYear = minMonth.slice(0, 4);
+    const maxYear = maxMonth.slice(0, 4);
+    for (let year = minYear; year <= maxYear; year = nextYearKey(year)) {
+      const bucket = yearBuckets.get(year) ?? { cents: 0, count: 0 };
+      cumulative += bucket.cents;
+      points.push(monthPoint(year, bucket, cumulative, "year"));
+    }
+  } else {
+    for (let key = minMonth; key <= maxMonth; key = nextMonthKey(key)) {
+      const bucket = monthBuckets.get(key) ?? { cents: 0, count: 0 };
+      cumulative += bucket.cents;
+      points.push(monthPoint(key, bucket, cumulative, "month"));
+    }
+  }
+
+  return { points, grain };
 }
 
 export function partyCounts(rows: readonly Donation[]): Record<string, number> {

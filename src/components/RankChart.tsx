@@ -1,4 +1,5 @@
 import { formatCompactNzd, formatNzd } from "../lib/format.ts";
+import { darkenColour } from "../lib/parties.ts";
 import { axisTicks } from "../lib/scale.ts";
 
 export type RankItem = {
@@ -6,6 +7,7 @@ export type RankItem = {
   label: string;
   value: number;
   meta: string;
+  colour?: string;
 };
 
 type Props = {
@@ -28,6 +30,11 @@ export function RankChart({ items, pressedId, onSelect, empty }: Props) {
         {items.map((item) => {
           const width = top === 0 ? 0 : Math.max((item.value / top) * 100, item.value > 0 ? 1.2 : 0);
           const pressed = item.id === pressedId;
+          const fill = item.colour
+            ? pressed
+              ? darkenColour(item.colour, 0.28)
+              : item.colour
+            : undefined;
           return (
             <li key={item.id}>
               <button
@@ -42,7 +49,13 @@ export function RankChart({ items, pressedId, onSelect, empty }: Props) {
                 </span>
                 <span className="rank-plot">
                   <span className="rank-track" aria-hidden="true">
-                    <span className="rank-fill" style={{ width: `${width}%` }} />
+                    <span
+                      className="rank-fill"
+                      style={{
+                        width: `${width}%`,
+                        ...(fill ? { background: fill } : {}),
+                      }}
+                    />
                   </span>
                   <span className="rank-value">
                     {formatCompactNzd(item.value)}
