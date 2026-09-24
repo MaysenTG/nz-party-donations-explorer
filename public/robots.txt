@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://maysentg.github.io/nz-party-donations-explorer/sitemap.xml

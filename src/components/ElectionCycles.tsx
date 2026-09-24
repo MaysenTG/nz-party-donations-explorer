@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function ElectionCycles({ cycles }: Props) {
-  const [openYear, setOpenYear] = useState(
+  const [openYear, setOpenYear] = useState<number | null>(
     () => cycles[cycles.length - 1]?.cycle.year ?? null,
   );
 
