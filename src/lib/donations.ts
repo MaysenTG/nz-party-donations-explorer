@@ -14,7 +14,7 @@ import type {
 } from "../types.ts";
 
 /** Same party published under slightly different names in Commission returns. */
-const PARTY_ALIASES: Record<string, string> = {
+export const PARTY_ALIASES: Record<string, string> = {
   // ACT
   "The ACT Party": "ACT New Zealand",
   "The Act Party": "ACT New Zealand",
@@ -43,6 +43,27 @@ const PARTY_ALIASES: Record<string, string> = {
   // Internet Party / 2014 Internet MANA alliance returns
   "Internet MANA": "Internet Party",
 };
+
+export type PartyMergeGroup = {
+  canonical: string;
+  aliases: string[];
+};
+
+/** Alias map grouped by canonical party name for display. */
+export function partyMergeGroups(): PartyMergeGroup[] {
+  const groups = new Map<string, string[]>();
+  for (const [alias, canonical] of Object.entries(PARTY_ALIASES)) {
+    const list = groups.get(canonical) ?? [];
+    list.push(alias);
+    groups.set(canonical, list);
+  }
+  return [...groups.entries()]
+    .map(([canonical, aliases]) => ({
+      canonical,
+      aliases: aliases.sort((a, b) => a.localeCompare(b, "en-NZ")),
+    }))
+    .sort((a, b) => a.canonical.localeCompare(b.canonical, "en-NZ"));
+}
 
 export function normalizeParty(party: string): string {
   return PARTY_ALIASES[party] ?? party;

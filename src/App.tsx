@@ -4,6 +4,7 @@ import { DonationsTable } from "./components/DonationsTable.tsx";
 import { ElectionCycles } from "./components/ElectionCycles.tsx";
 import { ExploreBar } from "./components/ExploreBar.tsx";
 import { Filters } from "./components/Filters.tsx";
+import { PartyMergesModal } from "./components/PartyMergesModal.tsx";
 import { RankChart } from "./components/RankChart.tsx";
 import { ScrollToTop } from "./components/ScrollToTop.tsx";
 import { TimeSeries } from "./components/TimeSeries.tsx";
@@ -61,6 +62,7 @@ function focusDonor(filters: FilterState, name: string): FilterState {
 export default function App() {
   const [filters, setFilters] = useState<FilterState>(createDefaultFilters);
   const [sort, setSort] = useState<SortState>({ key: "date", dir: "desc" });
+  const [mergesOpen, setMergesOpen] = useState(false);
 
   const problem = filterProblem(filters);
   const filtered = useMemo(() => applyFilters(donations, filters), [filters]);
@@ -324,8 +326,25 @@ export default function App() {
             <a href={SOURCE_30K_URL} target="_blank" rel="noopener noreferrer">
               page for donations exceeding $30,000
             </a>
-            . Each row is one declared return. Duplicates across sources are removed; published
-            party-name variants are combined where they are the same organisation.
+            . Each row is one declared return. Duplicate rows that appear in both source lists are
+            removed.
+          </p>
+          <p>
+            <strong>Party names:</strong> Commission returns sometimes use slightly different labels
+            for the same organisation. Those variants are consolidated so charts and filters treat
+            them as one party — for example ACT (“The ACT Party” / “The Act Party”), National
+            (“New Zealand National Party”), Greens (several short forms), NZ First (“New Zealand
+            First”), Te Pāti Māori (including older “Māori Party” / “Maori Party” wording), and The
+            Opportunities Party (including “Opportunity Party” and “TOP”). Returns labelled
+            “Internet MANA” (the 2014 Internet Party–Mana alliance) are grouped with the Internet
+            Party. Other party names are left as published.{" "}
+            <button
+              type="button"
+              className="text-button"
+              onClick={() => setMergesOpen(true)}
+            >
+              View merge list
+            </button>
           </p>
           <p>
             <strong>Why 2023–2025 look empty:</strong> the scraped sources cover the $30,000 list
@@ -349,6 +368,7 @@ export default function App() {
           </p>
         </div>
       </footer>
+      <PartyMergesModal open={mergesOpen} onClose={() => setMergesOpen(false)} />
       <ScrollToTop />
     </>
   );
