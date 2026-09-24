@@ -1,15 +1,12 @@
 import { useMemo, useState } from "react";
 import { ActiveFilters } from "./components/ActiveFilters.tsx";
-import { DataCoverageNotice } from "./components/DataCoverageNotice.tsx";
 import { DonationsTable } from "./components/DonationsTable.tsx";
 import { ElectionCycles } from "./components/ElectionCycles.tsx";
+import { ExploreBar } from "./components/ExploreBar.tsx";
 import { Filters } from "./components/Filters.tsx";
 import { RankChart } from "./components/RankChart.tsx";
 import { ScrollToTop } from "./components/ScrollToTop.tsx";
-import { SectionJump } from "./components/SectionJump.tsx";
-import { SummaryStrip } from "./components/SummaryStrip.tsx";
 import { TimeSeries } from "./components/TimeSeries.tsx";
-import { YearFilter } from "./components/YearFilter.tsx";
 import { donationsToCsv, downloadCsv } from "./lib/csv.ts";
 import { formatIsoLong } from "./lib/dates.ts";
 import {
@@ -108,10 +105,8 @@ export default function App() {
           <p className="eyebrow">Elections NZ disclosures · unofficial view</p>
           <h1>Declared party donations</h1>
           <p className="lede">
-            Political party donations declared to the Electoral Commission: gifts exceeding $20,000
-            under the current rules, plus earlier returns for donations exceeding $30,000
-            (2011–2022) and the older $20,000 threshold (2008–2010). Smaller gifts are not included,
-            and nothing here is estimated or added.
+            Large gifts declared to the Electoral Commission — above today’s $20,000 threshold, plus
+            earlier $30,000 returns. Smaller gifts are not included.
           </p>
           <p className="source-line">
             <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
@@ -129,10 +124,14 @@ export default function App() {
       </header>
 
       <main className="wrap">
-        <SectionJump />
-        <YearFilter filters={filters} onChange={setFilters} />
-        <DataCoverageNotice />
-        <SummaryStrip summary={summary} overall={OVERALL} rangeLabel={rangeLabel} />
+        <ExploreBar
+          filters={filters}
+          summary={summary}
+          overall={OVERALL}
+          rangeLabel={rangeLabel}
+          onChange={setFilters}
+        />
+
         <div className="layout">
           <Filters
             filters={filters}
@@ -154,7 +153,7 @@ export default function App() {
               <section className="card" aria-labelledby="party-chart-title">
                 <div className="card-head">
                   <h2 id="party-chart-title">Amount by party</h2>
-                  <p>Select a bar to show only that party. Select it again to show every party.</p>
+                  <p>Select a bar to focus one party; select again to clear.</p>
                 </div>
                 <RankChart
                   items={parties.map((party) => ({
@@ -175,10 +174,10 @@ export default function App() {
                   <h2 id="donor-chart-title">Largest donors</h2>
                   <p>
                     {donors.length === 0
-                      ? "Donor totals update with the filters."
+                      ? "Updates with the filters."
                       : donors.length < 12
-                        ? `All ${formatCount(donors.length)} donors in the current filters, by total given.`
-                        : "Top 12 donors by exact published name. Select a name to search for it — including gifts listed via a trust or similar wording."}
+                        ? `All ${formatCount(donors.length)} donors in range.`
+                        : "Top 12 by exact published name. Select to search."}
                   </p>
                 </div>
                 <RankChart
@@ -196,61 +195,15 @@ export default function App() {
                 />
                 {focusedDonor && (
                   <p className="chart-note">
-                    Filtering to text containing “{focusedDonor}” in the donor name or address. That
-                    can include the same person giving personally and through a trust or company
-                    where the published wording still contains this name. Chart bars above only add
-                    up identical name strings.
+                    Searching names and addresses containing “{focusedDonor}”. Chart bars only total
+                    identical name strings.
                   </p>
                 )}
                 {!focusedDonor && hiddenDonors > 0 && (
                   <p className="chart-note">
-                    {formatCount(hiddenDonors)} other {hiddenDonors === 1 ? "donor is" : "donors are"}{" "}
-                    not shown. Search or export the table for the full filtered list.
+                    {formatCount(hiddenDonors)} other{" "}
+                    {hiddenDonors === 1 ? "donor is" : "donors are"} in the table below.
                   </p>
-                )}
-              </section>
-
-              <section className="card wide table-card" aria-labelledby="table-title">
-                <div className="toolbar">
-                  <div>
-                    <h2 id="table-title">Donations</h2>
-                    <p aria-live="polite">
-                      Showing {formatCount(filtered.length)} of {formatCount(donations.length)}{" "}
-                      donations
-                      {" · "}
-                      {rangeLabel}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    className="export-button"
-                    onClick={exportCsv}
-                    disabled={sorted.length === 0}
-                  >
-                    Export CSV
-                  </button>
-                </div>
-                {sorted.length === 0 ? (
-                  <div className="empty">
-                    <h3>No donations match</h3>
-                    <p>
-                      {problem ??
-                        "Nothing in the published returns matches these filters. Widen the dates or amounts, or reset to the full list."}
-                    </p>
-                    <button
-                      type="button"
-                      className="reset-button"
-                      onClick={() => setFilters(createDefaultFilters())}
-                    >
-                      Reset filters
-                    </button>
-                  </div>
-                ) : (
-                  <DonationsTable
-                    rows={sorted}
-                    sort={sort}
-                    onSort={(key) => setSort((current) => nextSort(current, key))}
-                  />
                 )}
               </section>
 
@@ -259,9 +212,8 @@ export default function App() {
                   <div>
                     <h2 id="time-title">Donations over time</h2>
                     <p>
-                      {timeSeries.grain === "year"
-                        ? "Grouped by the year the party received the donation (longer ranges use years so the chart stays readable)."
-                        : "Grouped by the month the party received the donation."}
+                      By {timeSeries.grain === "year" ? "year" : "month"} received
+                      {timeSeries.grain === "year" ? " (longer ranges use years)" : ""}.
                     </p>
                   </div>
                   <ul className="legend">
@@ -299,6 +251,48 @@ export default function App() {
               </section>
 
               <ElectionCycles cycles={ELECTION_CYCLE_SUMMARIES} />
+
+              <section className="card wide table-card" aria-labelledby="table-title">
+                <div className="toolbar">
+                  <div>
+                    <h2 id="table-title">All matching donations</h2>
+                    <p aria-live="polite">
+                      {formatCount(filtered.length)} of {formatCount(donations.length)} ·{" "}
+                      {rangeLabel}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="export-button"
+                    onClick={exportCsv}
+                    disabled={sorted.length === 0}
+                  >
+                    Export CSV
+                  </button>
+                </div>
+                {sorted.length === 0 ? (
+                  <div className="empty">
+                    <h3>No donations match</h3>
+                    <p>
+                      {problem ??
+                        "Nothing matches these filters. Widen the dates or amounts, or reset."}
+                    </p>
+                    <button
+                      type="button"
+                      className="reset-button"
+                      onClick={() => setFilters(createDefaultFilters())}
+                    >
+                      Reset filters
+                    </button>
+                  </div>
+                ) : (
+                  <DonationsTable
+                    rows={sorted}
+                    sort={sort}
+                    onSort={(key) => setSort((current) => nextSort(current, key))}
+                  />
+                )}
+              </section>
             </div>
           </div>
         </div>
@@ -308,7 +302,7 @@ export default function App() {
         <div className="wrap">
           <h2>About this page</h2>
           <p>
-            This is an unofficial visualisation of public disclosures. The figures come from the{" "}
+            Unofficial visualisation of public disclosures from the{" "}
             <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
               Electoral Commission page for donations exceeding $20,000
             </a>{" "}
@@ -316,15 +310,19 @@ export default function App() {
             <a href={SOURCE_30K_URL} target="_blank" rel="noopener noreferrer">
               page for donations exceeding $30,000
             </a>
-            . Each row is one declared return, with the party name, donor, amount, and dates taken
-            from those pages. Duplicate rows across the two sources are removed. Published party-name
-            variants are combined where they are the same organisation (for example National, Greens,
-            ACT, Te Pāti Māori / Māori Party, NZ First, TOP, and Internet Party / Internet MANA).
+            . Each row is one declared return. Duplicates across sources are removed; published
+            party-name variants are combined where they are the same organisation.
           </p>
           <p>
-            The list only covers donations that crossed the Commission’s disclosure thresholds. It
-            is not a full account of party income. The donor-type control is a heuristic based on
-            words in the donor name. PDF links open the Commission’s own return where one was
+            <strong>Why 2023–2025 look empty:</strong> the scraped sources cover the $30,000 list
+            (mainly 2011–2022, plus older 2008–2010 disclosures) and the current $20,000 continuous
+            disclosures for the 2026 election-year period. Those middle years are not in the source
+            files — not because nothing was given. Under today’s rules, continuous $20,000
+            disclosures are mainly required in election years.
+          </p>
+          <p>
+            Only donations above the Commission’s thresholds appear here — not full party income.
+            Donor type is a name-based heuristic. PDF links open the Commission’s return where
             published. Party colours follow the{" "}
             <a
               href="https://en.wikipedia.org/wiki/Wikipedia:Index_of_New_Zealand_political_party_meta_attributes"
