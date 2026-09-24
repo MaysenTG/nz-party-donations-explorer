@@ -14,7 +14,7 @@ function Context({ current, overall }: { current: string; overall: string }) {
 
 export function SummaryStrip({ summary, overall, rangeLabel }: Props) {
   return (
-    <section className="summary" aria-label="Summary of donations matching the filters">
+    <section className="summary" id="summary" aria-label="Summary of donations matching the filters">
       <p className="summary-range">
         Totals below include every matching donation received in <strong>{rangeLabel}</strong>
         {summary.donations === overall.donations

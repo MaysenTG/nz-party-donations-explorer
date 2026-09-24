@@ -77,7 +77,10 @@ export function Filters({
               </button>
             )}
           </div>
-          <p className="field-help">Matches the donor name and address.</p>
+          <p className="field-help">
+            Matches text in the donor name or address. Selecting a donor from the chart uses the same
+            search, so related wording (for example “via … Trust”) is included on purpose.
+          </p>
         </div>
 
         <fieldset className="field">

@@ -1,10 +1,12 @@
 import { useMemo, useState } from "react";
 import { ActiveFilters } from "./components/ActiveFilters.tsx";
+import { DataCoverageNotice } from "./components/DataCoverageNotice.tsx";
 import { DonationsTable } from "./components/DonationsTable.tsx";
 import { ElectionCycles } from "./components/ElectionCycles.tsx";
 import { Filters } from "./components/Filters.tsx";
 import { RankChart } from "./components/RankChart.tsx";
 import { ScrollToTop } from "./components/ScrollToTop.tsx";
+import { SectionJump } from "./components/SectionJump.tsx";
 import { SummaryStrip } from "./components/SummaryStrip.tsx";
 import { TimeSeries } from "./components/TimeSeries.tsx";
 import { YearFilter } from "./components/YearFilter.tsx";
@@ -127,7 +129,9 @@ export default function App() {
       </header>
 
       <main className="wrap">
+        <SectionJump />
         <YearFilter filters={filters} onChange={setFilters} />
+        <DataCoverageNotice />
         <SummaryStrip summary={summary} overall={OVERALL} rangeLabel={rangeLabel} />
         <div className="layout">
           <Filters
@@ -174,7 +178,7 @@ export default function App() {
                       ? "Donor totals update with the filters."
                       : donors.length < 12
                         ? `All ${formatCount(donors.length)} donors in the current filters, by total given.`
-                        : "Top 12 donors by total given. The same name is added together."}
+                        : "Top 12 donors by exact published name. Select a name to search for it — including gifts listed via a trust or similar wording."}
                   </p>
                 </div>
                 <RankChart
@@ -190,7 +194,15 @@ export default function App() {
                   onSelect={(id) => setFilters((current) => focusDonor(current, id))}
                   empty="No donors in the current filters."
                 />
-                {hiddenDonors > 0 && (
+                {focusedDonor && (
+                  <p className="chart-note">
+                    Filtering to text containing “{focusedDonor}” in the donor name or address. That
+                    can include the same person giving personally and through a trust or company
+                    where the published wording still contains this name. Chart bars above only add
+                    up identical name strings.
+                  </p>
+                )}
+                {!focusedDonor && hiddenDonors > 0 && (
                   <p className="chart-note">
                     {formatCount(hiddenDonors)} other {hiddenDonors === 1 ? "donor is" : "donors are"}{" "}
                     not shown. Search or export the table for the full filtered list.
@@ -292,7 +304,7 @@ export default function App() {
         </div>
       </main>
 
-      <footer className="site-footer">
+      <footer className="site-footer" id="about">
         <div className="wrap">
           <h2>About this page</h2>
           <p>

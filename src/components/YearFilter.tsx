@@ -10,7 +10,7 @@ export function YearFilter({ filters, onChange }: Props) {
   const current = selectedYear(filters);
 
   return (
-    <section className="year-filter" aria-label="Filter by year received">
+    <section className="year-filter" id="year-filter" aria-label="Filter by year received">
       <div className="year-filter-head">
         <h2>Year received</h2>
         <p>Quick filter by the calendar year the party received the donation.</p>
