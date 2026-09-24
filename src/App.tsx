@@ -30,6 +30,7 @@ import { ELECTION_CYCLE_SUMMARIES } from "./lib/elections.ts";
 import { formatCount, formatShare } from "./lib/format.ts";
 import { partyColour } from "./lib/parties.ts";
 import {
+  DONATIONS_JSON_URL,
   SOURCE_30K_LABEL,
   SOURCE_30K_URL,
   SOURCE_LABEL,
@@ -196,7 +197,10 @@ export default function App() {
                 {focusedDonor && (
                   <p className="chart-note">
                     Searching names and addresses containing “{focusedDonor}”. Chart bars only total
-                    identical name strings.
+                    identical name strings.{" "}
+                    <a className="chart-note-link" href="#table-title">
+                      View matching donations
+                    </a>
                   </p>
                 )}
                 {!focusedDonor && hiddenDonors > 0 && (
@@ -261,14 +265,24 @@ export default function App() {
                       {rangeLabel}
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    className="export-button"
-                    onClick={exportCsv}
-                    disabled={sorted.length === 0}
-                  >
-                    Export CSV
-                  </button>
+                  <div className="toolbar-actions">
+                    <a
+                      className="data-link"
+                      href={DONATIONS_JSON_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View raw data
+                    </a>
+                    <button
+                      type="button"
+                      className="export-button"
+                      onClick={exportCsv}
+                      disabled={sorted.length === 0}
+                    >
+                      Export CSV
+                    </button>
+                  </div>
                 </div>
                 {sorted.length === 0 ? (
                   <div className="empty">

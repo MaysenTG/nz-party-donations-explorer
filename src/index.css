@@ -1014,6 +1014,17 @@ input[type="date"] {
   margin-top: 0.55rem;
 }
 
+.chart-note-link {
+  color: var(--accent-ink);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.chart-note-link:hover {
+  color: var(--accent);
+}
+
 .rank-chart {
   margin: 0;
 }
@@ -1202,6 +1213,30 @@ input[type="date"] {
   gap: 1rem;
   align-items: flex-end;
   margin-bottom: 0.8rem;
+}
+
+.toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.data-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: white;
+  color: var(--accent-ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.data-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
 }
 
 .toolbar p {
@@ -1482,6 +1517,10 @@ th.num button {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .toolbar-actions {
+    justify-content: flex-start;
   }
 
   .segment {
