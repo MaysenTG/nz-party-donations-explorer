@@ -67,7 +67,7 @@ export function DonationsTable({ rows, sort, onSort }: Props) {
     remaining > 0 ? (
       <div className="table-more">
         <p>
-          Showing {formatCount(visibleRows.length)} of {formatCount(rows.length)} matching donations
+          Showing {formatCount(visibleRows.length)} of {formatCount(rows.length)}
         </p>
         <button
           type="button"
@@ -79,7 +79,7 @@ export function DonationsTable({ rows, sort, onSort }: Props) {
       </div>
     ) : rows.length > PAGE_SIZE ? (
       <p className="table-more-note">
-        Showing all {formatCount(rows.length)} matching donations
+        Showing all {formatCount(rows.length)}
       </p>
     ) : null;
 

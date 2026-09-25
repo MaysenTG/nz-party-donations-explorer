@@ -1,4 +1,12 @@
+import donorBlurbs from "../data/donorBlurbs.json";
 import type { DonorType } from "../types.ts";
+
+const BLURBS = donorBlurbs as Record<string, string>;
+
+/** Short note for well-known top donors (exact published name). */
+export function donorBlurb(name: string): string | undefined {
+  return BLURBS[name];
+}
 
 /** Words that mark a donor name as an organisation. Matching is case-insensitive. */
 export const ORGANISATION_TERMS = [

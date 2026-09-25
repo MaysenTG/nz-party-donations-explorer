@@ -58,9 +58,8 @@ export function PartyMergesModal({ open, onClose }: Props) {
           </button>
         </div>
         <p className="modal-lede">
-          Exact published labels from Commission returns are mapped to one canonical party name
-          before charts and filters run. Only these listed variants are merged; everything else
-          stays as published.
+          Published labels from Commission returns map to one party name before charts and filters
+          run. Only the variants listed here are merged; everything else stays as published.
         </p>
         <ul className="merge-groups">
           {GROUPS.map((group) => (
@@ -81,8 +80,8 @@ export function PartyMergesModal({ open, onClose }: Props) {
           ))}
         </ul>
         <p className="modal-note">
-          Internet MANA was the 2014 Internet Party–Mana electoral alliance; those returns are
-          grouped under Internet Party for this explorer.
+          Internet MANA was the 2014 Internet Party–Mana alliance; those returns are grouped under
+          Internet Party.
         </p>
       </div>
     </div>

@@ -2,6 +2,7 @@ import rawDonations from "../data/donations.json";
 import { formatIsoLong, monthKey, monthLabels, nextMonthKey, nzDateToIso } from "./dates.ts";
 import { classifyDonor } from "./donors.ts";
 import { toCents } from "./format.ts";
+import { hasParliamentarySeats } from "./partyMeta.ts";
 import type {
   Donation,
   DonorTotal,
@@ -168,6 +169,8 @@ export function createDefaultFilters(): Filters {
     maxAmount: "",
     query: "",
     donorType: "all",
+    excludedDonors: [],
+    hideExtraParliamentary: false,
   };
 }
 
@@ -182,7 +185,9 @@ export function filtersAreDefault(filters: Filters): boolean {
     filters.minAmount.trim() === "" &&
     filters.maxAmount.trim() === "" &&
     filters.query.trim() === "" &&
-    filters.donorType === "all"
+    filters.donorType === "all" &&
+    filters.excludedDonors.length === 0 &&
+    !filters.hideExtraParliamentary
   );
 }
 
@@ -200,6 +205,8 @@ export function activeFilterCount(filters: Filters): number {
   if (filters.maxAmount.trim()) count += 1;
   if (filters.query.trim()) count += 1;
   if (filters.donorType !== "all") count += 1;
+  if (filters.excludedDonors.length > 0) count += 1;
+  if (filters.hideExtraParliamentary) count += 1;
   return count;
 }
 
@@ -218,14 +225,14 @@ export function filterProblem(filters: Filters): string | null {
     return "Select at least one party.";
   }
   if (filters.from && filters.to && filters.from > filters.to) {
-    return "The start date is after the end date.";
+    return "Start date is after end date.";
   }
   const min = parseBound(filters.minAmount);
   const max = parseBound(filters.maxAmount);
   if (!min.ok) return "Minimum amount must be a number.";
   if (!max.ok) return "Maximum amount must be a number.";
   if (min.value !== null && max.value !== null && min.value > max.value) {
-    return "The minimum amount is greater than the maximum.";
+    return "Minimum is greater than maximum.";
   }
   return null;
 }
@@ -255,9 +262,12 @@ export function applyFilters(
   const maxValue = max.ok ? max.value : null;
   const query = filters.query.trim().toLowerCase();
   const parties = new Set(filters.parties);
+  const excludedDonors = new Set(filters.excludedDonors);
 
   return rows.filter((row) => {
     if (!ignore.party && !parties.has(row.party)) return false;
+    if (filters.hideExtraParliamentary && !hasParliamentarySeats(row.party)) return false;
+    if (excludedDonors.has(row.donor_name)) return false;
     if (!ignore.donorType && filters.donorType !== "all" && row.donorType !== filters.donorType) {
       return false;
     }
@@ -310,7 +320,7 @@ export function partyTotals(rows: readonly Donation[]): PartyTotal[] {
     .sort((a, b) => b.value - a.value || a.label.localeCompare(b.label, "en-NZ"));
 }
 
-export function topDonors(rows: readonly Donation[], limit = 12): DonorTotal[] {
+export function topDonors(rows: readonly Donation[], limit = 15): DonorTotal[] {
   const buckets = new Map<string, { cents: number; count: number; parties: Set<string> }>();
   for (const row of rows) {
     const current = buckets.get(row.donor_name) ?? {

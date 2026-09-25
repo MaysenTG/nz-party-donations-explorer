@@ -62,7 +62,7 @@ export function ExploreBar({ filters, summary, overall, rangeLabel, onChange }: 
         </div>
         {current === null && (
           <p className="year-filter-note">
-            A custom date range is active. Pick a year above, or All years, to replace it.
+            Custom date range active. Pick a year or All years to replace it.
           </p>
         )}
       </div>

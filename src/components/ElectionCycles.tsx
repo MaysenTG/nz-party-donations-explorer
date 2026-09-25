@@ -23,7 +23,7 @@ export function ElectionCycles({ cycles }: Props) {
       <div className="card-head">
         <h2 id="election-cycles-title">Election cycles</h2>
         <p>
-          Disclosed large donations from the day after the previous election through election day —
+          Large disclosed donations from the day after the previous election through election day —
           not full campaign funding.
         </p>
       </div>
@@ -56,7 +56,7 @@ export function ElectionCycles({ cycles }: Props) {
                     <span className="election-summary-gov">{cycle.government}</span>
                     <span className="election-summary-meta">
                       {total === 0
-                        ? "No disclosed returns in this dataset"
+                        ? "No disclosed returns in this data"
                         : `${formatCompactNzd(winnerTotal)} to ${cycle.winnerLabel} · ${
                             hadMostDonations
                               ? "most disclosed"
@@ -81,7 +81,7 @@ export function ElectionCycles({ cycles }: Props) {
               <div className="election-detail" hidden={!isOpen}>
                   <dl className="election-stats">
                     <div>
-                      <dt>Winner’s disclosed large donations</dt>
+                      <dt>Winner’s disclosed large gifts</dt>
                       <dd>{formatNzd(winnerTotal)}</dd>
                     </div>
                     <div>
@@ -102,7 +102,7 @@ export function ElectionCycles({ cycles }: Props) {
 
                   {topParties.length === 0 ? (
                     <p className="empty-inline">
-                      No disclosed returns in this dataset fall inside this campaign cycle.
+                      No disclosed returns in this data fall in this campaign cycle.
                     </p>
                   ) : (
                     <figure className="rank-chart election-rank">

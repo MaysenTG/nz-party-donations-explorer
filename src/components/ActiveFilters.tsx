@@ -75,7 +75,7 @@ export function ActiveFilters({ filters, onChange, onReset }: Props) {
   if (filters.query.trim()) {
     chips.push({
       key: "query",
-      label: `Name/address contains “${filters.query.trim()}”`,
+      label: `Contains “${filters.query.trim()}”`,
       onRemove: () => onChange({ ...filters, query: "" }),
     });
   }
@@ -91,6 +91,24 @@ export function ActiveFilters({ filters, onChange, onReset }: Props) {
       key: "type",
       label: "Organisations",
       onRemove: () => onChange({ ...filters, donorType: "all" }),
+    });
+  }
+  if (filters.hideExtraParliamentary) {
+    chips.push({
+      key: "extra-parliamentary",
+      label: "Parliamentary parties only",
+      onRemove: () => onChange({ ...filters, hideExtraParliamentary: false }),
+    });
+  }
+  for (const name of filters.excludedDonors) {
+    chips.push({
+      key: `exclude-${name}`,
+      label: `Excluded ${name}`,
+      onRemove: () =>
+        onChange({
+          ...filters,
+          excludedDonors: filters.excludedDonors.filter((item) => item !== name),
+        }),
     });
   }
 

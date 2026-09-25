@@ -27,6 +27,10 @@ export type Filters = {
   maxAmount: string;
   query: string;
   donorType: DonorTypeFilter;
+  /** Exact published donor names to omit from results. */
+  excludedDonors: string[];
+  /** Drop parties that currently hold no seats in Parliament. */
+  hideExtraParliamentary: boolean;
 };
 
 export type SortKey = "party" | "donor" | "amount" | "date";

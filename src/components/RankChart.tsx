@@ -7,6 +7,7 @@ export type RankItem = {
   label: string;
   value: number;
   meta: string;
+  blurb?: string;
   colour?: string;
 };
 
@@ -45,6 +46,7 @@ export function RankChart({ items, pressedId, onSelect, empty }: Props) {
               >
                 <span className="rank-copy">
                   <span className="rank-label">{item.label}</span>
+                  {item.blurb && <span className="rank-blurb">{item.blurb}</span>}
                   <span className="rank-meta">{item.meta}</span>
                 </span>
                 <span className="rank-plot">
@@ -82,7 +84,7 @@ export function RankChart({ items, pressedId, onSelect, empty }: Props) {
         </span>
         <span className="rank-scale-value" />
       </div>
-      <figcaption className="chart-note">Amounts in New Zealand dollars.</figcaption>
+      <figcaption className="chart-note">Amounts in NZD.</figcaption>
     </figure>
   );
 }
