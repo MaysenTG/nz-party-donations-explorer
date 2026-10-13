@@ -3,8 +3,8 @@ import type { DonorTypeFilter, Filters } from "../types.ts";
 
 const ISO = /^\d{4}-\d{2}-\d{2}$/;
 
-/** Read filters (and an open donor) from the page URL query string. */
-export function readUrlState(search: string): { filters: Filters; donor: string | null } {
+/** Read filters from the page URL query string. Donor names are never stored in the URL. */
+export function readUrlState(search: string): { filters: Filters } {
   const params = new URLSearchParams(search);
   const filters = createDefaultFilters();
   const parties = params.getAll("party").filter((party) => ALL_PARTIES.includes(party));
@@ -15,14 +15,15 @@ export function readUrlState(search: string): { filters: Filters; donor: string 
   if (to && ISO.test(to)) filters.to = to;
   filters.minAmount = params.get("min") ?? "";
   filters.maxAmount = params.get("max") ?? "";
-  filters.query = params.get("q") ?? "";
   const type = params.get("type");
   if (type === "individual" || type === "organisation") filters.donorType = type as DonorTypeFilter;
   filters.hideExtraParliamentary = params.get("seats") === "1";
-  return { filters, donor: params.get("donor") };
+  filters.includeReturned = params.get("returned") === "1";
+  // Older links may carry a donor name; it is ignored and dropped on the next URL update.
+  return { filters };
 }
 
-export function writeUrlState(filters: Filters, donor: string | null): string {
+export function writeUrlState(filters: Filters): string {
   const params = new URLSearchParams();
   const allParties =
     filters.parties.length === ALL_PARTIES.length &&
@@ -32,10 +33,10 @@ export function writeUrlState(filters: Filters, donor: string | null): string {
   if (filters.to) params.set("to", filters.to);
   if (filters.minAmount.trim()) params.set("min", filters.minAmount.trim());
   if (filters.maxAmount.trim()) params.set("max", filters.maxAmount.trim());
-  if (filters.query.trim()) params.set("q", filters.query.trim());
+  // The donor search box is not written to the URL, so shared links do not carry personal names.
   if (filters.donorType !== "all") params.set("type", filters.donorType);
   if (filters.hideExtraParliamentary) params.set("seats", "1");
-  if (donor) params.set("donor", donor);
+  if (filters.includeReturned) params.set("returned", "1");
   const text = params.toString();
   return text ? `?${text}` : "";
 }

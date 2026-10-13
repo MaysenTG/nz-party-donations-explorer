@@ -13,7 +13,7 @@ function colourFor(party: string): string {
 export function PartyYearChart({ series }: Props) {
   const [ref, width] = useElementWidth<HTMLDivElement>();
   if (series.rows.length === 0) {
-    return <p className="empty-inline">No donations in these filters.</p>;
+    return <p className="empty-inline">No returns in these filters.</p>;
   }
   const narrow = width > 0 && width < 560;
   return (
@@ -60,8 +60,8 @@ export function PartyYearChart({ series }: Props) {
         )}
       </div>
       <figcaption>
-        Amount declared by year received, stacked by party. Years with no published donation table
-        show no bar.
+        Amount declared by the year of each return's latest donation date, stacked by party. Years
+        with no published table (2024 and 2025) show no bar.
       </figcaption>
       <div className="visually-hidden">
         <table>

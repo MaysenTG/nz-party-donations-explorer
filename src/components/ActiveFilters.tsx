@@ -93,6 +93,13 @@ export function ActiveFilters({ filters, onChange, onReset }: Props) {
       onRemove: () => onChange({ ...filters, donorType: "all" }),
     });
   }
+  if (filters.includeReturned) {
+    chips.push({
+      key: "returned",
+      label: "Including returned donations",
+      onRemove: () => onChange({ ...filters, includeReturned: false }),
+    });
+  }
   if (filters.hideExtraParliamentary) {
     chips.push({
       key: "extra-parliamentary",

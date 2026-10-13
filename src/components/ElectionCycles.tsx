@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { formatCompactNzd, formatCount, formatNzd, formatShare } from "../lib/format.ts";
 import type { ElectionCycleSummary } from "../lib/elections.ts";
-import {
-  darkenColour,
-  partyColour,
-  partyColourInk,
-  shortPartyLabel,
-} from "../lib/parties.ts";
 import { axisTicks } from "../lib/scale.ts";
 
 type Props = {
@@ -23,18 +17,17 @@ export function ElectionCycles({ cycles }: Props) {
       <div className="card-head">
         <h2 id="election-cycles-title">Election cycles</h2>
         <p>
-          Large disclosed donations from the day after the previous election through election day —
-          not full campaign funding.
+          Returns with a donation date from the day after the previous election through election
+          day. Donations the party gave back are left out. This is not full campaign funding.
+          Parties are listed by amount disclosed.
         </p>
       </div>
 
       <div className="election-list">
         {cycles.map((summary) => {
-          const { cycle, parties, total, winnerTotal, winnerShare, winnerRank, hadMostDonations } =
-            summary;
-          const winnerColour = partyColour(cycle.winnerLabel);
+          const { cycle, parties, total, rows } = summary;
           const isOpen = openYear === cycle.year;
-          const topParties = parties.slice(0, 6);
+          const topParties = parties;
           const { top, ticks } = axisTicks(
             Math.max(0, ...topParties.map((party) => party.value)),
           );
@@ -53,53 +46,19 @@ export function ElectionCycles({ cycles }: Props) {
                 <span className="election-summary-main">
                   <span className="election-summary-year">{cycle.year}</span>
                   <span className="election-summary-copy">
-                    <span className="election-summary-gov">{cycle.government}</span>
+                    <span className="election-summary-gov">Election on {cycle.electionLabel}</span>
                     <span className="election-summary-meta">
                       {total === 0
                         ? "No disclosed returns in this data"
-                        : `${formatCompactNzd(winnerTotal)} to ${cycle.winnerLabel} · ${
-                            hadMostDonations
-                              ? "most disclosed"
-                              : winnerRank == null
-                                ? "no winner donations"
-                                : `ranked #${winnerRank}`
+                        : `${formatCompactNzd(total)} disclosed in ${formatCount(rows.length)} ${
+                            rows.length === 1 ? "return" : "returns"
                           }`}
                     </span>
                   </span>
                 </span>
-                <span
-                  className="winner-pill"
-                  style={{
-                    background: winnerColour,
-                    color: partyColourInk(winnerColour),
-                  }}
-                >
-                  {cycle.winnerLabel}
-                </span>
               </button>
 
               <div className="election-detail" hidden={!isOpen}>
-                  <dl className="election-stats">
-                    <div>
-                      <dt>Winner’s disclosed large gifts</dt>
-                      <dd>{formatNzd(winnerTotal)}</dd>
-                    </div>
-                    <div>
-                      <dt>Share of cycle total</dt>
-                      <dd>{total === 0 ? "—" : formatShare(winnerShare)}</dd>
-                    </div>
-                    <div>
-                      <dt>Among parties</dt>
-                      <dd>
-                        {winnerRank == null || total === 0
-                          ? "No returns in range"
-                          : hadMostDonations
-                            ? "Most disclosed"
-                            : `Ranked #${winnerRank}`}
-                      </dd>
-                    </div>
-                  </dl>
-
                   {topParties.length === 0 ? (
                     <p className="empty-inline">
                       No disclosed returns in this data fall in this campaign cycle.
@@ -112,18 +71,16 @@ export function ElectionCycles({ cycles }: Props) {
                             top === 0
                               ? 0
                               : Math.max((party.value / top) * 100, party.value > 0 ? 1.2 : 0);
-                          const isWinner = party.family === cycle.winnerFamily;
                           return (
                             <li key={party.id}>
-                              <div className={`rank-row static${isWinner ? " is-winner" : ""}`}>
+                              <div className="rank-row static">
                                 <span className="rank-copy">
                                   <span className="rank-label">
-                                    {shortPartyLabel(party.label)}
-                                    {isWinner ? " · winner" : ""}
+                                    {party.shortLabel}
                                   </span>
                                   <span className="rank-meta">
                                     {formatCount(party.count)}{" "}
-                                    {party.count === 1 ? "donation" : "donations"} ·{" "}
+                                    {party.count === 1 ? "return" : "returns"} ·{" "}
                                     {formatShare(party.share)}
                                   </span>
                                 </span>
@@ -133,9 +90,7 @@ export function ElectionCycles({ cycles }: Props) {
                                       className="rank-fill"
                                       style={{
                                         width: `${width}%`,
-                                        background: isWinner
-                                          ? darkenColour(party.colour, 0.08)
-                                          : party.colour,
+                                        background: party.colour,
                                       }}
                                     />
                                   </span>

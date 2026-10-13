@@ -14,9 +14,13 @@ export function donationsToCsv(rows: readonly Donation[]): string {
     "party",
     "donor_name",
     "amount",
-    "donation_received_date",
+    "latest_donation_date_in_return",
     "return_received_date",
+    "amended_return_received_date",
     "donor_type",
+    "returned_to_donor",
+    "donor_is_party",
+    "notes",
     "source_pdf_url",
   ];
   const lines = rows.map((row) =>
@@ -26,7 +30,11 @@ export function donationsToCsv(rows: readonly Donation[]): string {
       row.amount,
       row.donation_received_date,
       row.return_received_date,
+      row.amended_return_received_date ?? "",
       donorTypeLabel(row.donorType),
+      row.returned_to_donor ? "yes" : "",
+      row.party_to_party ? "yes" : "",
+      row.notes.join(" "),
       row.source_pdf_url,
     ]
       .map(cell)

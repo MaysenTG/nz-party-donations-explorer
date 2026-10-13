@@ -45,15 +45,16 @@ export type MultiPartyDonor = {
   parties: { party: string; amount: number }[];
 };
 
-/** Donors (exact published name) who gave to more than one party in the rows. */
+/** Donors (grouped name) who gave to more than one party in the rows. Withheld names and party donors are skipped. */
 export function multiPartyDonors(rows: readonly Donation[]): MultiPartyDonor[] {
   const byDonor = new Map<string, Map<string, number>>();
   const counts = new Map<string, number>();
   for (const row of rows) {
-    const parties = byDonor.get(row.donor_name) ?? new Map<string, number>();
+    if (row.nameWithheld || row.party_to_party) continue;
+    const parties = byDonor.get(row.donorKey) ?? new Map<string, number>();
     parties.set(row.party, (parties.get(row.party) ?? 0) + toCents(row.amount));
-    byDonor.set(row.donor_name, parties);
-    counts.set(row.donor_name, (counts.get(row.donor_name) ?? 0) + 1);
+    byDonor.set(row.donorKey, parties);
+    counts.set(row.donorKey, (counts.get(row.donorKey) ?? 0) + 1);
   }
   const result: MultiPartyDonor[] = [];
   for (const [name, parties] of byDonor) {
@@ -82,7 +83,7 @@ const SIZE_EDGES: { label: string; max: number }[] = [
   { label: "$1m and over", max: Number.POSITIVE_INFINITY },
 ];
 
-/** Count and total of donations by size band. Lower bound inclusive, upper exclusive. */
+/** Count and total of returns by size band. Lower bound inclusive, upper exclusive. */
 export function sizeDistribution(rows: readonly Donation[]): SizeBucket[] {
   const buckets = SIZE_EDGES.map((edge) => ({ label: edge.label, count: 0, cents: 0 }));
   for (const row of rows) {
