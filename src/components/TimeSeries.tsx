@@ -158,8 +158,9 @@ export function TimeSeries({ points, grain, colour }: Props) {
         {grain === "year"
           ? " Empty years stay at zero. Long ranges group by year."
           : " Empty months in range stay at zero."}{" "}
-        Only gifts above disclosure thresholds are included. Data has $30,000 returns through 2022
-        and $20,000 returns from 2026, so 2023–2025 appear empty here.
+        Only gifts above disclosure thresholds are included. This dataset has $30,000 returns
+        through 2022 and $20,000 returns from 2026. It does not include the Commission’s 2023 to
+        2025 table, so those years appear empty here.
       </figcaption>
       <div className="visually-hidden">
         <table>
