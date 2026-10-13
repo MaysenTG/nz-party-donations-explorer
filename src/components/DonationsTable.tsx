@@ -95,7 +95,6 @@ export function DonationsTable({ rows, sort, onSort }: Props) {
                 <span className={`tag tag-${row.donorType}`}>{donorTypeLabel(row.donorType)}</span>
               </div>
               <span className="donor-name">{row.donor_name}</span>
-              <span className="donor-address">{row.donor_address}</span>
               <span className="donation-card-party">{row.party}</span>
               <span className="received-date">Received {row.donation_received_date}</span>
               <span className="return-date">Return received {row.return_received_date}</span>
@@ -145,7 +144,6 @@ export function DonationsTable({ rows, sort, onSort }: Props) {
                   <td>{row.party}</td>
                   <td>
                     <span className="donor-name">{row.donor_name}</span>
-                    <span className="donor-address">{row.donor_address}</span>
                     <span className={`tag tag-${row.donorType}`}>{donorTypeLabel(row.donorType)}</span>
                   </td>
                   <td className="num">{formatNzd(row.amount)}</td>

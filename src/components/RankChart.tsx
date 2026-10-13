@@ -7,7 +7,6 @@ export type RankItem = {
   label: string;
   value: number;
   meta: string;
-  blurb?: string;
   colour?: string;
 };
 
@@ -46,7 +45,6 @@ export function RankChart({ items, pressedId, onSelect, empty }: Props) {
               >
                 <span className="rank-copy">
                   <span className="rank-label">{item.label}</span>
-                  {item.blurb && <span className="rank-blurb">{item.blurb}</span>}
                   <span className="rank-meta">{item.meta}</span>
                 </span>
                 <span className="rank-plot">

@@ -1868,3 +1868,17 @@ th.num button {
     break-inside: avoid;
   }
 }
+
+.about-list {
+  margin: 0 0 1em;
+  padding-left: 1.25em;
+}
+
+.about-list li {
+  margin-bottom: 0.35em;
+}
+
+.site-notice {
+  border-top: 1px solid currentColor;
+  padding-top: 0.75em;
+}
