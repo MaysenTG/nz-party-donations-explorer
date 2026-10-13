@@ -7,7 +7,6 @@ import {
   RECEIVED_MIN,
 } from "../lib/donations.ts";
 import { ORGANISATION_TERMS } from "../lib/donors.ts";
-import { SUGGESTED_DONOR_EXCLUSIONS } from "../lib/exclusions.ts";
 import { hasParliamentarySeats } from "../lib/partyMeta.ts";
 import type { DonorTypeFilter, Filters as FilterState } from "../types.ts";
 
@@ -31,7 +30,6 @@ export function FilterFields({
   onReset,
 }: FilterFieldsProps) {
   const allSelected = filters.parties.length === ALL_PARTIES.length;
-  const excludedSet = new Set(filters.excludedDonors);
   const searchId = `${idPrefix}donor-search`;
   const donorTypeName = `${idPrefix}donor-type`;
 
@@ -42,13 +40,6 @@ export function FilterFields({
     onChange({ ...filters, parties: selected });
   }
 
-  function toggleExcludedDonor(name: string) {
-    const excludedDonors = excludedSet.has(name)
-      ? filters.excludedDonors.filter((item) => item !== name)
-      : [...filters.excludedDonors, name];
-    onChange({ ...filters, excludedDonors });
-  }
-
   return (
     <div className="filter-body">
       <div className="field">
@@ -57,7 +48,7 @@ export function FilterFields({
           <input
             id={searchId}
             type="search"
-            placeholder="Name or address"
+            placeholder="Donor name"
             value={filters.query}
             onChange={(event) => onChange({ ...filters, query: event.target.value })}
             autoComplete="off"
@@ -73,8 +64,8 @@ export function FilterFields({
           )}
         </div>
         <p className="field-help">
-          Matches donor name or address. Chart selection uses the same search, so related wording
-          (for example “via … Trust”) is included.
+          Matches the donor name. Chart selection uses the same search, so related wording (for
+          example “via … Trust”) is included.
         </p>
       </div>
 
@@ -114,11 +105,8 @@ export function FilterFields({
       </fieldset>
 
       <fieldset className="field">
-        <legend>Exclusions</legend>
-        <p className="field-help">
-          Hide names from totals, charts, and the table without changing the party checklist.
-        </p>
-        <ul className="party-list exclusion-list">
+        <legend>Parliament</legend>
+        <ul className="party-list">
           <li>
             <label>
               <input
@@ -131,21 +119,6 @@ export function FilterFields({
               <span>Hide parties with no current seats in Parliament</span>
             </label>
           </li>
-          {SUGGESTED_DONOR_EXCLUSIONS.map((item) => (
-            <li key={item.name}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={excludedSet.has(item.name)}
-                  onChange={() => toggleExcludedDonor(item.name)}
-                />
-                <span>
-                  Exclude {item.name}
-                  <small className="exclusion-note">{item.note}</small>
-                </span>
-              </label>
-            </li>
-          ))}
         </ul>
       </fieldset>
 
