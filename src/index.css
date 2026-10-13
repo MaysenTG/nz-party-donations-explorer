@@ -1599,11 +1599,15 @@ th.num button {
   justify-content: center;
   padding: 0;
   background: rgba(28, 33, 30, 0.45);
+  overscroll-behavior: none;
+  touch-action: none;
 }
 
 .filters-sheet {
   width: min(36rem, 100%);
-  max-height: min(92vh, 44rem);
+  max-height: calc(100dvh - 1rem);
+  overscroll-behavior: none;
+  touch-action: pan-y;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1637,11 +1641,64 @@ th.num button {
   font-size: 1.3rem;
 }
 
+/* Header stays put; only the body may scroll, and only on very short screens. */
+.filters-sheet-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface);
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--line);
+}
+
 .filters-sheet .filter-body {
-  overflow: auto;
+  overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 0.35rem 0.15rem 0.25rem;
+  padding: 0.5rem 0.15rem 0.25rem;
   min-height: 0;
+  flex: 1 1 auto;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.filters-sheet .filter-body > * {
+  margin: 0;
+}
+
+.filters-sheet .field-help,
+.filters-sheet .hint {
+  display: none;
+}
+
+.filters-sheet .field legend,
+.filters-sheet .field > label {
+  margin-bottom: 0.2rem;
+  font-size: 0.85rem;
+}
+
+.filters-sheet .field input[type="search"],
+.filters-sheet .field input[type="text"],
+.filters-sheet .field input[type="date"] {
+  min-height: 2.4rem;
+  padding-block: 0.3rem;
+}
+
+.filters-sheet .party-list.exclusion-list {
+  margin: 0;
+}
+
+.party-collapse > summary {
+  cursor: pointer;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.party-collapse[open] .party-list {
+  max-height: 12dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .exclusion-note,
@@ -2245,4 +2302,39 @@ th.num button {
 }
 .polling-day p {
   margin: 0 0 0.9rem;
+}
+
+/* Compact sheet layout so the filters fit a phone screen */
+.filters-sheet .segment {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.filters-sheet .segment label {
+  justify-content: center;
+  text-align: center;
+  padding: 0.4rem 0.3rem;
+  border-top: 0;
+}
+.filters-sheet .segment small {
+  display: block;
+}
+.filters-sheet .pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+.filters-sheet .pair label {
+  font-size: 0.8rem;
+  min-width: 0;
+}
+.filters-sheet .pair input {
+  width: 100%;
+  min-width: 0;
+}
+.filters-sheet .exclusion-list label {
+  padding-block: 0.35rem;
+  font-size: 0.9rem;
+}
+.filters-sheet .reset-button {
+  padding-block: 0.45rem;
 }
