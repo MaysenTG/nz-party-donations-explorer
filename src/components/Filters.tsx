@@ -16,6 +16,8 @@ export type FilterFieldsProps = {
   donorTypeCounts: Record<DonorTypeFilter, number>;
   problem: string | null;
   idPrefix?: string;
+  /** Compact layout for the mobile sheet: help text hidden, party list collapsed. */
+  compact?: boolean;
   onChange: (filters: FilterState) => void;
   onReset: () => void;
 };
@@ -26,6 +28,7 @@ export function FilterFields({
   donorTypeCounts,
   problem,
   idPrefix = "",
+  compact = false,
   onChange,
   onReset,
 }: FilterFieldsProps) {
@@ -39,6 +42,51 @@ export function FilterFields({
       : [...filters.parties, party];
     onChange({ ...filters, parties: selected });
   }
+
+  const partyControls = (
+    <>
+        <div className="inline-actions">
+          <button
+            type="button"
+            className="text-button"
+            onClick={() => onChange({ ...filters, parties: [...ALL_PARTIES] })}
+            disabled={allSelected}
+          >
+            Select all
+          </button>
+          <button
+            type="button"
+            className="text-button"
+            onClick={() => onChange({ ...filters, parties: [] })}
+            disabled={filters.parties.length === 0}
+          >
+            Clear
+          </button>
+        </div>
+        <ul className="party-list">
+          {ALL_PARTIES.map((party) => {
+            const count = partyCounts[party] ?? 0;
+            const extra = !hasParliamentarySeats(party);
+            return (
+              <li key={party}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={filters.parties.includes(party)}
+                    onChange={() => toggleParty(party)}
+                  />
+                  <span>
+                    {party}
+                    {extra && <small className="party-seat-note"> no current seats</small>}
+                  </span>
+                  <span className="count">{count.toLocaleString("en-NZ")}</span>
+                </label>
+              </li>
+            );
+          })}
+        </ul>
+    </>
+  );
 
   return (
     <div className="filter-body">
@@ -152,46 +200,18 @@ export function FilterFields({
           ACT, Te Pāti Māori and the Māori Party, NZ First, TOP). The full list is in About this
           page. Internet MANA (2014) is kept separate from the Internet Party.
         </p>
-        <div className="inline-actions">
-          <button
-            type="button"
-            className="text-button"
-            onClick={() => onChange({ ...filters, parties: [...ALL_PARTIES] })}
-            disabled={allSelected}
-          >
-            Select all
-          </button>
-          <button
-            type="button"
-            className="text-button"
-            onClick={() => onChange({ ...filters, parties: [] })}
-            disabled={filters.parties.length === 0}
-          >
-            Clear
-          </button>
-        </div>
-        <ul className="party-list">
-          {ALL_PARTIES.map((party) => {
-            const count = partyCounts[party] ?? 0;
-            const extra = !hasParliamentarySeats(party);
-            return (
-              <li key={party}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={filters.parties.includes(party)}
-                    onChange={() => toggleParty(party)}
-                  />
-                  <span>
-                    {party}
-                    {extra && <small className="party-seat-note"> no current seats</small>}
-                  </span>
-                  <span className="count">{count.toLocaleString("en-NZ")}</span>
-                </label>
-              </li>
-            );
-          })}
-        </ul>
+        {compact ? (
+          <details className="party-collapse">
+            <summary>
+              {allSelected
+                ? `All ${ALL_PARTIES.length} parties`
+                : `${filters.parties.length} of ${ALL_PARTIES.length} parties`}
+            </summary>
+            {partyControls}
+          </details>
+        ) : (
+          partyControls
+        )}
       </fieldset>
 
       <fieldset className="field">
