@@ -27,7 +27,7 @@ https://maysentg.github.io/nz-party-donations-explorer/
 
 Source: [Donations exceeding $20,000](https://elections.nz/democracy-in-nz/political-parties-in-new-zealand/donations-exceeding-20000) from Elections NZ / the Electoral Commission.
 
-The app reads from [`src/data/donations.json`](src/data/donations.json), a scrape of that page (currently 124 returns). Each record includes the party, donor name, amount in NZD, the date the party received the donation, the date the Commission received the return, and a link to the official PDF when available. The data file also holds the donor address as published, but the site build strips it out, so addresses are not shown, searchable, exported or shipped to the browser. Use the official return to see the full record.
+The app reads from [`src/data/donations.json`](src/data/donations.json), a scrape of that page (currently 142 returns). Each record includes the party, donor name, amount in NZD, the date the party received the donation, the date the Commission received the return, and a link to the official PDF when available. The data file also holds the donor address as published, but the site build strips it out, so addresses are not shown, searchable, exported or shipped to the browser. Use the official return to see the full record.
 
 A few things to keep in mind:
 
