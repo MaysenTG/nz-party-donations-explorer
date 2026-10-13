@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { donorTypeLabel } from "../lib/donors.ts";
 import { formatCount, formatNzd } from "../lib/format.ts";
-import { safeHttps } from "../lib/donations.ts";
 import { useMatchMedia } from "../hooks/useMatchMedia.ts";
 import type { Donation, SortKey, SortState } from "../types.ts";
 
@@ -20,12 +19,12 @@ const COLUMNS: { key: SortKey; label: string }[] = [
 
 const PAGE_SIZE = 25;
 
-function PdfLink({ url, donor }: { url: string | null; donor: string }) {
-  if (!url) return <span className="muted">PDF not published</span>;
+function OfficialReturnLink({ row }: { row: Donation }) {
+  const label = row.officialSourceKind === "pdf" ? "View PDF" : "Commission page";
   return (
-    <a href={url} target="_blank" rel="noopener noreferrer">
-      View PDF
-      <span className="visually-hidden"> for {donor}</span>
+    <a href={row.officialSourceUrl} target="_blank" rel="noopener noreferrer">
+      {label}
+      <span className="visually-hidden"> for {row.donor_name}</span>
     </a>
   );
 }
@@ -92,14 +91,15 @@ export function DonationsTable({ rows, sort, onSort }: Props) {
             <li key={row.id}>
               <div className="donation-card-top">
                 <span className="donation-card-amount">{formatNzd(row.amount)}</span>
-                <span className={`tag tag-${row.donorType}`}>{donorTypeLabel(row.donorType)}</span>
+                <span className={`tag tag-${row.donorType}`} title="Estimated from the name, not an official label">
+                  {donorTypeLabel(row.donorType)}
+                </span>
               </div>
               <span className="donor-name">{row.donor_name}</span>
-              <span className="donor-address">{row.donor_address}</span>
               <span className="donation-card-party">{row.party}</span>
               <span className="received-date">Received {row.donation_received_date}</span>
               <span className="return-date">Return received {row.return_received_date}</span>
-              <PdfLink url={safeHttps(row.source_pdf_url)} donor={row.donor_name} />
+              <OfficialReturnLink row={row} />
             </li>
           ))}
         </ol>
@@ -145,8 +145,9 @@ export function DonationsTable({ rows, sort, onSort }: Props) {
                   <td>{row.party}</td>
                   <td>
                     <span className="donor-name">{row.donor_name}</span>
-                    <span className="donor-address">{row.donor_address}</span>
-                    <span className={`tag tag-${row.donorType}`}>{donorTypeLabel(row.donorType)}</span>
+                    <span className={`tag tag-${row.donorType}`} title="Estimated from the name, not an official label">
+                      {donorTypeLabel(row.donorType)}
+                    </span>
                   </td>
                   <td className="num">{formatNzd(row.amount)}</td>
                   <td>
@@ -154,7 +155,7 @@ export function DonationsTable({ rows, sort, onSort }: Props) {
                     <span className="return-date">Return received {row.return_received_date}</span>
                   </td>
                   <td>
-                    <PdfLink url={safeHttps(row.source_pdf_url)} donor={row.donor_name} />
+                    <OfficialReturnLink row={row} />
                   </td>
                 </tr>
               ))}
