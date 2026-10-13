@@ -45,16 +45,16 @@ export type MultiPartyDonor = {
   parties: { party: string; amount: number }[];
 };
 
-/** Donors (grouped name) who gave to more than one party in the rows. Withheld names and party donors are skipped. */
+/** Donors (exact name as filed) who gave to more than one party in the rows. Withheld names and party donors are skipped. */
 export function multiPartyDonors(rows: readonly Donation[]): MultiPartyDonor[] {
   const byDonor = new Map<string, Map<string, number>>();
   const counts = new Map<string, number>();
   for (const row of rows) {
     if (row.nameWithheld || row.party_to_party) continue;
-    const parties = byDonor.get(row.donorKey) ?? new Map<string, number>();
+    const parties = byDonor.get(row.donor_name) ?? new Map<string, number>();
     parties.set(row.party, (parties.get(row.party) ?? 0) + toCents(row.amount));
-    byDonor.set(row.donorKey, parties);
-    counts.set(row.donorKey, (counts.get(row.donorKey) ?? 0) + 1);
+    byDonor.set(row.donor_name, parties);
+    counts.set(row.donor_name, (counts.get(row.donor_name) ?? 0) + 1);
   }
   const result: MultiPartyDonor[] = [];
   for (const [name, parties] of byDonor) {

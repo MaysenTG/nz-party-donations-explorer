@@ -244,7 +244,7 @@ export default function App() {
                       ? "Updates with the filters."
                       : donors.length < TOP_DONOR_LIMIT
                         ? `All ${formatCount(donors.length)} donors in range.`
-                        : `Top ${TOP_DONOR_LIMIT} by amount. Known spelling variants are grouped. Select one for returns from the last ${INSPECTION_YEARS} years.`}
+                        : `Top ${TOP_DONOR_LIMIT} by amount, by exact name as filed. Select one for returns from the last ${INSPECTION_YEARS} years.`}
                   </p>
                 </div>
                 <RankChart
@@ -334,8 +334,8 @@ export default function App() {
                   <h2 id="multi-title">Donors giving to more than one party</h2>
                   <p>
                     {formatCount(multiDonors.length)}{" "}
-                    {multiDonors.length === 1 ? "donor" : "donors"} in range, with known spelling
-                    variants grouped. Parties listed as donors and individuals on returns over{" "}
+                    {multiDonors.length === 1 ? "donor name" : "donor names"} in range, by exact name as
+                    filed. Parties listed as donors and individuals on returns over{" "}
                     {INSPECTION_YEARS} years old are left out.
                   </p>
                 </div>
@@ -433,7 +433,7 @@ export default function App() {
           </p>
           <ul className="about-list">
             <li>
-              Party names. The same party is sometimes labelled in different ways, so these variants
+              Party names (the only names we merge). The same party is sometimes labelled in different ways, so these variants
               are merged into one name. Every merge is listed below. Any party name not listed is
               shown as published.
             </li>
@@ -456,9 +456,9 @@ export default function App() {
               Freedoms New Zealand in 2023).
             </li>
             <li>
-              Donor names. Charts and donor counts group known spelling variants of one donor (for
-              example a middle name, an initial, or Ltd and Limited). The table shows each name as
-              published. The full list is in the README on GitHub.
+              Donor names are shown exactly as filed. We do not merge donor names, so one donor
+              can appear under more than one spelling, and each spelling counts as a separate
+              name. The only change is that the HTML code “&amp;amp;” in four names is shown as “&amp;”.
             </li>
             <li>
               Donor type (individual or organisation) is our guess from words in the name, such as

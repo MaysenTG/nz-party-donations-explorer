@@ -1,6 +1,6 @@
 import rawDonations from "virtual:donations";
 import { formatIsoLong, monthKey, monthLabels, nextMonthKey, nzDateToIso } from "./dates.ts";
-import { classifyDonor, donorGroup } from "./donors.ts";
+import { classifyDonor } from "./donors.ts";
 import { OLD_INDIVIDUAL_LABEL, inspectionCutoffIso, isPastInspection, withholdName } from "./privacy.ts";
 import { toCents } from "./format.ts";
 import { hasParliamentarySeats } from "./partyMeta.ts";
@@ -128,7 +128,6 @@ function loadDonations(value: unknown): Donation[] {
       receivedIso: nzDateToIso(row.donation_received_date),
       returnIso,
       donorType: nameWithheld ? "individual" : publishedType,
-      donorKey: nameWithheld ? `withheld-${index}` : donorGroup(row.donor_name),
       nameWithheld,
     };
   });
@@ -312,7 +311,7 @@ export function applyFilters(
     }
     if (query) {
       if (row.nameWithheld) return false;
-      const haystack = `${row.donor_name} ${row.donorKey}`.toLowerCase();
+      const haystack = row.donor_name.toLowerCase();
       if (!haystack.includes(query)) return false;
     }
     if (filters.from && row.receivedIso < filters.from) return false;
@@ -330,7 +329,7 @@ export function summarise(rows: readonly Donation[]): Summary {
   for (const row of rows) {
     cents += toCents(row.amount);
     parties.add(row.party);
-    if (!row.nameWithheld) donors.add(row.donorKey);
+    if (!row.nameWithheld) donors.add(row.donor_name);
   }
   return {
     total: cents / 100,
@@ -364,7 +363,7 @@ export function topDonors(rows: readonly Donation[], limit = 15): DonorTotal[] {
   const buckets = new Map<string, { cents: number; count: number; parties: Set<string> }>();
   for (const row of rows) {
     if (row.nameWithheld) continue;
-    const current = buckets.get(row.donorKey) ?? {
+    const current = buckets.get(row.donor_name) ?? {
       cents: 0,
       count: 0,
       parties: new Set<string>(),
@@ -372,7 +371,7 @@ export function topDonors(rows: readonly Donation[], limit = 15): DonorTotal[] {
     current.cents += toCents(row.amount);
     current.count += 1;
     current.parties.add(row.party);
-    buckets.set(row.donorKey, current);
+    buckets.set(row.donor_name, current);
   }
   return [...buckets.entries()]
     .map(([id, bucket]) => ({
@@ -387,7 +386,7 @@ export function topDonors(rows: readonly Donation[], limit = 15): DonorTotal[] {
 }
 
 export function donorCount(rows: readonly Donation[]): number {
-  return new Set(rows.filter((row) => !row.nameWithheld).map((row) => row.donorKey)).size;
+  return new Set(rows.filter((row) => !row.nameWithheld).map((row) => row.donor_name)).size;
 }
 
 const MONTH_SERIES_LIMIT = 24;

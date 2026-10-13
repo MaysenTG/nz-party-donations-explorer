@@ -27,9 +27,9 @@ export function StatCards({ stats, overall }: Props) {
       of: narrowed ? `of ${formatCount(overall.donations)}` : undefined,
     },
     {
-      label: "Donors (grouped)",
+      label: "Donor names",
       value: formatCount(stats.donors),
-      title: "Named donors, with known spelling variants grouped. Individuals on returns over 6 years old are not counted.",
+      title: "Distinct donor names as filed. One donor can appear under more than one spelling. Withheld names (returns over 6 years old) are not counted.",
       of: narrowed ? `of ${formatCount(overall.donors)}` : undefined,
     },
     {

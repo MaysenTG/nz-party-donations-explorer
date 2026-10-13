@@ -13,7 +13,7 @@ type Props = {
 };
 
 /**
- * Returns filed under one donor (grouped spellings), limited to returns still inside the
+ * Returns filed under one exact donor name, limited to returns still inside the
  * 6 year public inspection period. Opening this view does not change the page URL.
  */
 export function DonorDetail({ name, onClose, onFilterToDonor }: Props) {
@@ -21,13 +21,12 @@ export function DonorDetail({ name, onClose, onFilterToDonor }: Props) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const { rows, older } = useMemo(() => {
     if (!name) return { rows: [], older: 0 };
-    const all = donations.filter((row) => !row.nameWithheld && row.donorKey === name);
+    const all = donations.filter((row) => !row.nameWithheld && row.donor_name === name);
     const recent = all
       .filter((row) => !isPastInspection(row.returnIso, INSPECTION_CUTOFF_ISO))
       .sort((a, b) => b.receivedIso.localeCompare(a.receivedIso));
     return { rows: recent, older: all.length - recent.length };
   }, [name]);
-  const spellings = [...new Set(rows.map((row) => row.donor_name))].filter((n) => n !== name);
   const counted = rows.filter((row) => !row.returned_to_donor);
 
   useEffect(() => {
@@ -73,7 +72,7 @@ export function DonorDetail({ name, onClose, onFilterToDonor }: Props) {
         <p className="modal-lede">
           Returns filed under this name in the last {INSPECTION_YEARS} years, ignoring current
           filters.
-          {spellings.length > 0 && ` Also published as: ${spellings.join("; ")}.`}
+          {" The same donor may appear under other spellings; those are listed separately."}
           {rows[0] && ` Donor type is a name-based guess: ${donorTypeLabel(rows[0].donorType)}.`}
           {older > 0 &&
             ` ${formatCount(older)} older ${older === 1 ? "return is" : "returns are"} not listed here; ${

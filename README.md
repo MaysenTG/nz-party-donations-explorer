@@ -2,7 +2,7 @@
 
 An unofficial explorer of large party donations published by the Electoral Commission of New Zealand: returns over $20,000 for 2008 to 2010, over $30,000 for 2011 to 2022, and over $20,000 from 2023 (the Commission's 2023 and 2026 tables).
 
-This is an independent project. It is not an Electoral Commission website and is not affiliated with or endorsed by the Electoral Commission. Amounts and donor names are shown as filed, using the amended figure where a return was amended. Some things are changed for display, such as merging party name variants. See [Merges and other changes](#merges-and-other-changes).
+This is an independent project. It is not an Electoral Commission website and is not affiliated with or endorsed by the Electoral Commission. Amounts and donor names are shown as filed, using the amended figure where a return was amended. Only party names are merged; donor names are never merged. See [Merges and other changes](#merges-and-other-changes).
 
 ## Contents
 
@@ -20,10 +20,10 @@ https://maysentg.github.io/nz-party-donations-explorer/
 
 ## What you can do
 
-- See the total amount, number of returns, parties and donors (all update with your filters).
+- See the total amount, number of returns, parties and distinct donor names as filed (all update with your filters).
 - Filter by party, donation date, amount, donor name, and whether a donor looks like an individual or an organisation.
 - Sort the table and export the filtered rows as CSV.
-- Compare party totals, the largest donors, party totals by year, donors who gave to more than one party, and return sizes.
+- Compare party totals, the largest donor names, party totals by year, donor names that gave to more than one party, and return sizes.
 - Select a party bar to focus that party. Select a donor to see their returns from the last 6 years.
 
 ## About the data
@@ -79,47 +79,7 @@ Things to keep in mind:
 
 Internet MANA was a separate combined party registered for the 2014 election, so it is kept apart from the Internet Party. Any party name not in this table is shown as published.
 
-**Donor name groups.** Charts, the donor count and the donor view group these published spellings of one donor (from `DONOR_NAME_GROUPS` in [`src/lib/donors.ts`](src/lib/donors.ts)). Only clear cases are listed: middle names or initials, punctuation, Ltd and Limited, and typos. The table and CSV keep each name as published.
-
-| Grouped as | Published spellings |
-| --- | --- |
-| Alan Gibbs | Alan Timothy Gibbs |
-| Alpha Laboratories (NZ) Limited | ALPHA Laboratories (NZ) Limited |
-| Brendan Lindsay | Brendan J Lindsay; B J Lindsay |
-| Bruce Plested | B Plested |
-| Christopher & Banks Limited | Christopher & Banks Ltd; Christopher and Banks Limited |
-| Christopher & Banks Private Equity Limited | Christopher & Banks Private Equity Ltd |
-| Christopher Parkin | Chris Parkin |
-| Craig Heatley | Craig Leonard Heatley |
-| Dave Muller | D Muller |
-| Diane Townshend | Diane Evelyn Townshend; Diane Townsend |
-| Estate of Hugh Barr | The Estate of Hugh Barr |
-| Frances Wyborn | Fran Wyborn |
-| Gallagher Group Limited | Gallagher Group Ltd |
-| Gary Lane | Gary Rodney Lane |
-| Graeme Hart | Graeme Richard Hart |
-| Hon Robert Smellie QC | Hon. Robert Smellie QC |
-| Jeff Douglas | Jeffrey Graeme Douglas |
-| Jennifer Marcroft | Jenny Marcroft |
-| Jillian Garing | Jillian Sandra Garing |
-| Maritime Union of New Zealand | Maritime Union of New Zealand Incorporated |
-| Mark Townshend | Mark Gray Townshend; Mark Townsend |
-| Mark Wyborn | Mark John Wyborn; Mark J Wyborn; M J Wyborn; MJ Wyborn |
-| Michael Sullivan | Michael Grant Sullivan; Micheal G Sullivan |
-| Morris Hey | Morris Owen Hey |
-| Murray Chandler | Murray Graham Chandler |
-| Nicholas Mowbray | Nicholas James Mowbray |
-| Peter Goodfellow | Peter John Goodfellow |
-| Peter Vela | Peter James Vela; Sir Peter Vela; P J Vela |
-| Rail & Maritime Transport Union of New Zealand | Rail & Maritime Transport Union; Rail and Maritime Transport Union Inc |
-| Richard Hubbard | Richard John Hubbard |
-| Rorohara Farms Limited | Rorohara Farm Ltd |
-| Roshan Nauhria | Roshan Lal Nauhria |
-| Stuart Bramhall | Dr Stuart Bramhall; Dr. Stuart Bramhall |
-| Team McMillan Limited | Team McMillan Ltd |
-| Trevor Farmer | T Farmer |
-| Warwick and Averil Norman | Warwick & Averil Norman |
-| E Tu Union | E Tu; E tu Union |
+**Donor names are not merged.** Only party names are merged. Donor names are kept exactly as filed in the Commission's tables, so one donor can appear under more than one spelling (for example with or without a middle name), and the donor count counts distinct names as filed. The only change to donor names is decoding the HTML entity `&amp;` to `&` in four names (the Christopher & Banks names and EPMU).
 
 **Other changes:**
 

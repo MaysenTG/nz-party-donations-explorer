@@ -40,7 +40,7 @@ function DonorName({ row, onOpenDonor }: { row: Donation; onOpenDonor: (key: str
     );
   }
   return (
-    <button type="button" className="donor-name donor-link" onClick={() => onOpenDonor(row.donorKey)}>
+    <button type="button" className="donor-name donor-link" onClick={() => onOpenDonor(row.donor_name)}>
       {row.donor_name}
     </button>
   );

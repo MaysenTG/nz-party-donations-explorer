@@ -64,7 +64,7 @@ export function FilterFields({
           )}
         </div>
         <p className="field-help">
-          Matches the published donor name and its grouped spelling. Individuals on returns over 6
+          Matches the donor name as filed. Individuals on returns over 6
           years old are not named, so they do not match. The search is not saved in the page link.
         </p>
       </div>

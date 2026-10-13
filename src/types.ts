@@ -25,8 +25,6 @@ export type Donation = Omit<RawDonation, "notes" | "name_withheld"> & {
   receivedIso: string;
   returnIso: string;
   donorType: DonorType;
-  /** Name used to group spelling variants of one donor. */
-  donorKey: string;
   /** True when the donor is an individual and the return is past the 6 year inspection period. */
   nameWithheld: boolean;
 };
