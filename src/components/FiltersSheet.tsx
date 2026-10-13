@@ -23,6 +23,13 @@ export function FiltersSheet({
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
+  // Keep the latest onClose without making the open/close effect depend on it. The parent
+  // passes a new function on every render, and re-running the effect on each keystroke moved
+  // focus to the Done button (and reset the scroll lock).
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
   const active = activeFilterCount(filters);
 
   useEffect(() => {
@@ -49,7 +56,7 @@ export function FiltersSheet({
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        onClose();
+        onCloseRef.current();
         return;
       }
       if (event.key !== "Tab" || !sheetRef.current) return;
@@ -79,7 +86,7 @@ export function FiltersSheet({
       window.removeEventListener("keydown", onKeyDown);
       previousFocus?.focus?.();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 
