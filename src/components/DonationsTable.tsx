@@ -9,6 +9,7 @@ type Props = {
   rows: Donation[];
   sort: SortState;
   onSort: (key: SortKey) => void;
+  onOpenDonor: (name: string) => void;
 };
 
 const COLUMNS: { key: SortKey; label: string }[] = [
@@ -30,18 +31,20 @@ function PdfLink({ url, donor }: { url: string | null; donor: string }) {
   );
 }
 
-export function DonationsTable({ rows, sort, onSort }: Props) {
+export function DonationsTable({ rows, sort, onSort, onOpenDonor }: Props) {
   const cards = useMatchMedia("(max-width: 760px)");
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [page, setPage] = useState(0);
   const [activeRows, setActiveRows] = useState(rows);
 
   if (rows !== activeRows) {
     setActiveRows(rows);
-    setVisibleCount(PAGE_SIZE);
+    setPage(0);
   }
 
-  const visibleRows = rows.slice(0, visibleCount);
-  const remaining = rows.length - visibleRows.length;
+  const pageCount = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const current = Math.min(page, pageCount - 1);
+  const start = current * PAGE_SIZE;
+  const visibleRows = rows.slice(start, start + PAGE_SIZE);
 
   const sortControls = (
     <div className="sort-bar" role="group" aria-label="Sort donations">
@@ -64,23 +67,38 @@ export function DonationsTable({ rows, sort, onSort }: Props) {
   );
 
   const moreControls =
-    remaining > 0 ? (
-      <div className="table-more">
+    rows.length > PAGE_SIZE ? (
+      <nav className="pager" aria-label="Table pages">
         <p>
-          Showing {formatCount(visibleRows.length)} of {formatCount(rows.length)}
+          Showing {formatCount(start + 1)} to {formatCount(start + visibleRows.length)} of{" "}
+          {formatCount(rows.length)}
         </p>
-        <button
-          type="button"
-          className="more-button"
-          onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
-        >
-          Show {formatCount(Math.min(PAGE_SIZE, remaining))} more
-        </button>
-      </div>
-    ) : rows.length > PAGE_SIZE ? (
-      <p className="table-more-note">
-        Showing all {formatCount(rows.length)}
-      </p>
+        <div className="pager-buttons">
+          <button type="button" onClick={() => setPage(0)} disabled={current === 0}>
+            First
+          </button>
+          <button type="button" onClick={() => setPage(current - 1)} disabled={current === 0}>
+            Previous
+          </button>
+          <span className="pager-status" aria-live="polite">
+            Page {current + 1} of {pageCount}
+          </span>
+          <button
+            type="button"
+            onClick={() => setPage(current + 1)}
+            disabled={current >= pageCount - 1}
+          >
+            Next
+          </button>
+          <button
+            type="button"
+            onClick={() => setPage(pageCount - 1)}
+            disabled={current >= pageCount - 1}
+          >
+            Last
+          </button>
+        </div>
+      </nav>
     ) : null;
 
   return cards ? (
@@ -94,7 +112,13 @@ export function DonationsTable({ rows, sort, onSort }: Props) {
                 <span className="donation-card-amount">{formatNzd(row.amount)}</span>
                 <span className={`tag tag-${row.donorType}`}>{donorTypeLabel(row.donorType)}</span>
               </div>
-              <span className="donor-name">{row.donor_name}</span>
+              <button
+                type="button"
+                className="donor-name donor-link"
+                onClick={() => onOpenDonor(row.donor_name)}
+              >
+                {row.donor_name}
+              </button>
               <span className="donation-card-party">{row.party}</span>
               <span className="received-date">Received {row.donation_received_date}</span>
               <span className="return-date">Return received {row.return_received_date}</span>
@@ -143,7 +167,13 @@ export function DonationsTable({ rows, sort, onSort }: Props) {
                 <tr key={row.id}>
                   <td>{row.party}</td>
                   <td>
-                    <span className="donor-name">{row.donor_name}</span>
+                    <button
+                type="button"
+                className="donor-name donor-link"
+                onClick={() => onOpenDonor(row.donor_name)}
+              >
+                {row.donor_name}
+              </button>
                     <span className={`tag tag-${row.donorType}`}>{donorTypeLabel(row.donorType)}</span>
                   </td>
                   <td className="num">{formatNzd(row.amount)}</td>

@@ -1,5 +1,12 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ActiveFilters } from "./components/ActiveFilters.tsx";
+import { DonorDetail } from "./components/DonorDetail.tsx";
+import { MultiPartyDonors } from "./components/MultiPartyDonors.tsx";
+import { PartyYearChart } from "./components/PartyYearChart.tsx";
+import { SizeChart } from "./components/SizeChart.tsx";
+import { StatCards, type Stats } from "./components/StatCards.tsx";
+import { median, multiPartyDonors, partyYearSeries, sizeDistribution } from "./lib/insights.ts";
+import { readUrlState, writeUrlState } from "./lib/urlState.ts";
 import { DonationsTable } from "./components/DonationsTable.tsx";
 import { ElectionCycles } from "./components/ElectionCycles.tsx";
 import { ExploreBar } from "./components/ExploreBar.tsx";
@@ -42,9 +49,27 @@ import {
   SOURCE_URL,
   CONTACT_URL,
 } from "./lib/source.ts";
-import type { DonorTypeFilter, Filters as FilterState, SortKey, SortState } from "./types.ts";
+import type {
+  Donation,
+  DonorTypeFilter,
+  Filters as FilterState,
+  SortKey,
+  SortState,
+} from "./types.ts";
 
-const OVERALL = summarise(donations);
+function stats(rows: readonly Donation[]): Stats {
+  const base = summarise(rows);
+  const amounts = rows.map((row) => row.amount);
+  return {
+    ...base,
+    median: median(amounts),
+    largest: amounts.length ? Math.max(...amounts) : 0,
+  };
+}
+
+const INITIAL = readUrlState(window.location.search);
+
+const OVERALL = stats(donations);
 const PARTY_MERGE_GROUPS = partyMergeGroups();
 const TOP_DONOR_LIMIT = 15;
 
@@ -61,14 +86,30 @@ function focusParty(filters: FilterState, party: string): FilterState {
   return { ...filters, parties: onlyThis ? [...ALL_PARTIES] : [party] };
 }
 
-function focusDonor(filters: FilterState, name: string): FilterState {
-  const query = filters.query.trim() === name ? "" : name;
-  return { ...filters, query };
-}
-
 export default function App() {
   const isMobile = useMatchMedia("(max-width: 760px)");
-  const [filters, setFilters] = useState<FilterState>(createDefaultFilters);
+  const [filters, setFilters] = useState<FilterState>(INITIAL.filters);
+  const [openDonor, setOpenDonor] = useState<string | null>(INITIAL.donor);
+
+  // Keep the URL in step with filters so a view can be shared or bookmarked.
+  useEffect(() => {
+    const next = writeUrlState(filters, openDonor);
+    if (next !== window.location.search) {
+      window.history.replaceState(null, "", `${window.location.pathname}${next}${window.location.hash}`);
+    }
+  }, [filters, openDonor]);
+
+  useEffect(() => {
+    function onPop() {
+      const state = readUrlState(window.location.search);
+      setFilters(state.filters);
+      setOpenDonor(state.donor);
+    }
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  const closeDonor = useCallback(() => setOpenDonor(null), []);
   const [sort, setSort] = useState<SortState>({ key: "date", dir: "desc" });
   const [mergesOpen, setMergesOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(true);
@@ -77,7 +118,10 @@ export default function App() {
   const problem = filterProblem(filters);
   const filtered = useMemo(() => applyFilters(donations, filters), [filters]);
   const sorted = useMemo(() => sortDonations(filtered, sort), [filtered, sort]);
-  const summary = useMemo(() => summarise(filtered), [filtered]);
+  const summary = useMemo(() => stats(filtered), [filtered]);
+  const partyYears = useMemo(() => partyYearSeries(filtered), [filtered]);
+  const multiDonors = useMemo(() => multiPartyDonors(filtered), [filtered]);
+  const sizes = useMemo(() => sizeDistribution(filtered), [filtered]);
   const parties = useMemo(() => partyTotals(filtered), [filtered]);
   const donors = useMemo(() => topDonors(filtered, TOP_DONOR_LIMIT), [filtered]);
   const timeSeries = useMemo(() => donationSeries(filtered), [filtered]);
@@ -147,13 +191,8 @@ export default function App() {
       </header>
 
       <main className="wrap">
-        <ExploreBar
-          filters={filters}
-          summary={summary}
-          overall={OVERALL}
-          rangeLabel={rangeLabel}
-          onChange={setFilters}
-        />
+        <ExploreBar filters={filters} onChange={setFilters} />
+        <StatCards stats={summary} overall={OVERALL} />
 
         <div className="layout">
           {!isMobile && (
@@ -199,7 +238,7 @@ export default function App() {
                       ? "Updates with the filters."
                       : donors.length < TOP_DONOR_LIMIT
                         ? `All ${formatCount(donors.length)} donors in range.`
-                        : `Top ${TOP_DONOR_LIMIT} by exact published name. Select to search.`}
+                        : `Top ${TOP_DONOR_LIMIT} by exact published name. Select one for details.`}
                   </p>
                 </div>
                 <RankChart
@@ -212,7 +251,7 @@ export default function App() {
                     }`,
                   }))}
                   pressedId={donors.some((donor) => donor.id === focusedDonor) ? focusedDonor : null}
-                  onSelect={(id) => setFilters((current) => focusDonor(current, id))}
+                  onSelect={(id) => setOpenDonor(id)}
                   empty="No donors for these filters."
                 />
                 {focusedDonor && (
@@ -275,6 +314,34 @@ export default function App() {
                 />
               </section>
 
+              <section className="card wide" aria-labelledby="party-year-title">
+                <div className="card-head">
+                  <h2 id="party-year-title">Party totals by year</h2>
+                  <p>Largest parties in range shown separately; the rest are grouped.</p>
+                </div>
+                <PartyYearChart series={partyYears} />
+              </section>
+
+              <section className="card" aria-labelledby="multi-title">
+                <div className="card-head">
+                  <h2 id="multi-title">Donors giving to more than one party</h2>
+                  <p>
+                    {formatCount(multiDonors.length)} exact donor{" "}
+                    {multiDonors.length === 1 ? "name" : "names"} in range. Select one to see every
+                    donation under that name.
+                  </p>
+                </div>
+                <MultiPartyDonors donors={multiDonors} onOpenDonor={setOpenDonor} />
+              </section>
+
+              <section className="card" aria-labelledby="size-title">
+                <div className="card-head">
+                  <h2 id="size-title">Donation sizes</h2>
+                  <p>How many declared donations fall in each size band.</p>
+                </div>
+                <SizeChart buckets={sizes} />
+              </section>
+
               <ElectionCycles cycles={ELECTION_CYCLE_SUMMARIES} />
 
               <section className="card wide table-card" aria-labelledby="table-title">
@@ -316,6 +383,7 @@ export default function App() {
                     rows={sorted}
                     sort={sort}
                     onSort={(key) => setSort((current) => nextSort(current, key))}
+                    onOpenDonor={setOpenDonor}
                   />
                 )}
               </section>
@@ -405,6 +473,15 @@ export default function App() {
         </div>
       </footer>
       <PartyMergesModal open={mergesOpen} onClose={() => setMergesOpen(false)} />
+      <DonorDetail
+        name={openDonor}
+        onClose={closeDonor}
+        onFilterToDonor={(name) => {
+          setFilters((current) => ({ ...current, query: name }));
+          setOpenDonor(null);
+          document.getElementById("table-title")?.scrollIntoView();
+        }}
+      />
       <FiltersSheet
         {...filterProps}
         open={isMobile && filtersSheetOpen}
