@@ -1,5 +1,167 @@
 [
   {
+    "party": "The Green Party of Aotearoa New Zealand",
+    "return_received_date": "12 October 2026",
+    "donor_name": "Karl van Randow",
+    "donor_address": "28 Arnold Street Grey Lynn Auckland 1021",
+    "amount": 30000,
+    "donation_received_date": "11 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/K_van_Randow_12_October_2026.pdf"
+  },
+  {
+    "party": "The Green Party of Aotearoa New Zealand",
+    "return_received_date": "12 October 2026",
+    "donor_name": "Penelope Campbell",
+    "donor_address": "50 Awatea Street Ranui Porirua 5024",
+    "amount": 21500,
+    "donation_received_date": "8 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/P_Campbell_12_October_2026.pdf"
+  },
+  {
+    "party": "NZ Outdoors & Freedom Party",
+    "return_received_date": "7 October 2026",
+    "donor_name": "Liz Dotcom",
+    "donor_address": "25 Ti Point Road Ti Point Auckland",
+    "amount": 44000,
+    "donation_received_date": "28 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/L_Dotcom_7_October_2026.pdf"
+  },
+  {
+    "party": "New Zealand First Party",
+    "return_received_date": "7 October 2026",
+    "donor_name": "Robert Cookson",
+    "donor_address": "564 Number 7 Road Springdale RD Waitoa",
+    "amount": 28999.98,
+    "donation_received_date": "9 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Robert_Cookson_7_October_2026.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "6 October 2026",
+    "donor_name": "Jeff Douglas",
+    "donor_address": "285 Victoria Avenue Remuera Auckland 1050",
+    "amount": 25000,
+    "donation_received_date": "6 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/J_Douglas_6_October_2026.pdf"
+  },
+  {
+    "party": "New Zealand First Party",
+    "return_received_date": "6 October 2026",
+    "donor_name": "Jennifer Marcroft",
+    "donor_address": "7 Champers Way Warkworth Auckland",
+    "amount": 30000,
+    "donation_received_date": "20 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/J_Marcroft_6_October_2026.pdf"
+  },
+  {
+    "party": "New Zealand First Party",
+    "return_received_date": "6 October 2026",
+    "donor_name": "Foresta (NZ) Limited",
+    "donor_address": "89 Domain Road Papamoa Beach Papamoa",
+    "amount": 21000,
+    "donation_received_date": "29 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Foresta_NZ_Ltd_6_October_2026.pdf"
+  },
+  {
+    "party": "The Green Party of Aotearoa New Zealand",
+    "return_received_date": "5 October 2026",
+    "donor_name": "Robert Morgan",
+    "donor_address": "348 Oriental Parade Oriental Bay Wellington 6011",
+    "amount": 52000,
+    "donation_received_date": "28 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/R_Morgan_9_October_2026.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "1 October 2026",
+    "donor_name": "Len Cook",
+    "donor_address": "71 Glen Road Kelburn Wellington 6012",
+    "amount": 20405,
+    "donation_received_date": "19 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/L_Cook_1_October_2026.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "1 October 2026",
+    "donor_name": "Ake Mana Energy Limited",
+    "donor_address": "99 Great South Road Epsom Auckland 1051",
+    "amount": 49130,
+    "donation_received_date": "8 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Ake_Mana_Energy_Ltd_1_October_2026.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "1 October 2026",
+    "donor_name": "Little Umbrella Limited",
+    "donor_address": "Level 4 4 Graham Street Auckland 1010",
+    "amount": 26666,
+    "donation_received_date": "23 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Little_Umbrella_Ltd_1_October_2026.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "1 October 2026",
+    "donor_name": "Red Stag Timber Limited",
+    "donor_address": "Waipa State Mill Road Whakarewarewa Rotorua 3073",
+    "amount": 25000,
+    "donation_received_date": "21 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Red_Stag_Timber_Limited_1_October_2026.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "30 September 2026",
+    "donor_name": "Van Den Brink Karaka Limited",
+    "donor_address": "652 Great South Road Manukau Auckland 2104",
+    "amount": 50000,
+    "donation_received_date": "29 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/VDB_Karaka_Ltd_29_September_2026.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "28 September 2026",
+    "donor_name": "Rank Group Limited",
+    "donor_address": "Floor 9 148 Quay Street Auckland 1010",
+    "amount": 100000,
+    "donation_received_date": "28 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Rank_Group_Ltd_28_September_2026.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "28 September 2026",
+    "donor_name": "Nicholas Mowbray",
+    "donor_address": "186 Mahoenui Valley Road Coatesville Auckland 0793",
+    "amount": 25000,
+    "donation_received_date": "28 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/N_Mowbray_28_September_2026.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "25 September 2026",
+    "donor_name": "Troy Bowker",
+    "donor_address": "491A Marychurch Road Matangi Cambridge 3284",
+    "amount": 50000,
+    "donation_received_date": "25 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/T_Bowker_25_September_2026.pdf"
+  },
+  {
+    "party": "Te Tai Tokerau Party",
+    "return_received_date": "18 September 2026",
+    "donor_name": "Stanley Howard Fund via Richard Allen",
+    "donor_address": "1/26 Putiki Street Grey Lynn Auckland 1021",
+    "amount": 50000,
+    "donation_received_date": "3 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Stanley_Howard_Fund_18_September_2026.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "23 September 2026",
+    "donor_name": "Christopher Reeve",
+    "donor_address": "21 William Street Takapuna Auckland 0622",
+    "amount": 50000,
+    "donation_received_date": "18 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/C_-Reeve_18_September_2026.pdf"
+  },
+  {
     "party": "ACT New Zealand",
     "return_received_date": "17 September 2026",
     "donor_name": "Mike Johnson",
@@ -58,9 +220,9 @@
     "return_received_date": "4 September 2026",
     "donor_name": "Brian Cartmell",
     "donor_address": "413 Speargrass Flat Road Queenstown",
-    "amount": 100000,
+    "amount": 120000,
     "donation_received_date": "30 August 2026",
-    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/B_Cartmell_4_September_2026.pdf"
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/B_Cartmell_28_September_2026-amended-v2.pdf"
   },
   {
     "party": "ACT New Zealand",
