@@ -100,17 +100,6 @@ export function ActiveFilters({ filters, onChange, onReset }: Props) {
       onRemove: () => onChange({ ...filters, hideExtraParliamentary: false }),
     });
   }
-  for (const name of filters.excludedDonors) {
-    chips.push({
-      key: `exclude-${name}`,
-      label: `Excluded ${name}`,
-      onRemove: () =>
-        onChange({
-          ...filters,
-          excludedDonors: filters.excludedDonors.filter((item) => item !== name),
-        }),
-    });
-  }
 
   if (chips.length === 0) return null;
 
