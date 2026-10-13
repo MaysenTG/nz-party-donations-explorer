@@ -6,14 +6,14 @@ type Props = { buckets: SizeBucket[] };
 export function SizeChart({ buckets }: Props) {
   const maxCount = Math.max(1, ...buckets.map((bucket) => bucket.count));
   const total = buckets.reduce((sum, bucket) => sum + bucket.count, 0);
-  if (total === 0) return <p className="empty-inline">No donations in these filters.</p>;
+  if (total === 0) return <p className="empty-inline">No returns in these filters.</p>;
   return (
     <table className="size-table">
-      <caption className="visually-hidden">Number of donations and amount by size band</caption>
+      <caption className="visually-hidden">Number of returns and amount by size band</caption>
       <thead>
         <tr>
           <th scope="col">Size</th>
-          <th scope="col">Donations</th>
+          <th scope="col">Returns</th>
           <th scope="col" className="num">
             Amount
           </th>

@@ -1,6 +1,7 @@
 import rawDonations from "virtual:donations";
 import { formatIsoLong, monthKey, monthLabels, nextMonthKey, nzDateToIso } from "./dates.ts";
 import { classifyDonor } from "./donors.ts";
+import { OLD_INDIVIDUAL_LABEL, inspectionCutoffIso, isPastInspection, withholdName } from "./privacy.ts";
 import { toCents } from "./format.ts";
 import { hasParliamentarySeats } from "./partyMeta.ts";
 import type {
@@ -24,7 +25,7 @@ export const PARTY_ALIASES: Record<string, string> = {
   "New Zealand National Party": "The New Zealand National Party",
 
   // Greens
-  "The Greens, Green Party": "The Green Party of Aotearoa New Zealand",
+  "The Greens, Green Party of Aotearoa New Zealand": "The Green Party of Aotearoa New Zealand",
   "The Green Party of Aotearoa NZ": "The Green Party of Aotearoa New Zealand",
   "Green Party of Aotearoa New Zealand": "The Green Party of Aotearoa New Zealand",
   "The Green Party of Aotearoa": "The Green Party of Aotearoa New Zealand",
@@ -42,8 +43,6 @@ export const PARTY_ALIASES: Record<string, string> = {
   "Opportunity Party": "The Opportunities Party",
   "The Opportunities Party (TOP)": "The Opportunities Party",
 
-  // Internet Party / 2014 Internet MANA alliance returns
-  "Internet MANA": "Internet Party",
 };
 
 export type PartyMergeGroup = {
@@ -85,6 +84,13 @@ function isRawDonation(value: unknown): value is RawDonation {
   );
 }
 
+function optionalString(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim() ? value : undefined;
+}
+
+/** Cutoff for the 6 year inspection period, worked out when the page loads. */
+export const INSPECTION_CUTOFF_ISO = inspectionCutoffIso(new Date());
+
 function loadDonations(value: unknown): Donation[] {
   if (!Array.isArray(value)) {
     throw new Error("donations.json must be an array");
@@ -93,18 +99,36 @@ function loadDonations(value: unknown): Donation[] {
     if (!isRawDonation(row)) {
       throw new Error(`Invalid donation record at index ${index}`);
     }
-    // Build the record field by field so donor addresses in the source file are never read.
+    const extra = row as Record<string, unknown>;
+    const returnIso = nzDateToIso(row.return_received_date);
+    const publishedType = classifyDonor(row.donor_name);
+    // The build already withholds names past the inspection period; this catches returns
+    // that cross the 6 year line after the last build.
+    const nameWithheld =
+      extra.name_withheld === true ||
+      (withholdName(publishedType === "individual", row.donor_name) &&
+        isPastInspection(returnIso, INSPECTION_CUTOFF_ISO));
+    const donorName = nameWithheld ? OLD_INDIVIDUAL_LABEL : row.donor_name;
+    const notes = Array.isArray(extra.notes)
+      ? extra.notes.filter((note): note is string => typeof note === "string")
+      : [];
+    // Build the record field by field so no other source field (such as an address) is read.
     return {
       party: normalizeParty(row.party),
       return_received_date: row.return_received_date,
-      donor_name: row.donor_name,
+      donor_name: donorName,
       amount: row.amount,
       donation_received_date: row.donation_received_date,
       source_pdf_url: row.source_pdf_url,
+      amended_return_received_date: optionalString(extra.amended_return_received_date),
+      returned_to_donor: extra.returned_to_donor === true,
+      party_to_party: extra.party_to_party === true,
+      notes,
       id: String(index),
       receivedIso: nzDateToIso(row.donation_received_date),
-      returnIso: nzDateToIso(row.return_received_date),
-      donorType: classifyDonor(row.donor_name),
+      returnIso,
+      donorType: nameWithheld ? "individual" : publishedType,
+      nameWithheld,
     };
   });
 }
@@ -123,6 +147,16 @@ export const RECEIVED_MIN = donations.reduce(
 export const RECEIVED_MAX = donations.reduce(
   (max, row) => (row.receivedIso > max ? row.receivedIso : max),
   donations[0]?.receivedIso ?? "",
+);
+
+export const RETURN_MIN = donations.reduce(
+  (min, row) => (row.returnIso < min ? row.returnIso : min),
+  donations[0]?.returnIso ?? "",
+);
+
+export const RETURN_MAX = donations.reduce(
+  (max, row) => (row.returnIso > max ? row.returnIso : max),
+  donations[0]?.returnIso ?? "",
 );
 
 export const ALL_YEARS: string[] = [
@@ -154,7 +188,7 @@ export function filterRangeLabel(filters: Filters): string {
   const minYear = RECEIVED_MIN.slice(0, 4);
   const maxYear = RECEIVED_MAX.slice(0, 4);
   if (year === "") {
-    return minYear === maxYear ? `all of ${minYear}` : `all years ${minYear}–${maxYear}`;
+    return minYear === maxYear ? `all of ${minYear}` : `all years ${minYear} to ${maxYear}`;
   }
   if (year) return year;
   if (filters.from && filters.to) {
@@ -162,7 +196,7 @@ export function filterRangeLabel(filters: Filters): string {
   }
   if (filters.from) return `from ${formatIsoLong(filters.from)}`;
   if (filters.to) return `to ${formatIsoLong(filters.to)}`;
-  return minYear === maxYear ? `all of ${minYear}` : `all years ${minYear}–${maxYear}`;
+  return minYear === maxYear ? `all of ${minYear}` : `all years ${minYear} to ${maxYear}`;
 }
 
 export function createDefaultFilters(): Filters {
@@ -174,6 +208,7 @@ export function createDefaultFilters(): Filters {
     maxAmount: "",
     query: "",
     donorType: "all",
+    includeReturned: false,
     hideExtraParliamentary: false,
   };
 }
@@ -190,6 +225,7 @@ export function filtersAreDefault(filters: Filters): boolean {
     filters.maxAmount.trim() === "" &&
     filters.query.trim() === "" &&
     filters.donorType === "all" &&
+    !filters.includeReturned &&
     !filters.hideExtraParliamentary
   );
 }
@@ -209,6 +245,7 @@ export function activeFilterCount(filters: Filters): number {
   if (filters.query.trim()) count += 1;
   if (filters.donorType !== "all") count += 1;
   if (filters.hideExtraParliamentary) count += 1;
+  if (filters.includeReturned) count += 1;
   return count;
 }
 
@@ -267,11 +304,13 @@ export function applyFilters(
 
   return rows.filter((row) => {
     if (!ignore.party && !parties.has(row.party)) return false;
+    if (row.returned_to_donor && !filters.includeReturned) return false;
     if (filters.hideExtraParliamentary && !hasParliamentarySeats(row.party)) return false;
     if (!ignore.donorType && filters.donorType !== "all" && row.donorType !== filters.donorType) {
       return false;
     }
     if (query) {
+      if (row.nameWithheld) return false;
       const haystack = row.donor_name.toLowerCase();
       if (!haystack.includes(query)) return false;
     }
@@ -290,7 +329,7 @@ export function summarise(rows: readonly Donation[]): Summary {
   for (const row of rows) {
     cents += toCents(row.amount);
     parties.add(row.party);
-    donors.add(row.donor_name);
+    if (!row.nameWithheld) donors.add(row.donor_name);
   }
   return {
     total: cents / 100,
@@ -323,6 +362,7 @@ export function partyTotals(rows: readonly Donation[]): PartyTotal[] {
 export function topDonors(rows: readonly Donation[], limit = 15): DonorTotal[] {
   const buckets = new Map<string, { cents: number; count: number; parties: Set<string> }>();
   for (const row of rows) {
+    if (row.nameWithheld) continue;
     const current = buckets.get(row.donor_name) ?? {
       cents: 0,
       count: 0,
@@ -346,7 +386,7 @@ export function topDonors(rows: readonly Donation[], limit = 15): DonorTotal[] {
 }
 
 export function donorCount(rows: readonly Donation[]): number {
-  return new Set(rows.map((row) => row.donor_name)).size;
+  return new Set(rows.filter((row) => !row.nameWithheld).map((row) => row.donor_name)).size;
 }
 
 const MONTH_SERIES_LIMIT = 24;

@@ -38,7 +38,7 @@ export function TimeSeries({ points, grain, colour }: Props) {
   const rows = Array.isArray(points) ? points : [];
 
   if (rows.length === 0) {
-    return <p className="empty-inline">No donations in these filters to plot over time.</p>;
+    return <p className="empty-inline">No returns in these filters to plot over time.</p>;
   }
 
   const narrow = isPhone || (plotWidth > 0 && plotWidth < NARROW_PLOT_PX);
@@ -158,9 +158,9 @@ export function TimeSeries({ points, grain, colour }: Props) {
         {grain === "year"
           ? " Empty years stay at zero. Long ranges group by year."
           : " Empty months in range stay at zero."}{" "}
-        Only gifts above disclosure thresholds are included. This page has $30,000 returns through 2022
-        and $20,000 returns for 2023 and 2026. The Commission publishes no donation table for 2024
-        or 2025, so those years appear empty.
+        Each return is placed by its latest donation date. A return that adds up several donations
+        sits wholly in that period, and a few early parts date from 2007. Only returns above the
+        disclosure threshold for their year are included, and there are none for 2024 or 2025.
       </figcaption>
       <div className="visually-hidden">
         <table>
@@ -171,7 +171,7 @@ export function TimeSeries({ points, grain, colour }: Props) {
             <tr>
               <th>{grain === "year" ? "Year" : "Month"}</th>
               <th>Amount</th>
-              <th>Donations</th>
+              <th>Returns</th>
               <th>Cumulative</th>
             </tr>
           </thead>

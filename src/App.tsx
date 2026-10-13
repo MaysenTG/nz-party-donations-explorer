@@ -32,8 +32,8 @@ import {
   donationSeries,
   partyCounts,
   partyTotals,
-  RECEIVED_MAX,
-  RECEIVED_MIN,
+  RETURN_MAX,
+  RETURN_MIN,
   sortDonations,
   summarise,
   topDonors,
@@ -48,7 +48,10 @@ import {
   SOURCE_LABEL,
   SOURCE_URL,
   CONTACT_URL,
+  DATA_RETRIEVED,
+  PRIVATE_REPORT_URL,
 } from "./lib/source.ts";
+import { INSPECTION_YEARS } from "./lib/privacy.ts";
 import type {
   Donation,
   DonorTypeFilter,
@@ -69,7 +72,8 @@ function stats(rows: readonly Donation[]): Stats {
 
 const INITIAL = readUrlState(window.location.search);
 
-const OVERALL = stats(donations);
+const OVERALL = stats(applyFilters(donations, createDefaultFilters()));
+const WITHHELD_COUNT = donations.filter((row) => row.nameWithheld).length;
 const PARTY_MERGE_GROUPS = partyMergeGroups();
 const TOP_DONOR_LIMIT = 15;
 
@@ -89,21 +93,22 @@ function focusParty(filters: FilterState, party: string): FilterState {
 export default function App() {
   const isMobile = useMatchMedia("(max-width: 760px)");
   const [filters, setFilters] = useState<FilterState>(INITIAL.filters);
-  const [openDonor, setOpenDonor] = useState<string | null>(INITIAL.donor);
+  // The donor view is never stored in the URL, so shared links do not name a person.
+  const [openDonor, setOpenDonor] = useState<string | null>(null);
 
   // Keep the URL in step with filters so a view can be shared or bookmarked.
   useEffect(() => {
-    const next = writeUrlState(filters, openDonor);
+    const next = writeUrlState(filters);
     if (next !== window.location.search) {
       window.history.replaceState(null, "", `${window.location.pathname}${next}${window.location.hash}`);
     }
-  }, [filters, openDonor]);
+  }, [filters]);
 
   useEffect(() => {
     function onPop() {
       const state = readUrlState(window.location.search);
       setFilters(state.filters);
-      setOpenDonor(state.donor);
+      setOpenDonor(null);
     }
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
@@ -172,8 +177,9 @@ export default function App() {
           <p className="eyebrow">Elections NZ disclosures · unofficial view</p>
           <h1>Declared party donations</h1>
           <p className="lede">
-            Gifts declared to the Electoral Commission above today’s $20,000 threshold, plus older
-            $30,000 returns. Smaller gifts are not included.
+            Large donations to registered parties, as published by the Electoral Commission. The
+            reporting threshold has changed over time: over $20,000 (2008 to 2010), over $30,000
+            (2011 to 2022), and over $20,000 from 2023. Smaller donations are not included.
           </p>
           <p className="source-line">
             <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
@@ -183,8 +189,8 @@ export default function App() {
               {SOURCE_30K_LABEL}
             </a>
             <span>
-              {formatCount(donations.length)} returns · received {formatIsoLong(RECEIVED_MIN)} to{" "}
-              {formatIsoLong(RECEIVED_MAX)}
+              {formatCount(donations.length)} returns filed {formatIsoLong(RETURN_MIN)} to{" "}
+              {formatIsoLong(RETURN_MAX)} · checked against the Commission on {DATA_RETRIEVED}
             </span>
           </p>
         </div>
@@ -222,7 +228,7 @@ export default function App() {
                     label: party.label,
                     value: party.value,
                     colour: partyColour(party.id),
-                    meta: `${formatCount(party.count)} ${party.count === 1 ? "donation" : "donations"} · ${formatShare(party.share)}`,
+                    meta: `${formatCount(party.count)} ${party.count === 1 ? "return" : "returns"} · ${formatShare(party.share)}`,
                   }))}
                   pressedId={focusedParty}
                   onSelect={(id) => setFilters((current) => focusParty(current, id))}
@@ -238,7 +244,7 @@ export default function App() {
                       ? "Updates with the filters."
                       : donors.length < TOP_DONOR_LIMIT
                         ? `All ${formatCount(donors.length)} donors in range.`
-                        : `Top ${TOP_DONOR_LIMIT} by exact published name. Select one for details.`}
+                        : `Top ${TOP_DONOR_LIMIT} by amount, by exact name as filed. Select one for returns from the last ${INSPECTION_YEARS} years.`}
                   </p>
                 </div>
                 <RankChart
@@ -246,7 +252,7 @@ export default function App() {
                     id: donor.id,
                     label: donor.label,
                     value: donor.value,
-                    meta: `${formatCount(donor.count)} ${donor.count === 1 ? "donation" : "donations"}${
+                    meta: `${formatCount(donor.count)} ${donor.count === 1 ? "return" : "returns"}${
                       donor.partyCount > 1 ? ` · ${donor.partyCount} parties` : ""
                     }`,
                   }))}
@@ -274,9 +280,10 @@ export default function App() {
               <section className="card wide" aria-labelledby="time-title">
                 <div className="card-head card-head-row">
                   <div>
-                    <h2 id="time-title">Donations over time</h2>
+                    <h2 id="time-title">Returns over time</h2>
                     <p>
-                      By {timeSeries.grain === "year" ? "year" : "month"} received
+                      By {timeSeries.grain === "year" ? "year" : "month"} of the latest donation
+                      date in each return
                       {timeSeries.grain === "year" ? " (long ranges use years)" : ""}.
                     </p>
                   </div>
@@ -326,9 +333,10 @@ export default function App() {
                 <div className="card-head">
                   <h2 id="multi-title">Donors giving to more than one party</h2>
                   <p>
-                    {formatCount(multiDonors.length)} exact donor{" "}
-                    {multiDonors.length === 1 ? "name" : "names"} in range. Select one to see every
-                    donation under that name.
+                    {formatCount(multiDonors.length)}{" "}
+                    {multiDonors.length === 1 ? "donor name" : "donor names"} in range, by exact name as
+                    filed. Parties listed as donors and individuals on returns over{" "}
+                    {INSPECTION_YEARS} years old are left out.
                   </p>
                 </div>
                 <MultiPartyDonors donors={multiDonors} onOpenDonor={setOpenDonor} />
@@ -336,8 +344,11 @@ export default function App() {
 
               <section className="card" aria-labelledby="size-title">
                 <div className="card-head">
-                  <h2 id="size-title">Donation sizes</h2>
-                  <p>How many declared donations fall in each size band.</p>
+                  <h2 id="size-title">Return sizes</h2>
+                  <p>
+                    How many returns fall in each size band. A return can total several donations
+                    from one donor.
+                  </p>
                 </div>
                 <SizeChart buckets={sizes} />
               </section>
@@ -347,7 +358,7 @@ export default function App() {
               <section className="card wide table-card" aria-labelledby="table-title">
                 <div className="toolbar">
                   <div>
-                    <h2 id="table-title">All matching donations</h2>
+                    <h2 id="table-title">All matching returns</h2>
                     <p aria-live="polite">
                       {formatCount(filtered.length)} of {formatCount(donations.length)} ·{" "}
                       {rangeLabel}
@@ -366,7 +377,7 @@ export default function App() {
                 </div>
                 {sorted.length === 0 ? (
                   <div className="empty">
-                    <h3>No donations match</h3>
+                    <h3>No returns match</h3>
                     <p>
                       {problem ?? "No matches. Widen dates or amounts, or reset."}
                     </p>
@@ -396,7 +407,7 @@ export default function App() {
         <div className="wrap">
           <h2>About this page</h2>
           <p>
-            Unofficial view of public disclosures from the{" "}
+            Unofficial view of public returns from the{" "}
             <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
               Electoral Commission page for donations exceeding $20,000
             </a>{" "}
@@ -404,25 +415,66 @@ export default function App() {
             <a href={SOURCE_30K_URL} target="_blank" rel="noopener noreferrer">
               page for donations exceeding $30,000
             </a>
-            . Each row is one declared return.
+            . Each row is one return a party filed about one donor. A return can add up several
+            donations from that donor. The data was last checked against the Commission on{" "}
+            {DATA_RETRIEVED}.
           </p>
           <p>
-            <strong>What we change:</strong> Amounts, dates and donor names are shown as filed with
-            the Commission. We do not estimate or adjust any figure. We do make these changes:
+            <strong>Years covered:</strong> returns over $20,000 for 2008 to 2010, over $30,000 for
+            2011 to 2022, and over $20,000 for 2023 and 2026. The Commission publishes no table of
+            these returns for 2024 or 2025, so those years are empty. Smaller donations appear only
+            in party annual returns, which this site does not use. The two Commission pages cover
+            different years, so no return appears twice.
+          </p>
+          <p>
+            <strong>What we change:</strong> Amounts and donor names are shown as filed, using the
+            amended figure where a return was amended. We do not estimate any figure. We do make
+            these changes:
           </p>
           <ul className="about-list">
             <li>
-              Party names. Returns sometimes label the same party in different ways, so we merge
-              these variants into one name for charts, filters and the table. Every merge is listed
-              below. Any party name not listed is shown as published.
+              Party names (the only names we merge). The same party is sometimes labelled in different ways, so these variants
+              are merged into one name. Every merge is listed below. Any party name not listed is
+              shown as published.
             </li>
-            <li>Rows that appear on both the $20,000 and $30,000 pages are only counted once.</li>
+            <li>
+              Dates. Where a return adds up several donations, the date shown is the latest donation
+              date in that return, and the charts place the whole amount in that month or year. Some
+              of these returns include parts from 2007. For two returns (Hon Robert Smellie QC, 2020,
+              and NZ Public Party, 2020) the Commission lists dates with no year, so the date shown is
+              the date the return was filed.
+            </li>
+            <li>
+              Returned donations. The Commission notes that 2 donations in 2023 were given back to
+              the donor (Buen Holdings Limited to National, Z A Unkovich to NZ First). They are
+              flagged and left out of totals unless you include them in the filters.
+            </li>
+            <li>
+              Notes. Other Commission notes are shown on the row: amended return dates, a withdrawn
+              amendment, an extra $15,200 noted on one return, and rows where the donor is itself a
+              registered party (Internet Party to Internet MANA in 2014, Vision New Zealand to
+              Freedoms New Zealand in 2023).
+            </li>
+            <li>
+              Donor names are shown exactly as filed. We do not merge donor names, so one donor
+              can appear under more than one spelling, and each spelling counts as a separate
+              name. The only change is that the HTML code “&amp;amp;” in four names is shown as “&amp;”.
+            </li>
             <li>
               Donor type (individual or organisation) is our guess from words in the name, such as
-              Limited or Trust. It is not an official label.
+              Limited or Trust, plus a short list checked by hand. It is not an official label.
+            </li>
+            <li>
+              Older returns. Returns are open for public inspection for {INSPECTION_YEARS} years.
+              After that we do not name individual donors, or organisations whose listed name
+              includes a person: {formatCount(WITHHELD_COUNT)} rows show “Name withheld (return
+              over 6 years old)” instead. Their amounts and parties stay
+              in the totals. Organisations stay named. The donor view only lists returns from the
+              last {INSPECTION_YEARS} years.
             </li>
             <li>We do not show donor addresses. The official return for each row has the full record.</li>
-            <li>Party colours come from the{" "}
+            <li>
+              Party colours come from the{" "}
               <a
                 href="https://en.wikipedia.org/wiki/Wikipedia:Index_of_New_Zealand_political_party_meta_attributes"
                 target="_blank"
@@ -444,32 +496,30 @@ export default function App() {
             )}
           </ul>
           <p>
-            “Internet MANA” was the 2014 alliance between the Internet Party and Mana. Those returns
-            are grouped under Internet Party.{" "}
+            Internet MANA was a separate combined party registered for the 2014 election, so it is
+            shown on its own.{" "}
             <button type="button" className="text-button" onClick={() => setMergesOpen(true)}>
               Open merge list
             </button>
           </p>
           <p>
-            <strong>Years covered:</strong> This page uses the $30,000 list (2011 to 2022, plus
-            $20,000 disclosures from 2008 to 2010) and the Commission’s $20,000 tables for 2023 and
-            2026. The Commission publishes no donation table for 2024 or 2025, so those years are
-            empty here. Donations in those years appear only in party annual returns, which this
-            page does not include.
-          </p>
-          <p>
-            Only donations above the Commission’s thresholds appear here, so this is not a party’s
-            full income. Being listed means only that a party reported receiving a donation. It
-            does not suggest any wrongdoing by the donor or the party.
+            Being listed means only that a party reported receiving a donation. It does not suggest
+            any wrongdoing by the donor or the party.
           </p>
           <p className="site-notice">
             <strong>Notice:</strong> Data source is the Electoral Commission. This site is
             independent and is not affiliated with or endorsed by the Electoral Commission. If
             something here does not match the official record, please{" "}
             <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer">
-              report it on GitHub
+              open a public issue on GitHub
+            </a>{" "}
+            with only the row and the correction, and no personal details. If the correction is
+            about you or is private, use{" "}
+            <a href={PRIVATE_REPORT_URL} target="_blank" rel="noopener noreferrer">
+              GitHub’s private report form
             </a>
-            . Please do not post personal details in a public issue.
+            , which only the site owner can read. Neither route needs an email address or phone
+            number.
           </p>
         </div>
       </footer>

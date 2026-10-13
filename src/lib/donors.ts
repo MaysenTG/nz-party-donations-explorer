@@ -25,14 +25,27 @@ export const ORGANISATION_TERMS = [
   "Inc",
   "Enterprises",
   "Chambers",
+  "Bank",
+  "Authority",
+  "Vineyard",
+  "Fund",
 ] as const;
 
-const ORGANISATION_PATTERN = new RegExp(
-  `\\b(?:${ORGANISATION_TERMS.join("|")})\\b`,
-  "i",
-);
+/**
+ * Names the word list gets wrong. Exact published names.
+ * Checked by hand against the Commission tables (audit of 13 October 2026).
+ */
+export const DONOR_TYPE_OVERRIDES: Record<string, DonorType> = {
+  "NZ Amalgamated Engineering, Printing": "organisation",
+  "Vision New Zealand": "organisation",
+  "E Tu": "organisation",
+};
+
+const ORGANISATION_PATTERN = new RegExp(`\\b(?:${ORGANISATION_TERMS.join("|")})\\b`, "i");
 
 export function classifyDonor(name: string): DonorType {
+  const override = DONOR_TYPE_OVERRIDES[name];
+  if (override) return override;
   return ORGANISATION_PATTERN.test(name) ? "organisation" : "individual";
 }
 

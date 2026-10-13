@@ -21,15 +21,15 @@ export function StatCards({ stats, overall }: Props) {
       of: narrowed ? `of ${formatCompactNzd(overall.total)}` : undefined,
     },
     {
-      label: "Donations",
+      label: "Returns",
       value: formatCount(stats.donations),
       title: formatCount(stats.donations),
       of: narrowed ? `of ${formatCount(overall.donations)}` : undefined,
     },
     {
-      label: "Donors",
+      label: "Donor names",
       value: formatCount(stats.donors),
-      title: "Distinct donor names as published",
+      title: "Distinct donor names as filed. One donor can appear under more than one spelling. Withheld names (returns over 6 years old) are not counted.",
       of: narrowed ? `of ${formatCount(overall.donors)}` : undefined,
     },
     {
@@ -38,8 +38,8 @@ export function StatCards({ stats, overall }: Props) {
       title: formatCount(stats.parties),
       of: narrowed ? `of ${formatCount(overall.parties)}` : undefined,
     },
-    { label: "Median donation", value: formatCompactNzd(stats.median), title: formatNzd(stats.median) },
-    { label: "Largest donation", value: formatCompactNzd(stats.largest), title: formatNzd(stats.largest) },
+    { label: "Median return", value: formatCompactNzd(stats.median), title: formatNzd(stats.median) },
+    { label: "Largest return", value: formatCompactNzd(stats.largest), title: formatNzd(stats.largest) },
   ];
   return (
     <section className="stat-cards" aria-label="Summary for the current filters" aria-live="polite">

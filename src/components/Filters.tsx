@@ -64,8 +64,8 @@ export function FilterFields({
           )}
         </div>
         <p className="field-help">
-          Matches donor name. Chart selection uses the same search, so related wording
-          (for example “via … Trust”) is included.
+          Matches the donor name as filed. Individuals on returns over 6
+          years old are not named, so they do not match. The search is not saved in the page link.
         </p>
       </div>
 
@@ -97,11 +97,31 @@ export function FilterFields({
         <details className="hint">
           <summary>How donor type is decided</summary>
           <p>
-            Treated as an organisation if the name contains {ORGANISATION_TERMS.join(", ")}.
-            Everyone else is an individual, including joint personal names. This is a reading aid,
-            not an Electoral Commission classification.
+            Treated as an organisation if the name contains {ORGANISATION_TERMS.join(", ")}, plus a
+            short list of names checked by hand. Everyone else is an individual, including joint
+            personal names. This is a reading aid, not an Electoral Commission classification.
           </p>
         </details>
+      </fieldset>
+
+      <fieldset className="field">
+        <legend>Returned donations</legend>
+        <p className="field-help">
+          The Commission notes 2 donations that the party gave back to the donor. They are left out
+          of totals unless you include them.
+        </p>
+        <ul className="party-list exclusion-list">
+          <li>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.includeReturned}
+                onChange={(event) => onChange({ ...filters, includeReturned: event.target.checked })}
+              />
+              <span>Include donations returned to the donor</span>
+            </label>
+          </li>
+        </ul>
       </fieldset>
 
       <fieldset className="field">
@@ -128,8 +148,9 @@ export function FilterFields({
       <fieldset className="field">
         <legend>Party</legend>
         <p className="field-help">
-          Renames and spelling variants are combined (for example Greens, National, ACT, Te Pāti
-          Māori / Māori Party, NZ First, TOP, and Internet Party / Internet MANA).
+          Renames and spelling variants of one party are combined (for example Greens, National,
+          ACT, Te Pāti Māori and the Māori Party, NZ First, TOP). The full list is in About this
+          page. Internet MANA (2014) is kept separate from the Internet Party.
         </p>
         <div className="inline-actions">
           <button
@@ -174,7 +195,7 @@ export function FilterFields({
       </fieldset>
 
       <fieldset className="field">
-        <legend>Date received</legend>
+        <legend>Donation date</legend>
         <div className="pair">
           <label>
             From
@@ -198,11 +219,12 @@ export function FilterFields({
           </label>
         </div>
         <p className="field-help">
-          Date the party received the donation
+          The date the party received the donation, not the filing date. Where a return adds up
+          several donations from one donor, this is the date of the latest one
           {RECEIVED_MIN && RECEIVED_MAX
             ? ` (${formatIsoLong(RECEIVED_MIN)} to ${formatIsoLong(RECEIVED_MAX)})`
             : ""}
-          — not the filing date.
+          .
         </p>
       </fieldset>
 
@@ -231,7 +253,7 @@ export function FilterFields({
           </label>
         </div>
         <p className="field-help">
-          Commas optional. These amounts crossed the $20,000 or $30,000 disclosure thresholds.
+          Commas optional. Each amount is a return total, which can add up several donations.
         </p>
       </fieldset>
 

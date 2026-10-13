@@ -9,7 +9,7 @@ type Props = {
   rows: Donation[];
   sort: SortState;
   onSort: (key: SortKey) => void;
-  onOpenDonor: (name: string) => void;
+  onOpenDonor: (key: string) => void;
 };
 
 const COLUMNS: { key: SortKey; label: string }[] = [
@@ -28,6 +28,47 @@ function PdfLink({ url, donor }: { url: string | null; donor: string }) {
       View PDF
       <span className="visually-hidden"> for {donor}</span>
     </a>
+  );
+}
+
+function DonorName({ row, onOpenDonor }: { row: Donation; onOpenDonor: (key: string) => void }) {
+  if (row.nameWithheld) {
+    return (
+      <span className="donor-name donor-withheld" title="Returns stay open for public inspection for 6 years.">
+        {row.donor_name}
+      </span>
+    );
+  }
+  return (
+    <button type="button" className="donor-name donor-link" onClick={() => onOpenDonor(row.donor_name)}>
+      {row.donor_name}
+    </button>
+  );
+}
+
+function ReturnDates({ row }: { row: Donation }) {
+  return (
+    <>
+      <span className="return-date">Return received {row.return_received_date}</span>
+      {row.amended_return_received_date && (
+        <span className="return-date">Amended return received {row.amended_return_received_date}</span>
+      )}
+    </>
+  );
+}
+
+function RowNotes({ row }: { row: Donation }) {
+  if (!row.returned_to_donor && !row.party_to_party && row.notes.length === 0) return null;
+  return (
+    <span className="row-notes">
+      {row.returned_to_donor && <span className="tag tag-flag">Returned to donor</span>}
+      {row.party_to_party && <span className="tag tag-flag">Donor is a party</span>}
+      {row.notes.map((note) => (
+        <span key={note} className="row-note">
+          {note}
+        </span>
+      ))}
+    </span>
   );
 }
 
@@ -112,16 +153,11 @@ export function DonationsTable({ rows, sort, onSort, onOpenDonor }: Props) {
                 <span className="donation-card-amount">{formatNzd(row.amount)}</span>
                 <span className={`tag tag-${row.donorType}`}>{donorTypeLabel(row.donorType)}</span>
               </div>
-              <button
-                type="button"
-                className="donor-name donor-link"
-                onClick={() => onOpenDonor(row.donor_name)}
-              >
-                {row.donor_name}
-              </button>
+              <DonorName row={row} onOpenDonor={onOpenDonor} />
               <span className="donation-card-party">{row.party}</span>
-              <span className="received-date">Received {row.donation_received_date}</span>
-              <span className="return-date">Return received {row.return_received_date}</span>
+              <span className="received-date">Latest donation date {row.donation_received_date}</span>
+              <ReturnDates row={row} />
+              <RowNotes row={row} />
               <PdfLink url={safeHttps(row.source_pdf_url)} donor={row.donor_name} />
             </li>
           ))}
@@ -151,7 +187,7 @@ export function DonationsTable({ rows, sort, onSort, onOpenDonor }: Props) {
                       className={column.key === "amount" ? "num" : undefined}
                     >
                       <button type="button" onClick={() => onSort(column.key)}>
-                        {column.label === "Received" ? "Received by party" : column.label}
+                        {column.label === "Received" ? "Latest donation date in return" : column.label}
                         <span aria-hidden="true" className="sort-mark">
                           {active ? (sort.dir === "asc" ? "↑" : "↓") : "↕"}
                         </span>
@@ -167,19 +203,14 @@ export function DonationsTable({ rows, sort, onSort, onOpenDonor }: Props) {
                 <tr key={row.id}>
                   <td>{row.party}</td>
                   <td>
-                    <button
-                type="button"
-                className="donor-name donor-link"
-                onClick={() => onOpenDonor(row.donor_name)}
-              >
-                {row.donor_name}
-              </button>
+                    <DonorName row={row} onOpenDonor={onOpenDonor} />
                     <span className={`tag tag-${row.donorType}`}>{donorTypeLabel(row.donorType)}</span>
                   </td>
                   <td className="num">{formatNzd(row.amount)}</td>
                   <td>
                     <span className="received-date">{row.donation_received_date}</span>
-                    <span className="return-date">Return received {row.return_received_date}</span>
+                    <ReturnDates row={row} />
+                    <RowNotes row={row} />
                   </td>
                   <td>
                     <PdfLink url={safeHttps(row.source_pdf_url)} donor={row.donor_name} />
