@@ -28,6 +28,7 @@ export const PARTY_ALIASES: Record<string, string> = {
   "The Green Party of Aotearoa NZ": "The Green Party of Aotearoa New Zealand",
   "Green Party of Aotearoa New Zealand": "The Green Party of Aotearoa New Zealand",
   "The Green Party of Aotearoa": "The Green Party of Aotearoa New Zealand",
+  "Green Party of Aoteroa New Zealand": "The Green Party of Aotearoa New Zealand",
   "Green Party": "The Green Party of Aotearoa New Zealand",
 
   // Te Pāti Māori (formerly Māori Party)
