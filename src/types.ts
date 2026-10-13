@@ -1,20 +1,28 @@
 export type DonorType = "individual" | "organisation";
 
+export type OfficialSourceKind = "pdf" | "page";
+
 export type RawDonation = {
   party: string;
   return_received_date: string;
   donor_name: string;
-  donor_address: string;
   amount: number;
   donation_received_date: string;
   source_pdf_url: string;
 };
 
-export type Donation = RawDonation & {
+export type Donation = {
   id: string;
+  party: string;
+  donor_name: string;
+  amount: number;
+  donation_received_date: string;
+  return_received_date: string;
   receivedIso: string;
   returnIso: string;
   donorType: DonorType;
+  officialSourceUrl: string;
+  officialSourceKind: OfficialSourceKind;
 };
 
 export type DonorTypeFilter = "all" | DonorType;
@@ -27,8 +35,6 @@ export type Filters = {
   maxAmount: string;
   query: string;
   donorType: DonorTypeFilter;
-  /** Exact published donor names to omit from results. */
-  excludedDonors: string[];
   /** Drop parties that currently hold no seats in Parliament. */
   hideExtraParliamentary: boolean;
 };
