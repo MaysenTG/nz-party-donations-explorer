@@ -159,8 +159,8 @@ export function TimeSeries({ points, grain, colour }: Props) {
           ? " Empty years stay at zero. Long ranges group by year."
           : " Empty months in range stay at zero."}{" "}
         Only gifts above disclosure thresholds are included. This page has $30,000 returns through 2022
-        and $20,000 returns from 2026. The Commission also publishes 2023 returns, which are not
-        included here yet, so 2023 to 2025 appear empty.
+        and $20,000 returns for 2023 and 2026. The Commission publishes no donation table for 2024
+        or 2025, so those years appear empty.
       </figcaption>
       <div className="visually-hidden">
         <table>

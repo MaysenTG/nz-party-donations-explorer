@@ -1278,6 +1278,1185 @@
     "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/P_Mills_8_January_2026.pdf"
   },
   {
+    "party": "NewZeal",
+    "return_received_date": "17 July 2024",
+    "donor_name": "Anthony Tallott",
+    "donor_address": "5 Pintner Place Auckland",
+    "amount": 27000,
+    "donation_received_date": "4 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Anthony_Tallott_17_July_2024.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "23 May 2024",
+    "donor_name": "Jenny Marcroft",
+    "donor_address": "183 Green Road RD5 Warkworth",
+    "amount": 32000,
+    "donation_received_date": "30 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/J_Marcroft_30_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "23 May 2024",
+    "donor_name": "P D Harrison",
+    "donor_address": "418 Lake Road Takapuna Auckland",
+    "amount": 25000,
+    "donation_received_date": "25 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/P_D_Harrison_25_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "10 May 2024",
+    "donor_name": "Hon Pete Hodgson",
+    "donor_address": "25 Stevenson Avenue Sawyers Bay Port Chalmers 9023",
+    "amount": 20368,
+    "donation_received_date": "18 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Hon-Pete-Hodgson_18_9_2023.pdf"
+  },
+  {
+    "party": "Freedoms New Zealand",
+    "return_received_date": "22 April 2024",
+    "donor_name": "Aotearoa Media Ltd",
+    "donor_address": "Level 1/2 Kings Road Panmure Auckland",
+    "amount": 21959.25,
+    "donation_received_date": "30 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/AOTEAR1.PDF"
+  },
+  {
+    "party": "Freedoms New Zealand",
+    "return_received_date": "22 November 2023",
+    "donor_name": "Vision New Zealand",
+    "donor_address": "44 Bob Charles Drive Golflands Auckland",
+    "amount": 19250.22,
+    "donation_received_date": "23 October 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Vision_New_Zealand_23_October_2023-v4.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "15 November 2023",
+    "donor_name": "Hud Studio Limited",
+    "donor_address": "Level 11 19 Victoria Street West Auckland",
+    "amount": 35000,
+    "donation_received_date": "11 October 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Hud_Studios_Limited_15_November_2023.jpg"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "6 October 2023",
+    "donor_name": "Dame Jenny Gibbs",
+    "donor_address": "Apartment 508 155 Beaumont Street Wynyard Quarter Auckland 1010",
+    "amount": 50000,
+    "donation_received_date": "26 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/J_Gibbs_6_October_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "6 October 2023",
+    "donor_name": "Lani Hagaman",
+    "donor_address": "10 Goldstream Court Ilam Christchurch 8041",
+    "amount": 20175,
+    "donation_received_date": "26 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/L_Hagaman_6_October_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "10 October 2023",
+    "donor_name": "Paul Adams",
+    "donor_address": "188 State Highway 2 Bethlehem Tauranga 3110",
+    "amount": 28000,
+    "donation_received_date": "9 October 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/P_Adams_10-_October_2023.jpg"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "10 October 2023",
+    "donor_name": "Graeme Thomas Harrison",
+    "donor_address": "143 Forest Drive Methven 7730",
+    "amount": 23800,
+    "donation_received_date": "9 October 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/G_T_Harrison_10_October_2023.jpg"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "10 October 2023",
+    "donor_name": "Roshan Nauhria",
+    "donor_address": "39 Hobill Avenue Wiri Auckland 2104",
+    "amount": 29500,
+    "donation_received_date": "9 October 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/R_Nauhira_10_October_2023.jpg"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "2 October 2023",
+    "donor_name": "Hon. Robert Smellie QC",
+    "donor_address": "Grace Joel Retirement Village 59/184 St Heliers Bay Road St Heliers Auckland 1071",
+    "amount": 50000,
+    "donation_received_date": "30 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Hon_R_Smellie_QC_2_October_2023.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "2 October 2023",
+    "donor_name": "New Zealand Dairy Workers Union",
+    "donor_address": "34 Harwood Street Hamilton Central Hamilton North 3204",
+    "amount": 45000,
+    "donation_received_date": "26 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/NZ_Dairy_Workers_Union_2_October_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "26 September 2023",
+    "donor_name": "Rank Group Limited via Graeme Hart",
+    "donor_address": "Level 9 148 Quay Street Auckland Central Auckland 1010",
+    "amount": 104000,
+    "donation_received_date": "14 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Rank_Group_Limited_26_September_2023-v2.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "22 September 2023",
+    "donor_name": "Midlands Seed Limited",
+    "donor_address": "60 Cashel Street Christchurch Central City Christchurch",
+    "amount": 40000,
+    "donation_received_date": "12 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Midlands_Seed_Limited_22_September_2023.pdf"
+  },
+  {
+    "party": "NewZeal",
+    "return_received_date": "18 September 2023",
+    "donor_name": "Ototoa Trust via Isaac Higham",
+    "donor_address": "174 Higham Road South Head Helensville 0874",
+    "amount": 25000,
+    "donation_received_date": "6 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Isaac_Higham_18_September_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "15 September 2023",
+    "donor_name": "Rank Group Limited",
+    "donor_address": "Floor 9 148 Quay Street Auckland Central",
+    "amount": 150000,
+    "donation_received_date": "14 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Rank_Group_Limited_15-September_2023.jpg"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "15 September 2023",
+    "donor_name": "Rank Group Limited",
+    "donor_address": "Level 9 148 Quay Street Auckland",
+    "amount": 100000,
+    "donation_received_date": "28 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Rank_Group_15_September_2023.pdf"
+  },
+  {
+    "party": "Green Party of Aotearoa New Zealand",
+    "return_received_date": "15 September 2023",
+    "donor_name": "Simon Barclay",
+    "donor_address": "11 Ward Road Warkworth 0986",
+    "amount": 24000,
+    "donation_received_date": "12 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Simon_Barclay_15_September_2023.pdf"
+  },
+  {
+    "party": "Green Party of Aotearoa New Zealand",
+    "return_received_date": "15 September 2023",
+    "donor_name": "Robin Barclay",
+    "donor_address": "11 Ward Road Warkworth 0986",
+    "amount": 40000,
+    "donation_received_date": "14 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Robin_Barclay_15_September_2023.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "12 September 2023",
+    "donor_name": "B J Lindsay",
+    "donor_address": "11A Burwood Crescent Remuera Auckland",
+    "amount": 50000,
+    "donation_received_date": "1 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/B_J_Lindsay_12_September_2023.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "12 September 2023",
+    "donor_name": "P J Vela",
+    "donor_address": "10 Hinau Road Karaka 2213",
+    "amount": 50000,
+    "donation_received_date": "29 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/P_J_Vela_12_September_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "12 September 2023",
+    "donor_name": "Owens Properties Limited",
+    "donor_address": "89 Arrowtown-Lake Hayes Road Queenstown 9371",
+    "amount": 50160,
+    "donation_received_date": "1 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Owens_Properties_Ltd_1_May_2024.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "12 September 2023",
+    "donor_name": "Frances Wyborn",
+    "donor_address": "21A Takutai Street Parnell Auckland",
+    "amount": 24000,
+    "donation_received_date": "4 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/F_Wyborn_12_September_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "6 September 2023",
+    "donor_name": "William James Deihl",
+    "donor_address": "303/54 Surrey Crescent Grey Lynn Auckland",
+    "amount": 20500,
+    "donation_received_date": "5 September 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/W_J_Deihl_6_September_2023.jpg"
+  },
+  {
+    "party": "Green Party of Aotearoa New Zealand",
+    "return_received_date": "4 September 2023",
+    "donor_name": "Marama Davidson",
+    "donor_address": "5 Stratford Road Manurewa Auckland 2105",
+    "amount": 21158.12,
+    "donation_received_date": "29 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Marama_Davidson_4_September_2023.pdf"
+  },
+  {
+    "party": "Green Party of Aotearoa New Zealand",
+    "return_received_date": "4 September 2023",
+    "donor_name": "James Shaw",
+    "donor_address": "29 Orangi Kaupapa Road Northland Wellington 6012",
+    "amount": 20268.12,
+    "donation_received_date": "29 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/James_Shaw_4_September_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "4 September 2023",
+    "donor_name": "IEF Limited",
+    "donor_address": "326 New North Road Kingsland Auckland",
+    "amount": 23000,
+    "donation_received_date": "31 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/IEF_Limited_4_September_2023.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "4 September 2023",
+    "donor_name": "Mark James Todd",
+    "donor_address": "558 Great North Road Grey Lynn Auckland 1021",
+    "amount": 50000,
+    "donation_received_date": "25 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Mark_James_Todd_25_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "4 September 2023",
+    "donor_name": "Rail & Maritime Transport Union of New Zealand",
+    "donor_address": "Level 1, Tramways Building 1 Thorndon Quay Pipitea Wellington 6011",
+    "amount": 50000,
+    "donation_received_date": "25 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Rail_Maritime_Transport_Union_of_NZ_25_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "4 September 2023",
+    "donor_name": "Maritime Union of New Zealand",
+    "donor_address": "220 Willis Street Te Aro Wellington 6011",
+    "amount": 50000,
+    "donation_received_date": "25 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Maritime_Union_of_New_Zealand_25_August_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "31 August 2023",
+    "donor_name": "Michael Sullivan",
+    "donor_address": "62 Marine Parade Mellons Bay Auckland 2014",
+    "amount": 50000,
+    "donation_received_date": "21 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/M_Sullivan_31_August_2023.pdf"
+  },
+  {
+    "party": "Freedoms New Zealand",
+    "return_received_date": "29 August 2023",
+    "donor_name": "Warwick and Averil Norman",
+    "donor_address": "5 Paget Street Freemans Bay Auckland",
+    "amount": 23000,
+    "donation_received_date": "21 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/W_and_A_Norman_29_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "29 August 2023",
+    "donor_name": "Cheryl Adams",
+    "donor_address": "188 State Highway 2 Bethlehem Tauranga 3110",
+    "amount": 29000,
+    "donation_received_date": "28 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/C_Adams_29_August_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "28 August 2023",
+    "donor_name": "David Richwhite",
+    "donor_address": "Unit 1/105 Sarsfield Street Herne Bay Auckland",
+    "amount": 59725.12,
+    "donation_received_date": "15 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/D_Richwhite_28_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "28 August 2023",
+    "donor_name": "Jillian Sandra Garing",
+    "donor_address": "5B/20 Market Place Auckland Central Auckland",
+    "amount": 29000,
+    "donation_received_date": "26 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/J_S_Garing_28_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "25 August 2023",
+    "donor_name": "Christopher & Michaela Meehan",
+    "donor_address": "88 Speargrass Flat Road Queenstown",
+    "amount": 103260,
+    "donation_received_date": "23 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Christopher_and_Michaela_Meehan_26_August_2023.jpg"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "25 August 2023",
+    "donor_name": "Ateco Group NZ Ltd via Neville Crichton",
+    "donor_address": "40 Paisley Place Mount Wellington Auckland 1060",
+    "amount": 25000,
+    "donation_received_date": "11 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Ateco_Group_NZ_Ltd-_25_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "22 August 2023",
+    "donor_name": "Christopher Parkin",
+    "donor_address": "810/257 Wakefield Street Te Aro Wellington",
+    "amount": 20500,
+    "donation_received_date": "20 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/C_Parkin_20_August_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "21 August 2023",
+    "donor_name": "Neale Underdown",
+    "donor_address": "204 Tucker Beach Road Lower Shotover 9371",
+    "amount": 100000,
+    "donation_received_date": "9 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/N_Undertown_21_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "16 August 2023",
+    "donor_name": "Mahesh Muralidhar",
+    "donor_address": "3 Buller Street Ponsonby Auckland",
+    "amount": 36479.2,
+    "donation_received_date": "9 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Mahesh_Muralidhar_09_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "11 August 2023",
+    "donor_name": "Jonathan Edward Schick",
+    "donor_address": "928 Kaipaki Road Kaipaki Cambridge",
+    "amount": 55000,
+    "donation_received_date": "8 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Jonathan_Edward_Schick_08_August_2023.jpg"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "11 August 2023",
+    "donor_name": "Oregon Group Limited",
+    "donor_address": "Level 4, Norfolk House 18 High Street Auckland",
+    "amount": 62000,
+    "donation_received_date": "8 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Oregon_Group_Limited_08_August_2023.jpg"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "11 August 2023",
+    "donor_name": "M J Wyborn",
+    "donor_address": "1C, 89 Halsey Street The Viaduct Auckland",
+    "amount": 100000,
+    "donation_received_date": "9 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/M_J_Wyborn_9_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "11 August 2023",
+    "donor_name": "D Muller",
+    "donor_address": "Suite 1, Level 1 112 Parnell Road Parnell Auckland",
+    "amount": 30000,
+    "donation_received_date": "9 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/D_Muller_9_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "11 August 2023",
+    "donor_name": "Z A Unkovich",
+    "donor_address": "78 Arney Road Remuera Auckland",
+    "amount": 50000,
+    "donation_received_date": "7 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Z_A_Unkovich_7_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "3 August 2023",
+    "donor_name": "Mark Townsend",
+    "donor_address": "4938 State Highway 2 RD1 Ngatea 3597",
+    "amount": 30000,
+    "donation_received_date": "2 August 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/M_Townsend_2_August_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "3 August 2023",
+    "donor_name": "Diane Townsend",
+    "donor_address": "4938 State Highway 2 RD1 Ngatea 3597",
+    "amount": 20150,
+    "donation_received_date": "31 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/D_Townsend_31_July_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "1 August 2023",
+    "donor_name": "Michael Sullivan",
+    "donor_address": "62 Marine Parade Mellons Bay Auckland",
+    "amount": 50000,
+    "donation_received_date": "28 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Michael_Sullivan_28_July.pdf"
+  },
+  {
+    "party": "Te Pāti Māori",
+    "return_received_date": "31 July 2023",
+    "donor_name": "John Tamihere",
+    "donor_address": "11 Karemoana Drive Te Atatū Auckland",
+    "amount": 50000,
+    "donation_received_date": "17 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/J_Tamihere_17_July_2023.pdf"
+  },
+  {
+    "party": "Freedoms New Zealand",
+    "return_received_date": "27 July 2023",
+    "donor_name": "Vision New Zealand",
+    "donor_address": "44 Bob Charles Drive Golflands Auckland 2013",
+    "amount": 47052.53,
+    "donation_received_date": "25 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Vision_New_Zealand_27_July_2023-v2.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "26 July 2023",
+    "donor_name": "Shayne Greenlees",
+    "donor_address": "96 Plummer Road RD7 Whakamarama Tauranga 3179",
+    "amount": 50000,
+    "donation_received_date": "13 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/S-Greenlees_26_July_2023.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "25 July 2023",
+    "donor_name": "John Reynolds",
+    "donor_address": "93 Richmond Road Grey Lynn Auckland 1021",
+    "amount": 20500,
+    "donation_received_date": "20 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/John_Reynolds_20_July_2023.pdf"
+  },
+  {
+    "party": "Green Party of Aotearoa New Zealand",
+    "return_received_date": "25 July 2023",
+    "donor_name": "Robert Morgan",
+    "donor_address": "348 Oriental Parade Wellington 6011",
+    "amount": 50000,
+    "donation_received_date": "22 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/R_Morgan_25_July_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "25 July 2023",
+    "donor_name": "Marcus Kearns",
+    "donor_address": "16 Crannig Fen Wattle Downs Auckland 2103",
+    "amount": 25000,
+    "donation_received_date": "20 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/M_Kearns_25_July_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "25 July 2023",
+    "donor_name": "David Richwhite",
+    "donor_address": "1/105 Sarsfield Street Herne Bay Auckland",
+    "amount": 50000,
+    "donation_received_date": "24 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/D_Richwhite_25_July_2023.pdf"
+  },
+  {
+    "party": "Vision New Zealand",
+    "return_received_date": "24 July 2023",
+    "donor_name": "Cheyne Huka Hakaraia",
+    "donor_address": "105 Pakowhai Road Hastings",
+    "amount": 23000,
+    "donation_received_date": "20 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/C_H_Hukaraia_24_July_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "24 July 2023",
+    "donor_name": "Culum Alexander Manson",
+    "donor_address": "74 St. George's Bay Road Parnell Auckland 1052",
+    "amount": 70000,
+    "donation_received_date": "17 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/C_A_Manson_17_July_2023.pdf"
+  },
+  {
+    "party": "Freedoms New Zealand",
+    "return_received_date": "24 July 2023",
+    "donor_name": "Warwick & Averil Norman",
+    "donor_address": "5 Paget Street Freemans Bay Auckland",
+    "amount": 23000,
+    "donation_received_date": "20 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/W_and_A_Norman_20_July_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "20 July 2023",
+    "donor_name": "Cambrian Trust",
+    "donor_address": "C/- Cambrian Trustee Limited via Philip Thornton Hasketh Henry Level 10 188 Quay Street Auckland 1010",
+    "amount": 50000,
+    "donation_received_date": "10 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Philip_Thornton_Cambrian-Trustee_Ltd_10_July_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "19 July 2023",
+    "donor_name": "Craig & Shayne Greenlees",
+    "donor_address": "96 Plummer Road Tauranga 3176",
+    "amount": 50000,
+    "donation_received_date": "13 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Craig_and_Shayne_Greenlees_13_July_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "18 July 2023",
+    "donor_name": "Hugh Ross Jones",
+    "donor_address": "37 Saltburn Road Milford Auckland 0620",
+    "amount": 100000,
+    "donation_received_date": "12 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/H_R_Jones_12_July_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "18 July 2023",
+    "donor_name": "VDB Management Services Limited",
+    "donor_address": "652 Great South Road Manukau Auckland",
+    "amount": 50000,
+    "donation_received_date": "10 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/VDB_Management_Services_Ltd_10_July_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "18 July 2023",
+    "donor_name": "Buen Holdings Limited",
+    "donor_address": "48 Crooks Road East Tamaki Auckland 2013",
+    "amount": 200000,
+    "donation_received_date": "10 July 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Buen_Holdings_Ltd_10_July_2023.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "10 July 2023",
+    "donor_name": "MJ Wyborn",
+    "donor_address": "1C, 89 Halsey Street The Viaduct Auckland",
+    "amount": 50000,
+    "donation_received_date": "23 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/M_J_Wyborn_23_June_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "5 July 2023",
+    "donor_name": "Graeme Thomas Harrison",
+    "donor_address": "143 Forest Drive Methven 7730",
+    "amount": 20254,
+    "donation_received_date": "30 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/G_Harrison_30_June_2023.jpg"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "30 June 2023",
+    "donor_name": "Warren Lewis",
+    "donor_address": "45 Cliff Road St Heliers Auckland 1071",
+    "amount": 500000,
+    "donation_received_date": "26 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Warren-Lewis_26_June_2023.jpg"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "29 June 2023",
+    "donor_name": "Atlas Concrete Limited",
+    "donor_address": "11 Wairau Road Takapuna Auckland 0627",
+    "amount": 50000,
+    "donation_received_date": "22 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Atlas_Concrete_Ltd_22_June_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "29 June 2023",
+    "donor_name": "Stephen Owen",
+    "donor_address": "14 Ronaki Road Mission Bay Auckland",
+    "amount": 50000,
+    "donation_received_date": "20 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/S_Owen_20_June_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "29 June 2023",
+    "donor_name": "Craig Heatley",
+    "donor_address": "10C Brett Avenue Takapuna Auckland 0622",
+    "amount": 50000,
+    "donation_received_date": "22 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/C_Heatley_22_June_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "21 June 2023",
+    "donor_name": "Nicholas James Mowbray",
+    "donor_address": "186 Mahoenui Valley Road Coatesville Auckland",
+    "amount": 50000,
+    "donation_received_date": "19 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/N_J_Mowbray_19_June_2023-v2.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "21 June 2023",
+    "donor_name": "West Reeve Family Trust via Eldon Reeve and Hilary West",
+    "donor_address": "90 Grampian Road St Heliers Auckland 1071",
+    "amount": 25000,
+    "donation_received_date": "12 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/West_Reeve_Family_Trust_12_June_2023.pdf"
+  },
+  {
+    "party": "Green Party of Aotearoa New Zealand",
+    "return_received_date": "16 June 2023",
+    "donor_name": "Suzy Amis Cameron and James Cameron",
+    "donor_address": "3289 Western Lake Road RD3 Featherston Wellington 5773",
+    "amount": 50000,
+    "donation_received_date": "14 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Suzy_Cameron_and_James_Cameron_14_June_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "21 June 2023",
+    "donor_name": "Trevor Farmer",
+    "donor_address": "6/16 Viaduct Harbour Avenue Auckland Central Auckland",
+    "amount": 100000,
+    "donation_received_date": "19 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/T_Farmer_19_June_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "21 June 2023",
+    "donor_name": "ADN Commercial Ltd",
+    "donor_address": "76 Ossie James Drive Rekuhia Hamilton 3283",
+    "amount": 24500,
+    "donation_received_date": "14 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/ADN_Commercial_Ltd_14_June_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "20 June 2023",
+    "donor_name": "Jeffrey Graeme Douglas",
+    "donor_address": "Remuera Auckland 1050",
+    "amount": 51303.3,
+    "donation_received_date": "14 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Jeffrey_Graeme_Douglas_14_June_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "20 June 2023",
+    "donor_name": "Christopher & Banks Ltd",
+    "donor_address": "188 Quay Street Auckland",
+    "amount": 100000,
+    "donation_received_date": "13 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Christopher_Banks_Ltd_13_June_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "20 June 2023",
+    "donor_name": "Andrew Krukziener",
+    "donor_address": "The Colonial Building 163 Queen Street Auckland CBD 1010",
+    "amount": 22000,
+    "donation_received_date": "13 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Andrew_Krukziener_13_June_2023.pdf"
+  },
+  {
+    "party": "Green Party of Aotearoa New Zealand",
+    "return_received_date": "20 June 2023",
+    "donor_name": "Greg Payne",
+    "donor_address": "350 Mahurangi West Road Warkworth 0983",
+    "amount": 25010,
+    "donation_received_date": "15 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Greg_Payne_15_June_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "13 June 2023",
+    "donor_name": "Andrew Kelly",
+    "donor_address": "61 Manuwai Drive Matua Tauranga 3110",
+    "amount": 25000,
+    "donation_received_date": "13 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/A_Kelly_13_June_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "13 June 2023",
+    "donor_name": "Jocelyn E A Lindsay",
+    "donor_address": "11A Burwood Crescent Remuera Auckland",
+    "amount": 50000,
+    "donation_received_date": "12 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/J_EA_Lindsay_12_June_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "13 June 2023",
+    "donor_name": "Brendan J Lindsay",
+    "donor_address": "11A Burwood Crescent Remuera Auckland",
+    "amount": 50000,
+    "donation_received_date": "12 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/B_J_Lindsay_12_June_2023.pdf"
+  },
+  {
+    "party": "Green Party of Aotearoa New Zealand",
+    "return_received_date": "13 June 2023",
+    "donor_name": "L F Tapert",
+    "donor_address": "75 Godden Crescent Mission Bay Auckland 1071",
+    "amount": 50000,
+    "donation_received_date": "1 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/L_F_Tapert_1_June_2023-v2.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "7 June 2023",
+    "donor_name": "NZ Meat Workers Union",
+    "donor_address": "68 Langdons Road Papanui Christchurch",
+    "amount": 35000,
+    "donation_received_date": "28 April 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/NZ-Meat-Workers-Union-7-June-2023.pdf"
+  },
+  {
+    "party": "Green Party of Aotearoa New Zealand",
+    "return_received_date": "7 June 2023",
+    "donor_name": "Mark Zeman",
+    "donor_address": "36 Valley Road Titirangi Auckland 0604",
+    "amount": 21250,
+    "donation_received_date": "6 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Mark_Zeman_6_June_2023.pdf"
+  },
+  {
+    "party": "Freedoms New Zealand",
+    "return_received_date": "2 June 2023",
+    "donor_name": "Warwick & Averil Norman",
+    "donor_address": "5 Paget Street Freemans Bay Auckland",
+    "amount": 23000,
+    "donation_received_date": "1 June 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/W_and_A_Norman_1_June_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "2 June 2023",
+    "donor_name": "Dame Jenny Gibbs",
+    "donor_address": "Apt 508, 155 Beaumont Street Wynyard Quarter Auckland 1010",
+    "amount": 55000,
+    "donation_received_date": "22 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/J_Gibbs_2-June-2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "31 May 2023",
+    "donor_name": "Peter Menzies",
+    "donor_address": "25 William Street Takapuna Auckland",
+    "amount": 20500,
+    "donation_received_date": "30 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/P_Menzies_30_May_2023.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "30 May 2023",
+    "donor_name": "Estate of Hugh Barr",
+    "donor_address": "c/- Public Trust Level 8, 22-28 Willeston Street Wellington 6011",
+    "amount": 64979.69,
+    "donation_received_date": "26 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Estate_of_Hugh_Barr_3_March_2023.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "29 May 2023",
+    "donor_name": "E Tu",
+    "donor_address": "Incorporated 7 McGregor Street Rongotai Wellington 6022",
+    "amount": 90000,
+    "donation_received_date": "23 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/E_Tu_Incorporated_23_May_2023.pdf"
+  },
+  {
+    "party": "Green Party of Aoteroa New Zealand",
+    "return_received_date": "26 May 2023",
+    "donor_name": "Michael Lookman",
+    "donor_address": "63 Greenacres Road Richmond Nelson 7081",
+    "amount": 100000,
+    "donation_received_date": "25 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Michael_Lookman_25_May_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "19 May 2023",
+    "donor_name": "Gregory J & Paula R Dickson",
+    "donor_address": "68C Marine Parade Mt Maunganui",
+    "amount": 25000,
+    "donation_received_date": "16 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Gregory_J_and_Paula_-R_Dickson_16_May_2023.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "18 May 2023",
+    "donor_name": "Richard John Hubbard",
+    "donor_address": "114 Hensman Road Queenstown 9300",
+    "amount": 100000,
+    "donation_received_date": "18 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Richard_Hubbard_18_May_2023.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "18 May 2023",
+    "donor_name": "Phillip Mills",
+    "donor_address": "6 Cremorne Street Herne Bay Auckland 1011",
+    "amount": 50000,
+    "donation_received_date": "18 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Phillip_MIlls_18_May_2023.pdf"
+  },
+  {
+    "party": "Green Party of Aotearoa New Zealand",
+    "return_received_date": "16 May 2023",
+    "donor_name": "Estate of Betty Harris",
+    "donor_address": "c/- Public Trust 92 Bank Street Whangarei",
+    "amount": 100000,
+    "donation_received_date": "15 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Estate_of_Betty_Harris_15_May_2023.pdf"
+  },
+  {
+    "party": "Vision New Zealand",
+    "return_received_date": "10 May 2023",
+    "donor_name": "Raewyn Bhana",
+    "donor_address": "78 Moumoukai Hill Road Nest Valley Auckland",
+    "amount": 25000,
+    "donation_received_date": "10 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/R_Bhana_10_May_2023.pdf"
+  },
+  {
+    "party": "Freedoms New Zealand",
+    "return_received_date": "10 May 2023",
+    "donor_name": "Warwick & Averil Norman",
+    "donor_address": "5 Paget Street Freemans Bay Auckland",
+    "amount": 23000,
+    "donation_received_date": "9 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/W_and_A_Norman_9_May_2023.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "8 May 2023",
+    "donor_name": "AJR Finance Ltd",
+    "donor_address": "Waterloo Business Park 23 Commerce Crescent Islington Christchurch",
+    "amount": 50000,
+    "donation_received_date": "5 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/AJR_Finance_Ltd_5_May_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "8 May 2023",
+    "donor_name": "Michael Reid",
+    "donor_address": "21 Hanene Street St Heliers 1071",
+    "amount": 50000,
+    "donation_received_date": "27 April 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/M_Reid_8_May_2023.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "5 May 2023",
+    "donor_name": "John Bayley",
+    "donor_address": "13 Glanville Terrace Parnell Auckland",
+    "amount": 50000,
+    "donation_received_date": "27 April 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/John_Bayley_27_April_2023.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "3 May 2023",
+    "donor_name": "Dave Muller",
+    "donor_address": "Suite 1, Level 1 112 Parnell Road Parnell Auckland",
+    "amount": 20000,
+    "donation_received_date": "1 May 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Dave_Muller_1_May_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "3 May 2023",
+    "donor_name": "Gregory J & Paula R Dickson",
+    "donor_address": "68C Marine Parade Mt Maunganui",
+    "amount": 25000,
+    "donation_received_date": "26 April 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Gregory_J_and_Paula_-R_Dickson_26_April_2023.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "3 May 2023",
+    "donor_name": "Karl Maughan",
+    "donor_address": "33 Central Terrace Wellington",
+    "amount": 33804.35,
+    "donation_received_date": "21 April 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Karl_Maughan_21_April_2023.pdf"
+  },
+  {
+    "party": "Green Party of Aotearoa New Zealand",
+    "return_received_date": "27 April 2023",
+    "donor_name": "Weft Knitting Company",
+    "donor_address": "61-69 Orbell Street Sydenham Christchurch 8023",
+    "amount": 100000,
+    "donation_received_date": "20 April 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Weft_Knitting_Company_20_April_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "19 April 2023",
+    "donor_name": "Philip Maurice Carter",
+    "donor_address": "12/214 Hereford Street Christchurch Central 8011",
+    "amount": 50000,
+    "donation_received_date": "11 April 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Philip-Carter-donation-exceeding-20000.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "14 April 2023",
+    "donor_name": "T Farmer",
+    "donor_address": "Level 6 16 Viaduct Harbour Avenue Auckland",
+    "amount": 50000,
+    "donation_received_date": "13 April 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/T_Farmer_13_April_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "12 April 2023",
+    "donor_name": "Graeme Thomas Harrison",
+    "donor_address": "143 Forest Drive Methven 7730",
+    "amount": 22000,
+    "donation_received_date": "6 April 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/G_Harrison_6_April_2023.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "11 April 2023",
+    "donor_name": "M J Wyborn",
+    "donor_address": "1C, 89 Halsey Street The Viaduct CBD Auckland",
+    "amount": 50000,
+    "donation_received_date": "3 April 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/M_J_Wyborn_3_April_2023.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "6 April 2023",
+    "donor_name": "Islay Little",
+    "donor_address": "123 Opoho Road Opoho Dunedin 9010",
+    "amount": 100000,
+    "donation_received_date": "3 April 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Islay_Little_3_April_2023.pdf"
+  },
+  {
+    "party": "Green Party of Aotearoa New Zealand",
+    "return_received_date": "3 April 2023",
+    "donor_name": "Phillip Mills",
+    "donor_address": "6 Cremorne Street Auckland 1011",
+    "amount": 50000,
+    "donation_received_date": "30 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Phillip_Mills_3_April_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "3 April 2023",
+    "donor_name": "Velocity Freight Ltd",
+    "donor_address": "Level 10, BDO Tower 19 Como Street Takapuna",
+    "amount": 100000,
+    "donation_received_date": "24 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Velocity-Freight-Limited_24_March_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "3 April 2023",
+    "donor_name": "Tracy Summerfield",
+    "donor_address": "66 Melton Grange Road West Melton 7671",
+    "amount": 20030,
+    "donation_received_date": "22 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/T_Summerfield_22_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "24 March 2023",
+    "donor_name": "Christopher Meehan",
+    "donor_address": "19 Herne Bay Road Herne Bay Auckland 1011",
+    "amount": 50000,
+    "donation_received_date": "15 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/C_Meehan_24_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "24 March 2023",
+    "donor_name": "Align Farm Investments Limited",
+    "donor_address": "114 North Ridge Road Queenstown 9371",
+    "amount": 100000,
+    "donation_received_date": "14 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/Align_Farm_Investments_Ltd_24_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "24 March 2023",
+    "donor_name": "Christopher Reeve",
+    "donor_address": "21 William Street Takapuna Auckland 0622",
+    "amount": 25000,
+    "donation_received_date": "17 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/C_Reeve_24_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "24 March 2023",
+    "donor_name": "Christopher & Banks Limited",
+    "donor_address": "Level 4 3 Ferncroft Street Grafton Auckland 1010",
+    "amount": 100000,
+    "donation_received_date": "13 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/Christopher_Banks_Ltd_24_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "24 March 2023",
+    "donor_name": "Graeme Edwards for Beethoven Trust",
+    "donor_address": "Apartment 4/119 St Stephens Avenue Parnell Auckland 1052",
+    "amount": 50000,
+    "donation_received_date": "15 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/G_Edwards_for_Beethoven_Trust_24_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "24 March 2023",
+    "donor_name": "Gary Lane",
+    "donor_address": "9 Argyle Street Herne Bay Auckland",
+    "amount": 50000,
+    "donation_received_date": "17 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/G_Lane_24_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "24 March 2023",
+    "donor_name": "Murray Chandler",
+    "donor_address": "91 Stanley Point Road Stanley Point Auckland 0624",
+    "amount": 100000,
+    "donation_received_date": "14 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/M_Chandler_24_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "24 March 2023",
+    "donor_name": "Graeme Richard Hart",
+    "donor_address": "Level 9 148 Quay Street Auckland",
+    "amount": 100000,
+    "donation_received_date": "13 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/G_Hart_24_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "24 March 2023",
+    "donor_name": "Trevor Farmer",
+    "donor_address": "6/16 Viaduct Harbour Avenue Auckland Central Auckland",
+    "amount": 100000,
+    "donation_received_date": "13 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/T_Farmer_24_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "24 March 2023",
+    "donor_name": "Michael George Thorburn",
+    "donor_address": "91 Arney Road Remuera Auckland",
+    "amount": 50000,
+    "donation_received_date": "13 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/M_Thorburn_24_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "23 March 2023",
+    "donor_name": "Nicholas James Mowbray",
+    "donor_address": "186 Mahoenui Valley Road Coatesville Auckland",
+    "amount": 100000,
+    "donation_received_date": "10 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/N_Mowbray_23_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "17 March 2023",
+    "donor_name": "Brendan Lindsay",
+    "donor_address": "11A Burwood Crescent Remuera Auckland 1050",
+    "amount": 50000,
+    "donation_received_date": "6 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/B_Lindsay_17_March_2023.pdf"
+  },
+  {
+    "party": "New Zealand National Party",
+    "return_received_date": "17 March 2023",
+    "donor_name": "Vanessa Weenink",
+    "donor_address": "38a Hackthorne Road Cashmere Christchurch",
+    "amount": 20040,
+    "donation_received_date": "8 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/V_Weenink_17_March_2023.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "13 March 2023",
+    "donor_name": "New Zealand Dairy Workers Union",
+    "donor_address": "34 Harwood Street Hamilton North 3204",
+    "amount": 50000,
+    "donation_received_date": "9 March 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/NZ_Dairy_Workers_Union_13_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "10 March 2023",
+    "donor_name": "Sir Peter Vela",
+    "donor_address": "10 Hinau Road Karaka 2113",
+    "amount": 50000,
+    "donation_received_date": "27 February 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/P_Vella_10_March_2023.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "10 March 2023",
+    "donor_name": "Dame Jenny Gibbs",
+    "donor_address": "Apt 508, 155 Beaumont Street Wynyard Quarter Auckland 1010",
+    "amount": 50000,
+    "donation_received_date": "27 February 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/J_Gibbs_10_March_2023.pdf"
+  },
+  {
+    "party": "DemocracyNZ",
+    "return_received_date": "7 March 2023",
+    "donor_name": "Steve Dent",
+    "donor_address": "138 Tirohanga Road Tirohanga Lower Hutt",
+    "amount": 20000,
+    "donation_received_date": "28 February 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/S_Dent_7_March_2023.pdf"
+  },
+  {
+    "party": "New Zealand First",
+    "return_received_date": "3 March 2023",
+    "donor_name": "The Estate of Hugh Barr",
+    "donor_address": "C/- Public Trust Level 8, 22-28 Willeston Street Wellington 6011",
+    "amount": 116162,
+    "donation_received_date": "22 February 2023",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2023/Estate_of_Hugh_Barr_3_March_2023.pdf"
+  },
+  {
     "party": "The New Zealand National Party",
     "return_received_date": "22 December 2022",
     "donor_name": "Peter Goodfellow",

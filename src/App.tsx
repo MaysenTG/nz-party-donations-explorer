@@ -383,10 +383,11 @@ export default function App() {
             </button>
           </p>
           <p>
-            <strong>Years covered:</strong> This page uses the $30,000 list (mainly 2011 to 2022,
-            plus some 2008 to 2010 disclosures) and the $20,000 returns for 2026. The Commission
-            also publishes a table of $20,000 returns from 2023, which this page does not include
-            yet. So 2023 to 2025 look empty here even though returns exist for that period.
+            <strong>Years covered:</strong> This page uses the $30,000 list (2011 to 2022, plus
+            $20,000 disclosures from 2008 to 2010) and the Commission’s $20,000 tables for 2023 and
+            2026. The Commission publishes no donation table for 2024 or 2025, so those years are
+            empty here. Donations in those years appear only in party annual returns, which this
+            page does not include.
           </p>
           <p>
             Only donations above the Commission’s thresholds appear here, so this is not a party’s
