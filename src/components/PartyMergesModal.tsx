@@ -80,8 +80,8 @@ export function PartyMergesModal({ open, onClose }: Props) {
           ))}
         </ul>
         <p className="modal-note">
-          Internet MANA was the 2014 Internet Party–Mana alliance; those returns are grouped under
-          Internet Party.
+          Internet MANA was the 2014 alliance between the Internet Party and Mana. Those returns are
+          grouped under Internet Party.
         </p>
       </div>
     </div>

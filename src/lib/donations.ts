@@ -1,4 +1,4 @@
-import rawDonations from "../data/donations.json";
+import rawDonations from "virtual:donations";
 import { formatIsoLong, monthKey, monthLabels, nextMonthKey, nzDateToIso } from "./dates.ts";
 import { classifyDonor } from "./donors.ts";
 import { toCents } from "./format.ts";
@@ -77,7 +77,6 @@ function isRawDonation(value: unknown): value is RawDonation {
     typeof row.party === "string" &&
     typeof row.return_received_date === "string" &&
     typeof row.donor_name === "string" &&
-    typeof row.donor_address === "string" &&
     typeof row.amount === "number" &&
     Number.isFinite(row.amount) &&
     typeof row.donation_received_date === "string" &&
@@ -93,9 +92,14 @@ function loadDonations(value: unknown): Donation[] {
     if (!isRawDonation(row)) {
       throw new Error(`Invalid donation record at index ${index}`);
     }
+    // Build the record field by field so donor addresses in the source file are never read.
     return {
-      ...row,
       party: normalizeParty(row.party),
+      return_received_date: row.return_received_date,
+      donor_name: row.donor_name,
+      amount: row.amount,
+      donation_received_date: row.donation_received_date,
+      source_pdf_url: row.source_pdf_url,
       id: String(index),
       receivedIso: nzDateToIso(row.donation_received_date),
       returnIso: nzDateToIso(row.return_received_date),
@@ -169,7 +173,6 @@ export function createDefaultFilters(): Filters {
     maxAmount: "",
     query: "",
     donorType: "all",
-    excludedDonors: [],
     hideExtraParliamentary: false,
   };
 }
@@ -186,7 +189,6 @@ export function filtersAreDefault(filters: Filters): boolean {
     filters.maxAmount.trim() === "" &&
     filters.query.trim() === "" &&
     filters.donorType === "all" &&
-    filters.excludedDonors.length === 0 &&
     !filters.hideExtraParliamentary
   );
 }
@@ -205,7 +207,6 @@ export function activeFilterCount(filters: Filters): number {
   if (filters.maxAmount.trim()) count += 1;
   if (filters.query.trim()) count += 1;
   if (filters.donorType !== "all") count += 1;
-  if (filters.excludedDonors.length > 0) count += 1;
   if (filters.hideExtraParliamentary) count += 1;
   return count;
 }
@@ -262,17 +263,15 @@ export function applyFilters(
   const maxValue = max.ok ? max.value : null;
   const query = filters.query.trim().toLowerCase();
   const parties = new Set(filters.parties);
-  const excludedDonors = new Set(filters.excludedDonors);
 
   return rows.filter((row) => {
     if (!ignore.party && !parties.has(row.party)) return false;
     if (filters.hideExtraParliamentary && !hasParliamentarySeats(row.party)) return false;
-    if (excludedDonors.has(row.donor_name)) return false;
     if (!ignore.donorType && filters.donorType !== "all" && row.donorType !== filters.donorType) {
       return false;
     }
     if (query) {
-      const haystack = `${row.donor_name} ${row.donor_address}`.toLowerCase();
+      const haystack = row.donor_name.toLowerCase();
       if (!haystack.includes(query)) return false;
     }
     if (filters.from && row.receivedIso < filters.from) return false;

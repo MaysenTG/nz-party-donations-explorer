@@ -30,21 +30,22 @@ import {
   sortDonations,
   summarise,
   topDonors,
+  partyMergeGroups,
 } from "./lib/donations.ts";
-import { donorBlurb } from "./lib/donors.ts";
 import { ELECTION_CYCLE_SUMMARIES } from "./lib/elections.ts";
 import { formatCount, formatShare } from "./lib/format.ts";
 import { partyColour } from "./lib/parties.ts";
 import {
-  DONATIONS_JSON_URL,
   SOURCE_30K_LABEL,
   SOURCE_30K_URL,
   SOURCE_LABEL,
   SOURCE_URL,
+  CONTACT_URL,
 } from "./lib/source.ts";
 import type { DonorTypeFilter, Filters as FilterState, SortKey, SortState } from "./types.ts";
 
 const OVERALL = summarise(donations);
+const PARTY_MERGE_GROUPS = partyMergeGroups();
 const TOP_DONOR_LIMIT = 15;
 
 function nextSort(current: SortState, key: SortKey): SortState {
@@ -206,7 +207,6 @@ export default function App() {
                     id: donor.id,
                     label: donor.label,
                     value: donor.value,
-                    blurb: donorBlurb(donor.label),
                     meta: `${formatCount(donor.count)} ${donor.count === 1 ? "donation" : "donations"}${
                       donor.partyCount > 1 ? ` · ${donor.partyCount} parties` : ""
                     }`,
@@ -217,7 +217,7 @@ export default function App() {
                 />
                 {focusedDonor && (
                   <p className="chart-note">
-                    Search matches names and addresses containing “{focusedDonor}”. Bars only total
+                    Search matches donor names containing “{focusedDonor}”. Bars only total
                     exact name matches.{" "}
                     <a className="chart-note-link" href="#table-title">
                       View matching donations
@@ -287,14 +287,6 @@ export default function App() {
                     </p>
                   </div>
                   <div className="toolbar-actions">
-                    <a
-                      className="data-link"
-                      href={DONATIONS_JSON_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      View raw data
-                    </a>
                     <button
                       type="button"
                       className="export-button"
@@ -344,43 +336,71 @@ export default function App() {
             <a href={SOURCE_30K_URL} target="_blank" rel="noopener noreferrer">
               page for donations exceeding $30,000
             </a>
-            . Each row is one declared return. Duplicates across both lists are removed.
+            . Each row is one declared return.
           </p>
           <p>
-            <strong>Party names:</strong> Returns sometimes use different labels for the same party.
-            Variants are merged for charts and filters — for example ACT (“The ACT Party” / “The Act
-            Party”), National (“New Zealand National Party”), Greens (several short forms), NZ First
-            (“New Zealand First”), Te Pāti Māori (including older “Māori Party” / “Maori Party”
-            wording), and The Opportunities Party (including “Opportunity Party” and “TOP”). Returns
-            labelled “Internet MANA” (the 2014 Internet Party–Mana alliance) are grouped with the
-            Internet Party. Other names stay as published.{" "}
-            <button
-              type="button"
-              className="text-button"
-              onClick={() => setMergesOpen(true)}
-            >
-              View merge list
+            <strong>What we change:</strong> Amounts, dates and donor names are shown as filed with
+            the Commission. We do not estimate or adjust any figure. We do make these changes:
+          </p>
+          <ul className="about-list">
+            <li>
+              Party names. Returns sometimes label the same party in different ways, so we merge
+              these variants into one name for charts, filters and the table. Every merge is listed
+              below. Any party name not listed is shown as published.
+            </li>
+            <li>Rows that appear on both the $20,000 and $30,000 pages are only counted once.</li>
+            <li>
+              Donor type (individual or organisation) is our guess from words in the name, such as
+              Limited or Trust. It is not an official label.
+            </li>
+            <li>We do not show donor addresses. The official return for each row has the full record.</li>
+            <li>Party colours come from the{" "}
+              <a
+                href="https://en.wikipedia.org/wiki/Wikipedia:Index_of_New_Zealand_political_party_meta_attributes"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Wikipedia NZ party colour index
+              </a>
+              .
+            </li>
+          </ul>
+          <h3>Party name merges</h3>
+          <ul className="about-list merge-list">
+            {PARTY_MERGE_GROUPS.map((group) =>
+              group.aliases.map((alias) => (
+                <li key={alias}>
+                  “{alias}” is shown as “{group.canonical}”
+                </li>
+              )),
+            )}
+          </ul>
+          <p>
+            “Internet MANA” was the 2014 alliance between the Internet Party and Mana. Those returns
+            are grouped under Internet Party.{" "}
+            <button type="button" className="text-button" onClick={() => setMergesOpen(true)}>
+              Open merge list
             </button>
           </p>
           <p>
-            <strong>Why 2023–2025 look empty:</strong> Sources cover the $30,000 list (mainly
-            2011–2022, plus older 2008–2010 disclosures) and current $20,000 continuous disclosures
-            for the 2026 election year. Those middle years are not in the source files — not because
-            nothing was given. Under today’s rules, continuous $20,000 disclosures are mainly
-            required in election years.
+            <strong>Years covered:</strong> This page uses the $30,000 list (mainly 2011 to 2022,
+            plus some 2008 to 2010 disclosures) and the $20,000 returns for 2026. The Commission
+            also publishes a table of $20,000 returns from 2023, which this page does not include
+            yet. So 2023 to 2025 look empty here even though returns exist for that period.
           </p>
           <p>
-            Only donations above the Commission’s thresholds appear here — not full party income.
-            Donor type is a name-based guess. PDF links open the Commission return where published.
-            Party colours follow the{" "}
-            <a
-              href="https://en.wikipedia.org/wiki/Wikipedia:Index_of_New_Zealand_political_party_meta_attributes"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Wikipedia NZ party colour index
+            Only donations above the Commission’s thresholds appear here, so this is not a party’s
+            full income. Being listed means only that a party reported receiving a donation. It
+            does not suggest any wrongdoing by the donor or the party.
+          </p>
+          <p className="site-notice">
+            <strong>Notice:</strong> Data source is the Electoral Commission. This site is
+            independent and is not affiliated with or endorsed by the Electoral Commission. If
+            something here does not match the official record, please{" "}
+            <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer">
+              report it on GitHub
             </a>
-            .
+            . Please do not post personal details in a public issue.
           </p>
         </div>
       </footer>

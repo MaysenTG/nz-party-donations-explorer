@@ -13,7 +13,6 @@ export function donationsToCsv(rows: readonly Donation[]): string {
   const header = [
     "party",
     "donor_name",
-    "donor_address",
     "amount",
     "donation_received_date",
     "return_received_date",
@@ -24,7 +23,6 @@ export function donationsToCsv(rows: readonly Donation[]): string {
     [
       row.party,
       row.donor_name,
-      row.donor_address,
       row.amount,
       row.donation_received_date,
       row.return_received_date,
