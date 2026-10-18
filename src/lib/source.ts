@@ -19,4 +19,4 @@ export const PRIVATE_REPORT_URL =
   "https://github.com/MaysenTG/nz-party-donations-explorer/security/advisories/new";
 
 /** Date the Commission tables were last fetched and checked against this data. */
-export const DATA_RETRIEVED = "13 October 2026";
+export const DATA_RETRIEVED = "18 October 2026";
