@@ -1,3 +1,5 @@
+import { Ref } from "./Ref.tsx";
+import { jumpTo } from "../lib/jump.ts";
 import { ALL_YEARS, selectedYear, withYearFilter } from "../lib/donations.ts";
 import type { Filters } from "../types.ts";
 
@@ -58,6 +60,10 @@ export function ExploreBar({ filters, onChange }: Props) {
             </button>
           ))}
         </div>
+        <p className="year-filter-note year-gap-note">
+          No 2024 or 2025: the Commission lists no returns for those years
+          <Ref n={5} /> (<a href="#no-2024-2025" onClick={(e) => jumpTo("no-2024-2025", e)}>why</a>).
+        </p>
         {current === null && (
           <p className="year-filter-note">
             Custom date range active. Pick a year or All years to replace it.

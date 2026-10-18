@@ -1,6 +1,6 @@
 # NZ party donations explorer
 
-An unofficial explorer of large party donations published by the Electoral Commission of New Zealand: returns over $20,000 for 2008 to 2010, over $30,000 for 2011 to 2022, and over $20,000 from 2023 (the Commission's 2023 and 2026 tables).
+An unofficial explorer of large party donations published by the Electoral Commission of New Zealand: more than $20,000 until 2010, more than $30,000 from 2011 to 2022, and more than $20,000 in election years from 2023 (the Commission's 2023 and 2026 tables).
 
 This is an independent project. It is not an Electoral Commission website and is not affiliated with or endorsed by the Electoral Commission. Amounts and donor names are shown as filed, using the amended figure where a return was amended. Only party names are merged; donor names are never merged. See [Merges and other changes](#merges-and-other-changes).
 
@@ -52,7 +52,12 @@ The data file does not hold donor addresses. Use the official return to see the 
 Things to keep in mind:
 
 - Only returns over the threshold for their year are included. Smaller donations are not in this dataset.
-- Years covered: returns over $20,000 for 2008 to 2010, over $30,000 for 2011 to 2022, and over $20,000 for 2023 and 2026. The Commission publishes no table of these returns for 2024 or 2025, so those years are empty here. Smaller donations appear only in each party's annual return, which this project does not use. The two Commission pages cover different years, so no return appears twice.
+- Years covered: the Commission lists returns for 2008 to 2010, each year from 2011 to 2022, and 2023 and 2026. Rules as the Commission states them:
+  - Until 2010: more than $20,000 from one donor within a 12-month period ([Donations exceeding $30,000](https://elections.nz/democracy-in-nz/political-parties-in-new-zealand/donations-exceeding-20000/donations-exceeding-30000)).
+  - 1 January 2011 to 31 December 2022: more than $30,000 within a 12-month period, reported within 10 working days (same page).
+  - 2023: more than $20,000 between 1 January of election year and the day before election day, reported within 10 working days ([Donations exceeding $20,000](https://elections.nz/democracy-in-nz/political-parties-in-new-zealand/donations-exceeding-20000)).
+  - 2026: the same, but within 20 working days (same page).
+- 2024 and 2025: the Commission lists no returns for these years and its pages give no reason. Since 2023 the rule only covers the election year up to the day before election day, and the pages name 2023 and 2026 as election years. The site's References section quotes each source.
 - Dates. Where a return adds up several donations, `donation_received_date` is the latest one, and charts place the whole amount there. Some of these returns include parts from 2007. For two 2020 returns (Hon Robert Smellie QC and NZ Public Party) the Commission lists dates without a year, so the date stored is the date the return was filed. Each is noted on the row.
 - The individual or organisation label is a heuristic, not an official label. Names with words like Ltd, Trust, Union, Bank or Vineyard are treated as organisations, plus a short override list in [`src/lib/donors.ts`](src/lib/donors.ts). Everything else is treated as an individual.
 

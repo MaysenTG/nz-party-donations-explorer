@@ -52,6 +52,7 @@ import {
   PRIVATE_REPORT_URL,
 } from "./lib/source.ts";
 import { INSPECTION_YEARS } from "./lib/privacy.ts";
+import { Ref, References } from "./components/Ref.tsx";
 import type {
   Donation,
   DonorTypeFilter,
@@ -178,8 +179,11 @@ export default function App() {
           <h1>Declared party donations</h1>
           <p className="lede">
             Large donations to registered parties, as published by the Electoral Commission. The
-            reporting threshold has changed over time: over $20,000 (2008 to 2010), over $30,000
-            (2011 to 2022), and over $20,000 from 2023. Smaller donations are not included.
+            threshold has changed over time: more than $20,000 until 2010
+            <Ref n={4} />, more than $30,000 from 2011 to 2022
+            <Ref n={3} />, and more than $20,000 in election years from 2023
+            <Ref n={2} />
+            <Ref n={1} />. Smaller donations are not included.
           </p>
           <p className="source-line">
             <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
@@ -420,11 +424,27 @@ export default function App() {
             {DATA_RETRIEVED}.
           </p>
           <p>
-            <strong>Years covered:</strong> returns over $20,000 for 2008 to 2010, over $30,000 for
-            2011 to 2022, and over $20,000 for 2023 and 2026. The Commission publishes no table of
-            these returns for 2024 or 2025, so those years are empty. Smaller donations appear only
-            in party annual returns, which this site does not use. The two Commission pages cover
-            different years, so no return appears twice.
+            <strong>Years covered:</strong> the Commission lists returns for 2008 to 2010, each year
+            from 2011 to 2022, and 2023 and 2026
+            <Ref n={5} />.
+          </p>
+          <p>
+            <strong>Rules by period:</strong> until 2010, parties had to report more than $20,000
+            from one donor within a 12-month period
+            <Ref n={4} />. From 1 January 2011 to 31 December 2022, it was more than $30,000 within a
+            12-month period, reported within 10 working days
+            <Ref n={3} />. In 2023 it was more than $20,000 received between 1 January of election
+            year and the day before election day, reported within 10 working days
+            <Ref n={2} />. For 2026 the same rule applies, but parties have 20 working days
+            <Ref n={1} />.
+          </p>
+          <p id="no-2024-2025">
+            <strong>2024 and 2025:</strong> the Commission lists no returns for these years
+            <Ref n={5} />. Its pages do not give a reason. Since 2023 the rule only covers donations
+            received between 1 January of an election year and the day before election day, and the
+            pages name 2023 and 2026 as election years
+            <Ref n={2} />
+            <Ref n={1} />. So charts on this site show nothing for 2024 and 2025.
           </p>
           <p>
             <strong>What we change:</strong> Amounts and donor names are shown as filed, using the
@@ -465,7 +485,8 @@ export default function App() {
               Limited or Trust, plus a short list checked by hand. It is not an official label.
             </li>
             <li>
-              Older returns. Returns are open for public inspection for {INSPECTION_YEARS} years.
+              Older returns. Returns are open for public inspection for {INSPECTION_YEARS} years
+              <Ref n={6} />.
               After that we do not name individual donors, or organisations whose listed name
               includes a person: {formatCount(WITHHELD_COUNT)} rows show “Name withheld (return
               over 6 years old)” instead. Their amounts and parties stay
@@ -485,6 +506,7 @@ export default function App() {
               .
             </li>
           </ul>
+          <References />
           <h3>Party name merges</h3>
           <ul className="about-list merge-list">
             {PARTY_MERGE_GROUPS.map((group) =>
