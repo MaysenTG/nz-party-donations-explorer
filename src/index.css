@@ -2338,3 +2338,17 @@ th.num button {
 .filters-sheet .reset-button {
   padding-block: 0.45rem;
 }
+
+/* Footnote markers and references */
+.ref-mark { font-size: 0.7em; line-height: 0; margin-left: 0.1em; }
+.ref-mark a { text-decoration: none; padding: 0.2em 0.1em; }
+.ref-mark a:hover, .ref-mark a:focus-visible { text-decoration: underline; }
+.references { margin-top: 2rem; }
+.ref-list { padding-left: 1.6rem; }
+.ref-list li { margin-bottom: 1rem; scroll-margin-top: 5rem; }
+.ref-list li:target { background: rgba(255, 220, 120, 0.35); border-radius: 4px; }
+.ref-title { font-weight: 600; }
+.ref-url { overflow-wrap: anywhere; word-break: break-word; }
+.ref-list blockquote { margin: 0.4rem 0 0; padding-left: 0.8rem; border-left: 3px solid currentColor; opacity: 0.85; font-style: italic; }
+.year-gap-note { font-size: 0.9em; margin-top: 0.4rem; }
+#no-2024-2025 { scroll-margin-top: 5rem; }

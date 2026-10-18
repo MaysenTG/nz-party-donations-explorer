@@ -1,6 +1,30 @@
 [
   {
     "party": "The Green Party of Aotearoa New Zealand",
+    "return_received_date": "16 October 2026",
+    "donor_name": "Michael Lookman",
+    "amount": 50000,
+    "donation_received_date": "13 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/M_Lookman_16_October_2026.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "15 October 2026",
+    "donor_name": "Claudia Elliott",
+    "amount": 22000,
+    "donation_received_date": "11 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/C_Elliott_15_October_2026.pdf"
+  },
+  {
+    "party": "Te Pāti Māori",
+    "return_received_date": "15 October 2026",
+    "donor_name": "Kiri Tamihere-Waititi and Rawiri Waititi",
+    "amount": 30000,
+    "donation_received_date": "18 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/K_Tamihere-Waititi_R_Waititi_15_October_2026.pdf"
+  },
+  {
+    "party": "The Green Party of Aotearoa New Zealand",
     "return_received_date": "12 October 2026",
     "donor_name": "Karl van Randow",
     "amount": 30000,
