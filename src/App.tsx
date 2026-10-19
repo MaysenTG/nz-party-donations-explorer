@@ -424,9 +424,8 @@ export default function App() {
               addresses are shown.
             </p>
             <p>
-              <strong>Filing quirks:</strong> Dinesh Khadka’s return lists a 2010 received date for a
-              2020 donation. Alajamber Limited’s July 2026 return lists a received date before the
-              donation date. Both notes appear on the row.
+              <strong>Filing quirks:</strong> Two returns list a received date that conflicts with
+              the donation date. Each is noted on its row.
             </p>
             <p>
               Party colours from the{" "}

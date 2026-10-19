@@ -99,7 +99,7 @@ function seoShellAndCsv(): Plugin {
       const totalLabel =
         total >= 1_000_000
           ? `$${(Math.round((total / 1_000_000) * 100) / 100).toLocaleString("en-NZ", {
-              minimumFractionDigits: 1,
+              minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}m`
           : `$${Math.round(total).toLocaleString("en-NZ")}`;

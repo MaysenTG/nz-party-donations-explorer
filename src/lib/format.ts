@@ -7,14 +7,14 @@ export function formatNzd(amount: number): string {
   return `${sign}$${formatted}`;
 }
 
-/** Compact NZD for charts and stats. Millions keep up to two decimals ($2.75m, $39.9m). */
+/** Compact NZD for charts and stats. Millions always use two decimals ($2.75m, $39.90m). */
 export function formatCompactNzd(amount: number): string {
   const sign = amount < 0 ? "-" : "";
   const abs = Math.abs(amount);
   if (abs >= 1_000_000) {
     const millions = Math.round((abs / 1_000_000) * 100) / 100;
     const formatted = millions.toLocaleString("en-NZ", {
-      minimumFractionDigits: 1,
+      minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
     return `${sign}$${formatted}m`;
