@@ -59,7 +59,7 @@ export const REFERENCES: Reference[] = [
   },
   {
     n: 5,
-    label: "Years the Commission lists on its donation pages",
+    label: "Years listed on the Commission donation pages (no 2024 or 2025 tables)",
     title: "Donations exceeding $20,000 and Donations exceeding $30,000 (table headings)",
     publisher: "Electoral Commission",
     url: P20,

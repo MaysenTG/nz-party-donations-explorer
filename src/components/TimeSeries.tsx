@@ -1,4 +1,3 @@
-import { Ref } from "./Ref.tsx";
 import { jumpTo } from "../lib/jump.ts";
 import {
   Bar,
@@ -163,8 +162,18 @@ export function TimeSeries({ points, grain, colour }: Props) {
           : " Empty months in range stay at zero."}{" "}
         Each return is placed by its latest donation date. A return that adds up several donations
         sits wholly in that period, and a few early parts date from 2007. Only returns above the
-        threshold for their year are included. The Commission lists none for 2024 or 2025
-        <Ref n={5} />, so those years have no bar (<a href="#no-2024-2025" onClick={(e) => jumpTo("no-2024-2025", e)}>why</a>).
+        threshold for their year are included. No bars for 2024 or 2025 (
+        <a
+          href="#no-2024-2025"
+          onClick={(e) => {
+            const panel = document.getElementById("how-the-data-works");
+            if (panel instanceof HTMLDetailsElement) panel.open = true;
+            jumpTo("no-2024-2025", e);
+          }}
+        >
+          why
+        </a>
+        ).
       </figcaption>
       <div className="visually-hidden">
         <table>

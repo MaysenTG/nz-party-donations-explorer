@@ -62,7 +62,7 @@ export function FilterFields({
             Clear
           </button>
         </div>
-        <ul className="party-list">
+        <ul className="filter-list filter-list-scroll">
           {ALL_PARTIES.map((party) => {
             const count = partyCounts[party] ?? 0;
             const extra = !hasParliamentarySeats(party);
@@ -114,7 +114,7 @@ export function FilterFields({
 
       <fieldset className="field">
         <legend>Donor type</legend>
-        <div className="segment" role="radiogroup" aria-label="Donor type">
+        <ul className="filter-list" role="radiogroup" aria-label="Donor type">
           {(
             [
               ["all", "All"],
@@ -122,21 +122,21 @@ export function FilterFields({
               ["organisation", "Organisations"],
             ] as const
           ).map(([value, label]) => (
-            <label key={value} className={filters.donorType === value ? "checked" : ""}>
-              <input
-                type="radio"
-                name={donorTypeName}
-                value={value}
-                checked={filters.donorType === value}
-                onChange={() => onChange({ ...filters, donorType: value })}
-              />
-              <span>
-                {label}
-                <small> {donorTypeCounts[value].toLocaleString("en-NZ")}</small>
-              </span>
-            </label>
+            <li key={value}>
+              <label>
+                <input
+                  type="radio"
+                  name={donorTypeName}
+                  value={value}
+                  checked={filters.donorType === value}
+                  onChange={() => onChange({ ...filters, donorType: value })}
+                />
+                <span>{label}</span>
+                <span className="count">{donorTypeCounts[value].toLocaleString("en-NZ")}</span>
+              </label>
+            </li>
           ))}
-        </div>
+        </ul>
         <details className="hint">
           <summary>How donor type is decided</summary>
           <p>
@@ -149,7 +149,7 @@ export function FilterFields({
 
       <fieldset className="field">
         <legend>Returned donations</legend>
-        <ul className="party-list exclusion-list">
+        <ul className="filter-list">
           <li>
             <label>
               <input
@@ -165,7 +165,7 @@ export function FilterFields({
 
       <fieldset className="field">
         <legend>Parliament</legend>
-        <ul className="party-list exclusion-list">
+        <ul className="filter-list">
           <li>
             <label>
               <input

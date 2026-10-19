@@ -446,10 +446,12 @@ export default function App() {
               <Ref n={1} />).
             </p>
             <p id="no-2024-2025">
-              <strong>Years:</strong> the Commission lists 2008 to 2010, each year from 2011 to 2022,
-              then 2023 and 2026
-              <Ref n={5} />. It lists none for 2024 or 2025, so charts here show nothing for those
-              years.
+              <strong>2024 and 2025:</strong> since 2023, parties only report donations above $20,000
+              received between 1 January of an election year and the day before election day
+              <Ref n={2} />
+              <Ref n={1} />. The Commission’s pages name 2023 and 2026 as election years and list no
+              returns for 2024 or 2025
+              <Ref n={5} />, so charts here show nothing for those years.
             </p>
             <p>
               <strong>What we change:</strong> amounts and donor names as filed (amended figure

@@ -1,4 +1,3 @@
-import { Ref } from "./Ref.tsx";
 import { jumpTo } from "../lib/jump.ts";
 import { ALL_YEARS, selectedYear, withYearFilter } from "../lib/donations.ts";
 import { useMatchMedia } from "../hooks/useMatchMedia.ts";
@@ -89,8 +88,7 @@ export function ExploreBar({ filters, onChange }: Props) {
           </div>
         )}
         <p className="year-filter-note year-gap-note">
-          No 2024 or 2025
-          <Ref n={5} /> (
+          No 2024 or 2025 (
           <a
             href="#no-2024-2025"
             onClick={(e) => {
