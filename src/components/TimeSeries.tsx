@@ -1,4 +1,3 @@
-import { jumpTo } from "../lib/jump.ts";
 import {
   Bar,
   CartesianGrid,
@@ -146,20 +145,6 @@ export function TimeSeries({ points, grain, colour }: Props) {
           </ComposedChart>
         ) : null}
       </div>
-      <figcaption className="chart-note">
-        Latest donation date in each return. No 2024 or 2025 (
-        <a
-          href="#no-2024-2025"
-          onClick={(e) => {
-            const panel = document.getElementById("how-the-data-works");
-            if (panel instanceof HTMLDetailsElement) panel.open = true;
-            jumpTo("no-2024-2025", e);
-          }}
-        >
-          why
-        </a>
-        ).
-      </figcaption>
       <div className="visually-hidden">
         <table>
           <caption>

@@ -1,4 +1,3 @@
-import { jumpTo } from "../lib/jump.ts";
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
 import { useElementWidth } from "../hooks/useElementWidth.ts";
 import { useMatchMedia } from "../hooks/useMatchMedia.ts";
@@ -90,20 +89,6 @@ export function PartyYearChart({ series }: Props) {
           </BarChart>
         )}
       </div>
-      <figcaption className="chart-note">
-        Stacked by party. No 2024 or 2025 (
-        <a
-          href="#no-2024-2025"
-          onClick={(e) => {
-            const panel = document.getElementById("how-the-data-works");
-            if (panel instanceof HTMLDetailsElement) panel.open = true;
-            jumpTo("no-2024-2025", e);
-          }}
-        >
-          why
-        </a>
-        ).
-      </figcaption>
       <div className="visually-hidden">
         <table>
           <caption>Amount by party and year</caption>

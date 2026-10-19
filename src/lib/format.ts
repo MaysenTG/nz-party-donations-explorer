@@ -7,16 +7,15 @@ export function formatNzd(amount: number): string {
   return `${sign}$${formatted}`;
 }
 
+/** Compact NZD for charts and stats. Millions always use one decimal ($39.9m, $3.5m). */
 export function formatCompactNzd(amount: number): string {
   const sign = amount < 0 ? "-" : "";
   const abs = Math.abs(amount);
   if (abs >= 1_000_000) {
-    const millions = abs / 1_000_000;
-    const round = Math.round(millions * 100) / 100;
-    const digits = Number.isInteger(round) ? 0 : round * 10 === Math.round(round * 10) ? 1 : 2;
-    const formatted = round.toLocaleString("en-NZ", {
-      minimumFractionDigits: digits,
-      maximumFractionDigits: digits,
+    const millions = Math.round((abs / 1_000_000) * 10) / 10;
+    const formatted = millions.toLocaleString("en-NZ", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
     });
     return `${sign}$${formatted}m`;
   }

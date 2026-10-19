@@ -74,8 +74,9 @@ export function FilterFields({
                     checked={filters.parties.includes(party)}
                     onChange={() => toggleParty(party)}
                   />
-                  <span className={extra ? "party-extra" : undefined} title={extra ? "No current seats in Parliament" : undefined}>
+                  <span>
                     {party}
+                    {extra && <small className="party-seat-note"> no seats</small>}
                   </span>
                   <span className="count">{count.toLocaleString("en-NZ")}</span>
                 </label>
@@ -113,29 +114,31 @@ export function FilterFields({
 
       <fieldset className="field">
         <legend>Donor type</legend>
-        <ul className="filter-list" role="radiogroup" aria-label="Donor type">
-          {(
-            [
-              ["all", "All"],
-              ["individual", "Individuals"],
-              ["organisation", "Organisations"],
-            ] as const
-          ).map(([value, label]) => (
-            <li key={value}>
-              <label>
-                <input
-                  type="radio"
-                  name={donorTypeName}
-                  value={value}
-                  checked={filters.donorType === value}
-                  onChange={() => onChange({ ...filters, donorType: value })}
-                />
-                <span>{label}</span>
-                <span className="count">{donorTypeCounts[value].toLocaleString("en-NZ")}</span>
-              </label>
-            </li>
-          ))}
-        </ul>
+        <div role="radiogroup" aria-label="Donor type">
+          <ul className="filter-list">
+            {(
+              [
+                ["all", "All"],
+                ["individual", "Individuals"],
+                ["organisation", "Organisations"],
+              ] as const
+            ).map(([value, label]) => (
+              <li key={value}>
+                <label>
+                  <input
+                    type="radio"
+                    name={donorTypeName}
+                    value={value}
+                    checked={filters.donorType === value}
+                    onChange={() => onChange({ ...filters, donorType: value })}
+                  />
+                  <span>{label}</span>
+                  <span className="count">{donorTypeCounts[value].toLocaleString("en-NZ")}</span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
         <details className="hint">
           <summary>How donor type is decided</summary>
           <p>

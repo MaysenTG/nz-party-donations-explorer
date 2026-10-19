@@ -19,11 +19,13 @@ import "./index.css";
 const root = document.getElementById("root");
 if (!root) throw new Error("Root element missing");
 
-// The app, and the data with party names, only load when polling day mode is off.
-const App = lazy(() => import("./App.tsx"));
-
 const now = Date.now();
 const pollingDay = pollingDayActive(now, window.location.search);
+
+// Start the app chunk immediately when polling-day mode is off, so the wait is shorter.
+const loadApp = () => import("./App.tsx");
+if (!pollingDay) void loadApp();
+const App = lazy(loadApp);
 
 // Reload at the start and end of the window so an open tab switches over on time.
 if (!BUILD_FLAG) {

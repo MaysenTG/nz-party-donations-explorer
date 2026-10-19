@@ -177,7 +177,6 @@ export default function App() {
           <h1>Who Funds NZ</h1>
           <p className="lede">
             Large donations to New Zealand political parties from Electoral Commission returns.
-            Filter by party, year, amount or donor.
           </p>
           <p className="source-line">
             <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
@@ -187,8 +186,7 @@ export default function App() {
               {SOURCE_30K_LABEL}
             </a>
             <span>
-              {formatCount(OVERALL.donations)} returns ({formatCount(donations.length)} filed) ·
-              checked {DATA_RETRIEVED}
+              {formatCount(OVERALL.donations)} returns · checked {DATA_RETRIEVED}
             </span>
           </p>
         </div>
@@ -224,7 +222,6 @@ export default function App() {
               <section className="card" aria-labelledby="party-chart-title">
                 <div className="card-head">
                   <h2 id="party-chart-title">Amount by party</h2>
-                  <p>Select a bar to focus; select again to clear.</p>
                 </div>
                 <RankChart
                   items={parties.map((party) => ({
@@ -243,13 +240,9 @@ export default function App() {
               <section className="card" aria-labelledby="donor-chart-title">
                 <div className="card-head">
                   <h2 id="donor-chart-title">Largest donors</h2>
-                  <p>
-                    {donors.length === 0
-                      ? "Updates with the filters."
-                      : donors.length < TOP_DONOR_LIMIT
-                        ? `All ${formatCount(donors.length)} donors in range.`
-                        : `Top ${TOP_DONOR_LIMIT} by amount as filed.`}
-                  </p>
+                  {donors.length > 0 && donors.length >= TOP_DONOR_LIMIT && (
+                    <p>Top {TOP_DONOR_LIMIT} as filed.</p>
+                  )}
                 </div>
                 <RankChart
                   items={donors.map((donor) => ({
@@ -282,10 +275,6 @@ export default function App() {
                 <div className="card-head card-head-row">
                   <div>
                     <h2 id="time-title">Returns over time</h2>
-                    <p>
-                      By {timeSeries.grain === "year" ? "year" : "month"} of the latest donation
-                      date in each return.
-                    </p>
                   </div>
                   <ul className="legend">
                     <li>
@@ -331,10 +320,6 @@ export default function App() {
               <section className="card" aria-labelledby="multi-title">
                 <div className="card-head">
                   <h2 id="multi-title">Donors giving to more than one party</h2>
-                  <p>
-                    {formatCount(multiDonors.length)}{" "}
-                    {multiDonors.length === 1 ? "name" : "names"} as filed.
-                  </p>
                 </div>
                 <MultiPartyDonors donors={multiDonors} onOpenDonor={setOpenDonor} />
               </section>
@@ -400,17 +385,12 @@ export default function App() {
         <div className="wrap">
           <h2>About this page</h2>
           <p>
-            Unofficial view of public returns from the{" "}
+            Unofficial view of{" "}
             <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
-              Electoral Commission $20,000 page
+              Electoral Commission
             </a>{" "}
-            and the{" "}
-            <a href={SOURCE_30K_URL} target="_blank" rel="noopener noreferrer">
-              $30,000 page
-            </a>
-            . Each row is one return about one donor. Last checked {DATA_RETRIEVED}. Being listed
-            means only that a party reported receiving a donation. It does not suggest any
-            wrongdoing by the donor or the party.
+            returns. Each row is one return about one donor. Being listed does not suggest any
+            wrongdoing.
           </p>
           <details className="footer-fold" id="how-the-data-works">
             <summary>
@@ -459,7 +439,7 @@ export default function App() {
               </a>
               .{" "}
               <button type="button" className="text-button" onClick={() => setMergesOpen(true)}>
-                Party name merges
+                View party name merges
               </button>
             </p>
           </details>
@@ -488,7 +468,7 @@ export default function App() {
             </p>
           </details>
           <p className="site-notice">
-            Independent of the Electoral Commission. Corrections:{" "}
+            Independent of the Electoral Commission. Have some feedback? {" "}
             <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer">
               GitHub issue
             </a>{" "}
