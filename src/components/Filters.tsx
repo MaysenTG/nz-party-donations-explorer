@@ -1,4 +1,3 @@
-import { formatIsoLong } from "../lib/dates.ts";
 import {
   activeFilterCount,
   ALL_PARTIES,
@@ -111,12 +110,6 @@ export function FilterFields({
             </button>
           )}
         </div>
-        <p className="field-help">
-          Matches the donor name as filed — not the party. Searching “national” finds names like
-          National Urban Māori Authority, not every National Party return. Use the party checklist
-          for that. Individuals on returns over 6 years old are not named, so they do not match.
-          The search is not saved in the page link.
-        </p>
       </div>
 
       <fieldset className="field">
@@ -156,10 +149,6 @@ export function FilterFields({
 
       <fieldset className="field">
         <legend>Returned donations</legend>
-        <p className="field-help">
-          The Commission notes 2 donations that the party gave back to the donor. They are left out
-          of totals unless you include them.
-        </p>
         <ul className="party-list exclusion-list">
           <li>
             <label>
@@ -176,9 +165,6 @@ export function FilterFields({
 
       <fieldset className="field">
         <legend>Parliament</legend>
-        <p className="field-help">
-          Hide parties that hold no seats, without changing the party checklist.
-        </p>
         <ul className="party-list exclusion-list">
           <li>
             <label>
@@ -197,11 +183,6 @@ export function FilterFields({
 
       <fieldset className="field">
         <legend>Party</legend>
-        <p className="field-help">
-          Renames and spelling variants of one party are combined (for example Greens, National,
-          ACT, Te Pāti Māori and the Māori Party, NZ First, TOP). The full list is in About this
-          page. Internet MANA (2014) is kept separate from the Internet Party.
-        </p>
         {compact ? (
           <details className="party-collapse">
             <summary>
@@ -240,14 +221,6 @@ export function FilterFields({
             />
           </label>
         </div>
-        <p className="field-help">
-          The date the party received the donation, not the filing date. Where a return adds up
-          several donations from one donor, this is the date of the latest one
-          {RECEIVED_MIN && RECEIVED_MAX
-            ? ` (${formatIsoLong(RECEIVED_MIN)} to ${formatIsoLong(RECEIVED_MAX)})`
-            : ""}
-          .
-        </p>
       </fieldset>
 
       <fieldset className="field">
@@ -274,9 +247,6 @@ export function FilterFields({
             />
           </label>
         </div>
-        <p className="field-help">
-          Commas optional. Each amount is a return total, which can add up several donations.
-        </p>
       </fieldset>
 
       {problem && (

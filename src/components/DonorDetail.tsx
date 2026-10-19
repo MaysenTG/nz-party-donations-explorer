@@ -8,7 +8,7 @@ import type { Donation } from "../types.ts";
 
 type Props = {
   name: string | null;
-  /** Filtered page rows — modal totals match the charts and table. */
+  /** Filtered page rows - modal totals match the charts and table. */
   sourceRows: readonly Donation[];
   onClose: () => void;
   onFilterToDonor: (name: string) => void;
@@ -31,7 +31,7 @@ export function DonorDetail({ name, sourceRows, onClose, onFilterToDonor }: Prop
       .sort((a, b) => b.receivedIso.localeCompare(a.receivedIso));
     return { rows: recent, older: matching.length - recent.length, blocked: false };
   }, [name, sourceRows]);
-  const counted = rows.filter((row) => !row.returned_to_donor);
+  const counted = rows.filter((row) => !row.returned_to_donor && !row.party_to_party);
 
   useEffect(() => {
     if (!name) return;

@@ -1,3 +1,4 @@
+import { countsInTotals } from "./donations.ts";
 import { toCents } from "./format.ts";
 import type { Donation } from "../types.ts";
 
@@ -12,6 +13,7 @@ export function partyYearSeries(rows: readonly Donation[], maxParties = 8): Part
   const totals = new Map<string, number>();
   const cells = new Map<string, Map<string, number>>();
   for (const row of rows) {
+    if (!countsInTotals(row)) continue;
     const year = row.receivedIso.slice(0, 4);
     const cents = toCents(row.amount);
     totals.set(row.party, (totals.get(row.party) ?? 0) + cents);
@@ -87,6 +89,7 @@ const SIZE_EDGES: { label: string; max: number }[] = [
 export function sizeDistribution(rows: readonly Donation[]): SizeBucket[] {
   const buckets = SIZE_EDGES.map((edge) => ({ label: edge.label, count: 0, cents: 0 }));
   for (const row of rows) {
+    if (!countsInTotals(row)) continue;
     const index = SIZE_EDGES.findIndex((edge) => row.amount < edge.max);
     const bucket = buckets[index === -1 ? buckets.length - 1 : index];
     bucket.count += 1;

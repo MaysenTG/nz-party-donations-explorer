@@ -322,14 +322,23 @@ export function applyFilters(
   });
 }
 
+/**
+ * Party-to-party transfers are still listed in the table, but left out of money
+ * totals so internal moves are not counted as new funding.
+ */
+export function countsInTotals(row: Donation): boolean {
+  return !row.party_to_party;
+}
+
 export function summarise(rows: readonly Donation[]): Summary {
   let cents = 0;
   const parties = new Set<string>();
   const donors = new Set<string>();
   for (const row of rows) {
-    cents += toCents(row.amount);
     parties.add(row.party);
     if (!row.nameWithheld) donors.add(row.donor_name);
+    if (!countsInTotals(row)) continue;
+    cents += toCents(row.amount);
   }
   return {
     total: cents / 100,
@@ -342,6 +351,7 @@ export function summarise(rows: readonly Donation[]): Summary {
 export function partyTotals(rows: readonly Donation[]): PartyTotal[] {
   const buckets = new Map<string, { cents: number; count: number }>();
   for (const row of rows) {
+    if (!countsInTotals(row)) continue;
     const current = buckets.get(row.party) ?? { cents: 0, count: 0 };
     current.cents += toCents(row.amount);
     current.count += 1;
@@ -362,7 +372,7 @@ export function partyTotals(rows: readonly Donation[]): PartyTotal[] {
 export function topDonors(rows: readonly Donation[], limit = 15): DonorTotal[] {
   const buckets = new Map<string, { cents: number; count: number; parties: Set<string> }>();
   for (const row of rows) {
-    if (row.nameWithheld) continue;
+    if (row.nameWithheld || !countsInTotals(row)) continue;
     const current = buckets.get(row.donor_name) ?? {
       cents: 0,
       count: 0,
@@ -426,12 +436,13 @@ export type DonationSeries = {
 
 /** Month bars for short ranges; year bars when the span would be too dense to read. */
 export function donationSeries(rows: readonly Donation[]): DonationSeries {
-  if (rows.length === 0) return { points: [], grain: "month" };
+  const counted = rows.filter(countsInTotals);
+  if (counted.length === 0) return { points: [], grain: "month" };
 
   const monthBuckets = new Map<string, { cents: number; count: number }>();
-  let minMonth = monthKey(rows[0].receivedIso);
+  let minMonth = monthKey(counted[0].receivedIso);
   let maxMonth = minMonth;
-  for (const row of rows) {
+  for (const row of counted) {
     const key = monthKey(row.receivedIso);
     if (key < minMonth) minMonth = key;
     if (key > maxMonth) maxMonth = key;
@@ -457,7 +468,7 @@ export function donationSeries(rows: readonly Donation[]): DonationSeries {
       current.count += bucket.count;
       yearBuckets.set(year, current);
     }
-    // Only years with returns — do not invent $0 years (e.g. 2024–2025) that read as
+    // Only years with returns - do not invent $0 years (e.g. 2024-2025) that read as
     // “nobody donated” when the Commission simply published no year bucket.
     const years = [...yearBuckets.keys()].sort((a, b) => a.localeCompare(b));
     for (const year of years) {

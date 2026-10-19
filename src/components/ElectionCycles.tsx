@@ -19,9 +19,9 @@ export function ElectionCycles({ cycles }: Props) {
         <h2 id="election-cycles-title">Election cycles</h2>
         <p>
           Returns with a donation date from the day after the previous election through election
-          day, using the current filters. Donations the party gave back are left out. This is not
-          full campaign funding. Parties are listed by amount disclosed; the winner pill is who
-          formed the government afterward.
+          day, using the current filters. Returned donations and party-to-party transfers are left
+          out. This is not full campaign funding. For past elections the winner pill is who formed
+          the government afterward.
         </p>
       </div>
 
@@ -29,7 +29,8 @@ export function ElectionCycles({ cycles }: Props) {
         {cycles.map((summary) => {
           const { cycle, parties, total, rows, winnerTotal, winnerShare, winnerRank, hadMostDonations } =
             summary;
-          const winnerColour = partyColour(cycle.winnerLabel);
+          const upcoming = cycle.upcoming === true;
+          const winnerColour = upcoming ? "#5c645e" : partyColour(cycle.winnerLabel);
           const isOpen = openYear === cycle.year;
           const topParties = parties;
           const { top, ticks } = axisTicks(
@@ -68,11 +69,27 @@ export function ElectionCycles({ cycles }: Props) {
                     color: partyColourInk(winnerColour),
                   }}
                 >
-                  {cycle.winnerLabel}
+                  {upcoming ? "Upcoming" : cycle.winnerLabel}
                 </span>
               </button>
 
               <div className="election-detail" hidden={!isOpen}>
+                {upcoming ? (
+                  <dl className="election-stats">
+                    <div>
+                      <dt>Disclosed in cycle</dt>
+                      <dd>{formatNzd(total)}</dd>
+                    </div>
+                    <div>
+                      <dt>Returns</dt>
+                      <dd>{formatCount(rows.length)}</dd>
+                    </div>
+                    <div>
+                      <dt>Government</dt>
+                      <dd>Not yet formed</dd>
+                    </div>
+                  </dl>
+                ) : (
                 <dl className="election-stats">
                   <div>
                     <dt>{cycle.winnerLabel} disclosed</dt>
@@ -80,7 +97,7 @@ export function ElectionCycles({ cycles }: Props) {
                   </div>
                   <div>
                     <dt>Share of cycle total</dt>
-                    <dd>{total === 0 ? "—" : formatShare(winnerShare)}</dd>
+                    <dd>{total === 0 ? "-" : formatShare(winnerShare)}</dd>
                   </div>
                   <div>
                     <dt>Among parties</dt>
@@ -93,6 +110,7 @@ export function ElectionCycles({ cycles }: Props) {
                     </dd>
                   </div>
                 </dl>
+                )}
 
                 {topParties.length === 0 ? (
                   <p className="empty-inline">
@@ -106,7 +124,8 @@ export function ElectionCycles({ cycles }: Props) {
                           top === 0
                             ? 0
                             : Math.max((party.value / top) * 100, party.value > 0 ? 1.2 : 0);
-                        const isWinner = party.family === cycle.winnerFamily;
+                        const isWinner =
+                          !upcoming && cycle.winnerFamily != null && party.family === cycle.winnerFamily;
                         return (
                           <li key={party.id}>
                             <div className={`rank-row static${isWinner ? " is-winner" : ""}`}>

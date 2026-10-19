@@ -35,7 +35,9 @@ export function References(): ReactNode {
       requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: "start" }));
       return;
     }
-    if (id === "no-2024-2025") {
+    if (id === "no-2024-2025" || id === "how-the-data-works") {
+      const panel = document.getElementById("how-the-data-works");
+      if (panel instanceof HTMLDetailsElement) panel.open = true;
       requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: "start" }));
     }
   }, []);

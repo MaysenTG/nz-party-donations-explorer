@@ -551,7 +551,10 @@
     "donor_name": "Alajamber Limited",
     "amount": 21140,
     "donation_received_date": "8 July 2026",
-    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Alajamber_Limited_30_July_2026.pdf"
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Alajamber_Limited_30_July_2026.pdf",
+    "notes": [
+      "The Commission lists the return received date (30 June 2026) before the donation date (8 July 2026)."
+    ]
   },
   {
     "party": "New Zealand First Party",
@@ -2364,7 +2367,8 @@
     "source_pdf_url": "",
     "notes": [
       "This return adds up several donations received between 29 March 2022 and 2 May 2022."
-    ]
+    ],
+    "amended_return_received_date": "1 June 2022"
   },
   {
     "party": "The New Zealand National Party",
@@ -2486,7 +2490,8 @@
     "source_pdf_url": "",
     "notes": [
       "This return adds up several donations received between 22 September 2021 and 30 March 2022."
-    ]
+    ],
+    "amended_return_received_date": "14 April 2023"
   },
   {
     "party": "The New Zealand National Party",
@@ -2551,7 +2556,8 @@
     "source_pdf_url": "",
     "notes": [
       "This return adds up several donations received between 5 January 2022 and 8 March 2022."
-    ]
+    ],
+    "amended_return_received_date": "4 May 2023"
   },
   {
     "party": "ACT New Zealand",
@@ -2684,7 +2690,8 @@
     "source_pdf_url": "",
     "notes": [
       "This return adds up several donations received between 11 February 2021 and 10 November 2021."
-    ]
+    ],
+    "amended_return_received_date": "29 April 2022"
   },
   {
     "party": "The New Zealand National Party",
@@ -2703,7 +2710,8 @@
     "source_pdf_url": "",
     "notes": [
       "This return adds up several donations received between 25 November 2020 and 10 November 2021."
-    ]
+    ],
+    "amended_return_received_date": "21 April 2022"
   },
   {
     "party": "The Green Party of Aotearoa New Zealand",
@@ -2741,7 +2749,8 @@
     "source_pdf_url": "",
     "notes": [
       "This return adds up several donations received between 9 December 2020 and 24 November 2021."
-    ]
+    ],
+    "amended_return_received_date": "21 April 2022"
   },
   {
     "party": "The New Zealand National Party",
@@ -2793,7 +2802,8 @@
     "source_pdf_url": "",
     "notes": [
       "This return adds up several donations received between 1 August 2020 and 2 October 2020."
-    ]
+    ],
+    "amended_return_received_date": "7 May 2021"
   },
   {
     "party": "New Zealand Labour Party",
@@ -2900,7 +2910,8 @@
     "source_pdf_url": "",
     "notes": [
       "This return adds up several donations received between 16 January 2020 and 24 July 2020."
-    ]
+    ],
+    "amended_return_received_date": "7 May 2021"
   },
   {
     "party": "New Zealand Labour Party",
@@ -2980,8 +2991,10 @@
     "donation_received_date": "24 May 2020",
     "source_pdf_url": "",
     "notes": [
-      "This return adds up several donations received between 24 May 2020 and 24 May 2020."
-    ]
+      "This return adds up several donations received between 24 May 2020 and 24 May 2020.",
+      "The Commission lists the return received date as 22 July 2010 for a donation dated 24 May 2020."
+    ],
+    "amended_return_received_date": "7 May 2021"
   },
   {
     "party": "Te Pāti Māori",
@@ -3160,7 +3173,8 @@
     "source_pdf_url": "",
     "notes": [
       "This return adds up several donations received between 30 November 2017 and 29 November 2018."
-    ]
+    ],
+    "amended_return_received_date": "2 May 2019"
   },
   {
     "party": "The Opportunities Party",
@@ -3676,7 +3690,8 @@
     "source_pdf_url": "",
     "notes": [
       "This return adds up several donations received between 13 January 2016 and 25 February 2016."
-    ]
+    ],
+    "amended_return_received_date": "2 May 2017"
   },
   {
     "party": "ACT New Zealand",
@@ -3766,7 +3781,8 @@
     "source_pdf_url": "",
     "notes": [
       "This return adds up several donations received between 8 September 2014 and 18 September 2014."
-    ]
+    ],
+    "amended_return_received_date": "12 May 2015"
   },
   {
     "party": "Conservative Party of New Zealand",

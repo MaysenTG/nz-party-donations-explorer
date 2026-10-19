@@ -64,7 +64,7 @@ import type {
 
 function stats(rows: readonly Donation[]): Stats {
   const base = summarise(rows);
-  const amounts = rows.map((row) => row.amount);
+  const amounts = rows.filter((row) => !row.party_to_party).map((row) => row.amount);
   return {
     ...base,
     median: median(amounts),
@@ -180,12 +180,9 @@ export default function App() {
           <p className="eyebrow">Declared party donations · unofficial view</p>
           <h1>Who Funds NZ</h1>
           <p className="lede">
-            Large donations to registered New Zealand political parties, as published by the
-            Electoral Commission. The threshold has changed over time: more than $20,000 until 2010
-            <Ref n={4} />, more than $30,000 from 2011 to 2022
-            <Ref n={3} />, and more than $20,000 in election years from 2023
-            <Ref n={2} />
-            <Ref n={1} />. Smaller donations are not included.
+            Large donations to registered New Zealand political parties, from Electoral Commission
+            returns. Only amounts above the disclosure threshold are included. Filter by party,
+            year, amount or donor.
           </p>
           <p className="source-line">
             <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
@@ -195,16 +192,17 @@ export default function App() {
               {SOURCE_30K_LABEL}
             </a>
             <span>
-              {formatCount(donations.length)} returns filed {formatIsoLong(RETURN_MIN)} to{" "}
-              {formatIsoLong(RETURN_MAX)} · checked against the Commission on {DATA_RETRIEVED}
+              {formatCount(OVERALL.donations)} returns in totals ({formatCount(donations.length)}{" "}
+              filed {formatIsoLong(RETURN_MIN)} to {formatIsoLong(RETURN_MAX)}) · checked{" "}
+              {DATA_RETRIEVED}
             </span>
           </p>
         </div>
       </header>
 
       <main className="wrap">
-        <ExploreBar filters={filters} onChange={setFilters} />
         <StatCards stats={summary} overall={OVERALL} />
+        <ExploreBar filters={filters} onChange={setFilters} />
 
         <div className="layout">
           {!isMobile && (
@@ -422,107 +420,64 @@ export default function App() {
           <p>
             Unofficial view of public returns from the{" "}
             <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
-              Electoral Commission page for donations exceeding $20,000
+              Electoral Commission $20,000 page
             </a>{" "}
             and the{" "}
             <a href={SOURCE_30K_URL} target="_blank" rel="noopener noreferrer">
-              page for donations exceeding $30,000
+              $30,000 page
             </a>
-            . Each row is one return a party filed about one donor. A return can add up several
-            donations from that donor. The data was last checked against the Commission on{" "}
-            {DATA_RETRIEVED}.
+            . Each row is one return a party filed about one donor. Last checked against the
+            Commission on {DATA_RETRIEVED}. Being listed means only that a party reported receiving
+            a donation.
           </p>
-          <p>
-            <strong>Years covered:</strong> the Commission lists returns for 2008 to 2010, each year
-            from 2011 to 2022, and 2023 and 2026
-            <Ref n={5} />.
-          </p>
-          <p>
-            <strong>Rules by period:</strong> until 2010, parties had to report more than $20,000
-            from one donor within a 12-month period
-            <Ref n={4} />. From 1 January 2011 to 31 December 2022, it was more than $30,000 within a
-            12-month period, reported within 10 working days
-            <Ref n={3} />. In 2023 it was more than $20,000 received between 1 January of election
-            year and the day before election day, reported within 10 working days
-            <Ref n={2} />. For 2026 the same rule applies, but parties have 20 working days
-            <Ref n={1} />.
-          </p>
-          <p id="no-2024-2025">
-            <strong>2024 and 2025:</strong> the Commission lists no returns for these years
-            <Ref n={5} />. Its pages do not give a reason. Since 2023 the rule only covers donations
-            received between 1 January of an election year and the day before election day, and the
-            pages name 2023 and 2026 as election years
-            <Ref n={2} />
-            <Ref n={1} />. So charts on this site show nothing for 2024 and 2025.
-          </p>
-          <p>
-            <strong>What we change:</strong> Amounts and donor names are shown as filed, using the
-            amended figure where a return was amended. We do not estimate any figure. We do make
-            these changes:
-          </p>
-          <details className="footer-fold">
+          <details className="footer-fold" id="how-the-data-works">
             <summary>
-              <span className="footer-fold-title">Changes we make</span>
+              <span className="footer-fold-title">How the data works</span>
               <span className="summary-meta">
                 <span className="when-open">Hide</span>
                 <span className="when-closed">Show</span>
               </span>
             </summary>
-            <ul className="about-list">
-              <li>
-                Party names (the only names we merge). The same party is sometimes labelled in different ways, so these variants
-                are merged into one name. Every merge is listed below. Any party name not listed is
-                shown as published.
-              </li>
-              <li>
-                Dates. Where a return adds up several donations, the date shown is the latest donation
-                date in that return, and the charts place the whole amount in that month or year. Some
-                of these returns include parts from 2007. For two returns (Hon Robert Smellie QC, 2020,
-                and NZ Public Party, 2020) the Commission lists dates with no year, so the date shown is
-                the date the return was filed.
-              </li>
-              <li>
-                Returned donations. The Commission notes that 2 donations in 2023 were given back to
-                the donor (Buen Holdings Limited to National, Z A Unkovich to NZ First). They are
-                flagged and left out of totals unless you include them in the filters.
-              </li>
-              <li>
-                Notes. Other Commission notes are shown on the row: amended return dates, a withdrawn
-                amendment, an extra $15,200 noted on one return, and rows where the donor is itself a
-                registered party (Internet Party to Internet MANA in 2014, Vision New Zealand to
-                Freedoms New Zealand in 2023).
-              </li>
-              <li>
-                Donor names are shown exactly as filed. We do not merge donor names, so one donor
-                can appear under more than one spelling, and each spelling counts as a separate
-                name. The only change is that the HTML code “&amp;amp;” in four names is shown as “&amp;”.
-              </li>
-              <li>
-                Donor type (individual or organisation) is our guess from words in the name, such as
-                Limited or Trust, plus a short list checked by hand. It is not an official label.
-              </li>
-              <li>
-                Older returns. Returns are open for public inspection for {INSPECTION_YEARS} years
-                <Ref n={6} />.
-                After that we do not name individual donors, or organisations whose listed name
-                includes a person: {formatCount(WITHHELD_COUNT)} rows show “Name withheld (return
-                over 6 years old)” instead. Their amounts and parties stay
-                in the totals. Organisations stay named. The donor view only lists returns from the
-                last {INSPECTION_YEARS} years.
-              </li>
-              <li>We do not show donor addresses. The official return for each row has the full record.</li>
-              <li>
-                Party colours come from the{" "}
-                <a
-                  href="https://en.wikipedia.org/wiki/Wikipedia:Index_of_New_Zealand_political_party_meta_attributes"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Wikipedia NZ party colour index
-                </a>
-                .
-              </li>
-            </ul>
+            <p>
+              <strong>Thresholds:</strong> more than $20,000 until 2010
+              <Ref n={4} />; more than $30,000 from 2011 to 2022
+              <Ref n={3} />; more than $20,000 in election years from 2023 (10 working days in 2023
+              <Ref n={2} />, 20 in 2026
+              <Ref n={1} />).
+            </p>
+            <p id="no-2024-2025">
+              <strong>Years:</strong> the Commission lists 2008 to 2010, each year from 2011 to 2022,
+              then 2023 and 2026
+              <Ref n={5} />. It lists none for 2024 or 2025, so charts here show nothing for those
+              years.
+            </p>
+            <p>
+              <strong>What we change:</strong> amounts and donor names as filed (amended figure
+              where amended). Party name spellings are merged; donor names are not. Returned
+              donations are left out of totals unless you include them. Party-to-party transfers are
+              listed but left out of money totals. After {INSPECTION_YEARS} years
+              <Ref n={6} />, {formatCount(WITHHELD_COUNT)} individual names are withheld. No donor
+              addresses are shown.
+            </p>
+            <p>
+              <strong>Filing quirks:</strong> Dinesh Khadka’s return lists a 2010 received date for a
+              2020 donation. Alajamber Limited’s July 2026 return lists a received date before the
+              donation date. Both notes appear on the row.
+            </p>
+            <p>
+              Party colours from the{" "}
+              <a
+                href="https://en.wikipedia.org/wiki/Wikipedia:Index_of_New_Zealand_political_party_meta_attributes"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Wikipedia NZ party colour index
+              </a>
+              .{" "}
+              <button type="button" className="text-button" onClick={() => setMergesOpen(true)}>
+                Party name merges
+              </button>
+            </p>
           </details>
           <References />
           <details className="footer-fold">
@@ -545,30 +500,20 @@ export default function App() {
             </ul>
             <p>
               Internet MANA was a separate combined party registered for the 2014 election, so it is
-              shown on its own.{" "}
-              <button type="button" className="text-button" onClick={() => setMergesOpen(true)}>
-                Open merge list
-              </button>
+              shown on its own.
             </p>
           </details>
-          <p>
-            Being listed means only that a party reported receiving a donation. It does not suggest
-            any wrongdoing by the donor or the party.
-          </p>
           <p className="site-notice">
-            <strong>Notice:</strong> Data source is the Electoral Commission. This site is
-            independent and is not affiliated with or endorsed by the Electoral Commission. If
-            something here does not match the official record, please{" "}
+            <strong>Notice:</strong> Independent of the Electoral Commission. If something does not
+            match the official record,{" "}
             <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer">
-              open a public issue on GitHub
+              open a GitHub issue
             </a>{" "}
-            with only the row and the correction, and no personal details. If the correction is
-            about you or is private, use{" "}
+            with only the row and correction, or use{" "}
             <a href={PRIVATE_REPORT_URL} target="_blank" rel="noopener noreferrer">
-              GitHub’s private report form
+              the private report form
             </a>
-            , which only the site owner can read. Neither route needs an email address or phone
-            number.
+            .
           </p>
         </div>
       </footer>

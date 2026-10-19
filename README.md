@@ -83,7 +83,7 @@ Internet MANA was a separate combined party registered for the 2014 election, so
 **Other changes:**
 
 - Returned donations. The Commission notes 2 donations in 2023 that the party gave back to the donor (Buen Holdings Limited to National, $200,000; Z A Unkovich to NZ First, $50,000). They are flagged and left out of totals unless the "Include donations returned to the donor" filter is on.
-- Party donors. Two donors are themselves parties (Internet Party to Internet MANA, 2014; Vision New Zealand to Freedoms New Zealand, 2023). They are flagged and left out of the "more than one party" list.
+- Party donors. Three donors are themselves parties (including Internet Party to Internet MANA, 2014; Vision New Zealand to Freedoms New Zealand, 2023). They are flagged, left out of money totals so transfers are not counted as new funding, and left out of the "more than one party" list.
 - Commission notes (amended return dates, a withdrawn amendment, an extra $15,200 noted on one return) are shown on the row.
 - Party colours come from the Wikipedia NZ party colour index.
 

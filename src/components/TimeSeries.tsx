@@ -14,6 +14,7 @@ import { useMatchMedia } from "../hooks/useMatchMedia.ts";
 import { CHART_TOOLTIP_STYLE, CHART_TOOLTIP_STYLE_NARROW } from "../lib/chartTooltip.ts";
 import { formatCompactNzd, formatCount, formatNzd } from "../lib/format.ts";
 import { darkenColour } from "../lib/parties.ts";
+import { niceMax } from "../lib/scale.ts";
 import type { MonthPoint } from "../types.ts";
 
 type Props = {
@@ -49,6 +50,8 @@ export function TimeSeries({ points, grain, colour }: Props) {
   const barColour = colour ?? DEFAULT_BAR;
   const lineColour = colour ? darkenColour(colour, 0.28) : DEFAULT_LINE;
   const periodLabel = grain === "year" ? "year" : "month";
+  const periodMax = niceMax(Math.max(0, ...rows.map((row) => row.amount)));
+  const totalMax = niceMax(Math.max(0, ...rows.map((row) => row.cumulative)));
 
   // Fewer X labels on narrow screens so remaining ticks stay readable.
   const tickInterval = narrow
@@ -89,6 +92,7 @@ export function TimeSeries({ points, grain, colour }: Props) {
             />
             <YAxis
               yAxisId="period"
+              domain={[0, periodMax]}
               tickFormatter={(value: number) => formatCompactNzd(value)}
               tick={{ fill: barColour, fontSize: narrow ? 12 : 11 }}
               tickLine={false}
@@ -99,6 +103,7 @@ export function TimeSeries({ points, grain, colour }: Props) {
             <YAxis
               yAxisId="total"
               orientation="right"
+              domain={[0, totalMax]}
               tickFormatter={(value: number) => formatCompactNzd(value)}
               tick={{ fill: lineColour, fontSize: 11 }}
               tickLine={false}

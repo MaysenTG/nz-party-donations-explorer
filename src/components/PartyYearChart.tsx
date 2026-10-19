@@ -7,6 +7,7 @@ import { CHART_TOOLTIP_STYLE, CHART_TOOLTIP_STYLE_NARROW } from "../lib/chartToo
 import { formatCompactNzd, formatNzd } from "../lib/format.ts";
 import { OTHER_PARTIES, type PartyYearSeries } from "../lib/insights.ts";
 import { partyColour, shortPartyLabel } from "../lib/parties.ts";
+import { niceMax } from "../lib/scale.ts";
 
 type Props = { series: PartyYearSeries };
 
@@ -25,6 +26,13 @@ export function PartyYearChart({ series }: Props) {
     return <p className="empty-inline">No returns in these filters.</p>;
   }
   const narrow = isPhone || (width > 0 && width < 560);
+  const stackMax = Math.max(
+    0,
+    ...series.rows.map((row) =>
+      series.parties.reduce((sum, party) => sum + Number(row[party] ?? 0), 0),
+    ),
+  );
+  const yMax = niceMax(stackMax);
   return (
     <figure className="series">
       <ul className="legend party-legend">
@@ -51,6 +59,7 @@ export function PartyYearChart({ series }: Props) {
               axisLine={{ stroke: "#ddd6c8" }}
             />
             <YAxis
+              domain={[0, yMax]}
               tickFormatter={(value: number) => formatCompactNzd(value)}
               width={narrow ? 52 : 64}
               tick={{ fill: "#5c645e", fontSize: narrow ? 12 : 11 }}

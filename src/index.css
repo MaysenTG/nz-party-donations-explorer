@@ -3,8 +3,8 @@
   --bg: #efece4;
   --surface: #fbfaf6;
   --ink: #1c211e;
-  --muted: #5c645e;
-  --faint: #7d857e;
+  --muted: #4a524c;
+  --faint: #4a524c;
   --line: #ddd6c8;
   --accent: #1f4a42;
   --accent-ink: #14332d;
@@ -498,7 +498,7 @@ button:disabled {
   grid-template-columns: minmax(16rem, 19.5rem) minmax(0, 1fr);
   gap: 1rem;
   align-items: start;
-  padding-bottom: 2.5rem;
+  padding-bottom: 1rem;
 }
 
 .filters {
@@ -1404,12 +1404,10 @@ input[type="date"] {
   background: white;
 }
 
-/* Desktop table only: scroll inside a capped viewport.
-   Mobile cards paginate in normal flow — a max-height here let overflowing
-   card content extend the page past the footer. */
+/* Desktop table: sticky header, page scroll (not a tiny inner scroll box). */
 .donations-viewport.table-scroll {
-  max-height: min(28rem, 55vh);
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: visible;
 }
 
 .donations-viewport .donation-cards {
@@ -1873,20 +1871,38 @@ th.num button {
   }
 
   .site-header {
-    padding-top: 1.15rem;
+    padding-top: 1rem;
+    padding-bottom: 0;
   }
 
   h1 {
     max-width: none;
+    font-size: clamp(1.55rem, 7vw, 2.1rem);
+    margin-bottom: 0.45rem;
   }
 
   .lede {
-    font-size: 1rem;
+    font-size: 0.98rem;
+  }
+
+  .source-line {
+    margin-top: 0.55rem;
+    font-size: 0.88rem;
+  }
+
+  .stat-cards {
+    margin: 0.75rem 0 0.65rem;
+    padding-right: 3.5rem;
   }
 
   .explore-bar {
-    margin: 0.85rem 0 1rem;
-    padding: 0.75rem 0.85rem;
+    margin: 0.55rem 0 0.85rem;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .explore-years {
+    border-top: 0;
+    padding-top: 0;
   }
 
   .election-stats {
@@ -2456,10 +2472,48 @@ th.num button {
   padding-block: 0.45rem;
 }
 
-/* Footnote markers and references */
-.ref-mark { font-size: 0.7em; line-height: 0; margin-left: 0.1em; }
-.ref-mark a { text-decoration: none; padding: 0.2em 0.1em; }
-.ref-mark a:hover, .ref-mark a:focus-visible { text-decoration: underline; }
+/* Footnote markers: small in the line, larger invisible tap target. */
+.ref-mark {
+  position: relative;
+  font-size: 0.72em;
+  line-height: 0;
+  margin-left: 0.12em;
+  vertical-align: baseline;
+}
+.ref-mark a {
+  position: relative;
+  text-decoration: none;
+  padding: 0 0.05em;
+}
+.ref-mark a::before {
+  content: "";
+  position: absolute;
+  inset: -0.65rem -0.45rem;
+}
+.ref-mark a:hover,
+.ref-mark a:focus-visible {
+  text-decoration: underline;
+}
+
+html.js .seo-shell {
+  display: none;
+}
+
+.seo-shell-note {
+  margin: 0 0 1.5rem;
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+.year-select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: white;
+  font: inherit;
+}
 .references { margin-top: 0.85rem; }
 .ref-list {
   list-style: none;

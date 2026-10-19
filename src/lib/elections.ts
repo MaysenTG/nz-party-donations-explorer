@@ -10,11 +10,13 @@ export type ElectionCycle = {
   /** Inclusive start: day after the previous general election. */
   cycleStartIso: string;
   cycleEndIso: string;
-  /** Party family that led the government formed after the election. */
-  winnerFamily: PartyFamily;
+  /** Party family that led the government formed after the election. Null if not yet held. */
+  winnerFamily: PartyFamily | null;
   winnerLabel: string;
   /** Short description of the government / coalition that took office. */
   government: string;
+  /** True while the election has not yet been held. */
+  upcoming?: boolean;
 };
 
 /**
@@ -83,6 +85,17 @@ export const ELECTION_CYCLES: ElectionCycle[] = [
     winnerLabel: "National",
     government: "National–ACT–NZ First coalition",
   },
+  {
+    year: 2026,
+    electionIso: "2026-11-07",
+    electionLabel: "7 November 2026",
+    cycleStartIso: "2023-10-15",
+    cycleEndIso: "2026-11-07",
+    winnerFamily: null,
+    winnerLabel: "TBC",
+    government: "Election not yet held",
+    upcoming: true,
+  },
 ];
 
 export type CyclePartyTotal = PartyTotal & {
@@ -118,7 +131,9 @@ export function summariseElectionCycle(
   cycle: ElectionCycle,
   sourceRows: readonly Donation[] = donations,
 ): ElectionCycleSummary {
-  const rows = sourceRows.filter((row) => inCycle(row, cycle) && !row.returned_to_donor);
+  const rows = sourceRows.filter(
+    (row) => inCycle(row, cycle) && !row.returned_to_donor && !row.party_to_party,
+  );
   const buckets = new Map<string, { cents: number; count: number }>();
   let totalCents = 0;
   for (const row of rows) {
@@ -158,15 +173,21 @@ export function summariseElectionCycle(
     });
   }
 
-  const winnerCents = sorted
-    .filter(([party]) => partyFamily(party) === cycle.winnerFamily)
-    .reduce((sum, [, bucket]) => sum + bucket.cents, 0);
+  const winnerCents =
+    cycle.winnerFamily == null
+      ? 0
+      : sorted
+          .filter(([party]) => partyFamily(party) === cycle.winnerFamily)
+          .reduce((sum, [, bucket]) => sum + bucket.cents, 0);
   const winnerTotal = winnerCents / 100;
   const ranked = sorted.map(([party, bucket]) => ({
     family: partyFamily(party),
     cents: bucket.cents,
   }));
-  const winnerRankIndex = ranked.findIndex((entry) => entry.family === cycle.winnerFamily);
+  const winnerRankIndex =
+    cycle.winnerFamily == null
+      ? -1
+      : ranked.findIndex((entry) => entry.family === cycle.winnerFamily);
   const winnerRank = winnerRankIndex >= 0 ? winnerRankIndex + 1 : null;
   const topFamily = ranked[0]?.family ?? null;
 
@@ -178,7 +199,8 @@ export function summariseElectionCycle(
     winnerTotal,
     winnerShare: totalCents === 0 ? 0 : winnerCents / totalCents,
     winnerRank,
-    hadMostDonations: topFamily === cycle.winnerFamily && winnerTotal > 0,
+    hadMostDonations:
+      cycle.winnerFamily != null && topFamily === cycle.winnerFamily && winnerTotal > 0,
   };
 }
 
