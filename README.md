@@ -1,22 +1,16 @@
-# NZ party donations explorer
+# Who Funds NZ
 
-An unofficial explorer of large party donations published by the Electoral Commission of New Zealand: more than $20,000 until 2010, more than $30,000 from 2011 to 2022, and more than $20,000 in election years from 2023 (the Commission's 2023 and 2026 tables).
+**[whofunds.nz](https://whofunds.nz)** — an unofficial explorer of large donations to New Zealand political parties, drawn from returns the Electoral Commission publishes.
 
-This is an independent project. It is not an Electoral Commission website and is not affiliated with or endorsed by the Electoral Commission. Amounts and donor names are shown as filed, using the amended figure where a return was amended. Only party names are merged; donor names are never merged. See [Merges and other changes](#merges-and-other-changes).
+Browse totals, filter by party, year, amount and donor type, compare charts, and open a donor’s recent returns. Built for clarity, not spin: amounts and names are shown as filed.
 
-## Contents
-
-1. [Live site](#live-site)
-2. [What you can do](#what-you-can-do)
-3. [About the data](#about-the-data)
-4. [Merges and other changes](#merges-and-other-changes)
-5. [Privacy](#privacy)
-6. [Polling day mode](#polling-day-mode)
-7. [Corrections](#corrections)
+> Independent project. Not an Electoral Commission website, and not affiliated with or endorsed by the Commission. Only party names are merged for consistency; donor names are never merged. See [Merges and other changes](#merges-and-other-changes).
 
 ## Live site
 
-https://maysentg.github.io/nz-party-donations-explorer/
+**https://whofunds.nz**
+
+(Also available at the GitHub Pages URL: https://maysentg.github.io/nz-party-donations-explorer/)
 
 ## What you can do
 
@@ -111,3 +105,5 @@ The Electoral Act 1993, s 197(1)(g), bars publishing party names or logos on pol
 ## Corrections
 
 If something here does not match the official record, please [open an issue on GitHub](https://github.com/MaysenTG/nz-party-donations-explorer/issues) with only the row and the correction, and no personal details. If the correction is about you or is private, use [GitHub's private report form](https://github.com/MaysenTG/nz-party-donations-explorer/security/advisories/new), which only the repository owner can read. Neither route needs an email address or phone number. If the official record itself is wrong, the party needs to file an amended return with the Electoral Commission.
+
+Code changes are maintainer-only: branch rules block pushes, merges and branch updates from anyone except the repository owner. Please use issues for corrections and suggestions rather than pull requests.
