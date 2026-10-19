@@ -1,5 +1,4 @@
 # Builds the Vite app and publishes dist/ to Cloudflare Pages (Direct Upload).
-# Leaves the existing GitHub Pages workflow untouched.
 name: Deploy to Cloudflare Pages
 
 on:

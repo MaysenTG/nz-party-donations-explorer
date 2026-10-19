@@ -17,7 +17,10 @@ export function ElectionCycles({ cycles }: Props) {
     <section className="election-cycles card wide" aria-labelledby="election-cycles-title">
       <div className="card-head">
         <h2 id="election-cycles-title">Election cycles</h2>
-        <p>From the day after the previous election through election day.</p>
+        <p>
+          From the day after the previous election through election day. Returned and
+          party-to-party transfers are left out.
+        </p>
       </div>
 
       <div className="election-list">

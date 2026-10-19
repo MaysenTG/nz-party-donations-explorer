@@ -10,8 +10,6 @@ Browse totals, filter by party, year, amount and donor type, compare charts, and
 
 **https://whofunds.nz**
 
-(Also available at the GitHub Pages URL: https://maysentg.github.io/nz-party-donations-explorer/)
-
 ## What you can do
 
 - See the total amount, number of returns, parties and distinct donor names as filed (all update with your filters).
@@ -99,7 +97,7 @@ Internet MANA was a separate combined party registered for the 2014 election, so
 The Electoral Act 1993, s 197(1)(g), bars publishing party names or logos on polling day before voting closes. In polling day mode the site shows only a neutral notice: no party names, colours, charts or data (the data is not even downloaded).
 
 - **Automatic:** the visitor's browser turns the mode on from 00:00 to 19:00 NZDT on Saturday 7 November 2026 (`src/lib/pollingDay.ts`). An open tab reloads itself at the start and end of the window.
-- **Build flag:** `VITE_POLLING_DAY=1 npm run build` builds a site that is always in polling day mode, with no reliance on any clock. For a GitHub Pages deploy, set it in the build step on the day and remove it after 7 pm.
+- **Build flag:** `VITE_POLLING_DAY=1 npm run build` builds a site that is always in polling day mode, with no reliance on any clock. For a production deploy, set it in the build step on the day and remove it after 7 pm.
 - **Check it:** open the site with `?preview=polling-day` to see the notice at any time. To check the automatic window, run `npm run build && npx vite preview` with the system clock set inside the window.
 
 ## Corrections

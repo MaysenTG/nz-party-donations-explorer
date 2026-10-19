@@ -98,9 +98,9 @@ function seoShellAndCsv(): Plugin {
       const total = totalCents / 100;
       const totalLabel =
         total >= 1_000_000
-          ? `$${(Math.round((total / 1_000_000) * 10) / 10).toLocaleString("en-NZ", {
+          ? `$${(Math.round((total / 1_000_000) * 100) / 100).toLocaleString("en-NZ", {
               minimumFractionDigits: 1,
-              maximumFractionDigits: 1,
+              maximumFractionDigits: 2,
             })}m`
           : `$${Math.round(total).toLocaleString("en-NZ")}`;
       const nz = (n: number) => n.toLocaleString("en-NZ");

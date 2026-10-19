@@ -2365,7 +2365,8 @@ th.num button {
 }
 
 /* Polling day notice */
-.polling-day {
+.polling-day,
+.not-found {
   max-width: 40rem;
   margin: 12vh auto;
   padding: 2rem 1.5rem;
@@ -2373,11 +2374,23 @@ th.num button {
   border-radius: 12px;
   line-height: 1.55;
 }
-.polling-day h1 {
+.polling-day h1,
+.not-found h1 {
   margin-top: 0;
 }
-.polling-day p {
+.polling-day p,
+.not-found p {
   margin: 0 0 0.9rem;
+}
+.not-found-brand {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.not-found a {
+  color: var(--accent);
 }
 
 .loading-screen {
