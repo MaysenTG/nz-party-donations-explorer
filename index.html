@@ -7,6 +7,7 @@
     </script>
     <link rel="icon" href="%BASE_URL%favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />
     <link rel="canonical" href="https://whofunds.nz/" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#efece4" />
@@ -26,7 +27,8 @@
       property="og:description"
       content="Explore large donations to New Zealand political parties from Electoral Commission returns. Filter by party, year, amount and donor."
     />
-    <meta property="og:image" content="https://whofunds.nz/og-image.png" />
+    <meta property="og:image" content="https://whofunds.nz/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Who Funds NZ - declared party donations explorer" />
@@ -37,7 +39,7 @@
       name="twitter:description"
       content="Explore large donations to New Zealand political parties from Electoral Commission returns. Filter by party, year, amount and donor."
     />
-    <meta name="twitter:image" content="https://whofunds.nz/og-image.png" />
+    <meta name="twitter:image" content="https://whofunds.nz/og-image.jpg" />
 
     <script type="application/ld+json">
       {
@@ -49,7 +51,7 @@
             "url": "https://whofunds.nz/",
             "description": "Unofficial explorer of large donations to New Zealand political parties, from Electoral Commission returns.",
             "inLanguage": "en-NZ",
-            "image": "https://whofunds.nz/og-image.png",
+            "image": "https://whofunds.nz/og-image.jpg",
             "publisher": {
               "@type": "Person",
               "name": "Maysen Greenwood",
@@ -65,7 +67,7 @@
             "operatingSystem": "Any",
             "inLanguage": "en-NZ",
             "isAccessibleForFree": true,
-            "image": "https://whofunds.nz/og-image.png",
+            "image": "https://whofunds.nz/og-image.jpg",
             "isBasedOn": [
               "https://elections.nz/democracy-in-nz/political-parties-in-new-zealand/donations-exceeding-20000",
               "https://elections.nz/democracy-in-nz/political-parties-in-new-zealand/donations-exceeding-20000/donations-exceeding-30000"
@@ -97,7 +99,7 @@
               {
                 "@type": "DataDownload",
                 "encodingFormat": "text/csv",
-                "contentUrl": "https://whofunds.nz/"
+                "contentUrl": "https://whofunds.nz/donations.csv"
               }
             ]
           }
@@ -109,12 +111,10 @@
     <div id="seo-shell" class="seo-shell">
       <header class="site-header">
         <div class="wrap">
-          <p class="eyebrow">Declared party donations · unofficial view</p>
           <h1>Who Funds NZ</h1>
           <p class="lede">
-            Large donations to registered New Zealand political parties, from Electoral Commission
-            returns. Only amounts above the disclosure threshold are included. Filter by party,
-            year, amount or donor.
+            Large donations to New Zealand political parties from Electoral Commission returns.
+            Filter by party, year, amount or donor.
           </p>
           <p class="source-line">
             <a
@@ -150,7 +150,8 @@
         </section>
         <p class="seo-shell-note">
           Interactive charts and filters need JavaScript. Source data is from the Electoral
-          Commission. This site is independent and unofficial.
+          Commission. This site is independent and unofficial. Being listed does not suggest any
+          wrongdoing.
         </p>
       </div>
     </div>

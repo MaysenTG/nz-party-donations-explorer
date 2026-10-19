@@ -19,7 +19,6 @@ import { ScrollToTop } from "./components/ScrollToTop.tsx";
 import { TimeSeries } from "./components/TimeSeries.tsx";
 import { useMatchMedia } from "./hooks/useMatchMedia.ts";
 import { donationsToCsv, downloadCsv } from "./lib/csv.ts";
-import { formatIsoLong } from "./lib/dates.ts";
 import {
   ALL_PARTIES,
   activeFilterCount,
@@ -32,8 +31,6 @@ import {
   donationSeries,
   partyCounts,
   partyTotals,
-  RETURN_MAX,
-  RETURN_MIN,
   sortDonations,
   summarise,
   topDonors,
@@ -177,12 +174,10 @@ export default function App() {
       </a>
       <header className="site-header">
         <div className="wrap">
-          <p className="eyebrow">Declared party donations · unofficial view</p>
           <h1>Who Funds NZ</h1>
           <p className="lede">
-            Large donations to registered New Zealand political parties, from Electoral Commission
-            returns. Only amounts above the disclosure threshold are included. Filter by party,
-            year, amount or donor.
+            Large donations to New Zealand political parties from Electoral Commission returns.
+            Filter by party, year, amount or donor.
           </p>
           <p className="source-line">
             <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
@@ -192,9 +187,8 @@ export default function App() {
               {SOURCE_30K_LABEL}
             </a>
             <span>
-              {formatCount(OVERALL.donations)} returns in totals ({formatCount(donations.length)}{" "}
-              filed {formatIsoLong(RETURN_MIN)} to {formatIsoLong(RETURN_MAX)}) · checked{" "}
-              {DATA_RETRIEVED}
+              {formatCount(OVERALL.donations)} returns ({formatCount(donations.length)} filed) ·
+              checked {DATA_RETRIEVED}
             </span>
           </p>
         </div>
@@ -230,7 +224,7 @@ export default function App() {
               <section className="card" aria-labelledby="party-chart-title">
                 <div className="card-head">
                   <h2 id="party-chart-title">Amount by party</h2>
-                  <p>Select a bar to focus one party; select again to clear.</p>
+                  <p>Select a bar to focus; select again to clear.</p>
                 </div>
                 <RankChart
                   items={parties.map((party) => ({
@@ -254,7 +248,7 @@ export default function App() {
                       ? "Updates with the filters."
                       : donors.length < TOP_DONOR_LIMIT
                         ? `All ${formatCount(donors.length)} donors in range.`
-                        : `Top ${TOP_DONOR_LIMIT} by amount, by exact name as filed. Select one for returns from the last ${INSPECTION_YEARS} years.`}
+                        : `Top ${TOP_DONOR_LIMIT} by amount as filed.`}
                   </p>
                 </div>
                 <RankChart
@@ -272,8 +266,6 @@ export default function App() {
                 />
                 {focusedDonor && (
                   <p className="chart-note">
-                    Search matches donor names containing “{focusedDonor}”. Bars only total
-                    exact name matches.{" "}
                     <a className="chart-note-link" href="#table-title">
                       View matching donations
                     </a>
@@ -281,9 +273,7 @@ export default function App() {
                 )}
                 {!focusedDonor && hiddenDonors > 0 && (
                   <p className="chart-note">
-                    {formatCount(hiddenDonors)} other{" "}
-                    {hiddenDonors === 1 ? "donor is" : "donors are"} in the table below (withheld
-                    names omitted from this chart).
+                    {formatCount(hiddenDonors)} more in the table below.
                   </p>
                 )}
               </section>
@@ -294,8 +284,7 @@ export default function App() {
                     <h2 id="time-title">Returns over time</h2>
                     <p>
                       By {timeSeries.grain === "year" ? "year" : "month"} of the latest donation
-                      date in each return
-                      {timeSeries.grain === "year" ? " (long ranges use years)" : ""}.
+                      date in each return.
                     </p>
                   </div>
                   <ul className="legend">
@@ -335,7 +324,6 @@ export default function App() {
               <section className="card wide" aria-labelledby="party-year-title">
                 <div className="card-head">
                   <h2 id="party-year-title">Party totals by year</h2>
-                  <p>Largest parties in range shown separately; the rest are grouped.</p>
                 </div>
                 <PartyYearChart series={partyYears} />
               </section>
@@ -345,9 +333,7 @@ export default function App() {
                   <h2 id="multi-title">Donors giving to more than one party</h2>
                   <p>
                     {formatCount(multiDonors.length)}{" "}
-                    {multiDonors.length === 1 ? "donor name" : "donor names"} in range, by exact name as
-                    filed. Parties listed as donors and individuals on returns over{" "}
-                    {INSPECTION_YEARS} years old are left out.
+                    {multiDonors.length === 1 ? "name" : "names"} as filed.
                   </p>
                 </div>
                 <MultiPartyDonors donors={multiDonors} onOpenDonor={setOpenDonor} />
@@ -356,10 +342,6 @@ export default function App() {
               <section className="card" aria-labelledby="size-title">
                 <div className="card-head">
                   <h2 id="size-title">Return sizes</h2>
-                  <p>
-                    How many returns fall in each size band. A return can total several donations
-                    from one donor.
-                  </p>
                 </div>
                 <SizeChart buckets={sizes} />
               </section>
@@ -426,9 +408,9 @@ export default function App() {
             <a href={SOURCE_30K_URL} target="_blank" rel="noopener noreferrer">
               $30,000 page
             </a>
-            . Each row is one return a party filed about one donor. Last checked against the
-            Commission on {DATA_RETRIEVED}. Being listed means only that a party reported receiving
-            a donation.
+            . Each row is one return about one donor. Last checked {DATA_RETRIEVED}. Being listed
+            means only that a party reported receiving a donation. It does not suggest any
+            wrongdoing by the donor or the party.
           </p>
           <details className="footer-fold" id="how-the-data-works">
             <summary>
@@ -506,14 +488,13 @@ export default function App() {
             </p>
           </details>
           <p className="site-notice">
-            <strong>Notice:</strong> Independent of the Electoral Commission. If something does not
-            match the official record,{" "}
+            Independent of the Electoral Commission. Corrections:{" "}
             <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer">
-              open a GitHub issue
+              GitHub issue
             </a>{" "}
-            with only the row and correction, or use{" "}
+            or{" "}
             <a href={PRIVATE_REPORT_URL} target="_blank" rel="noopener noreferrer">
-              the private report form
+              private report
             </a>
             .
           </p>

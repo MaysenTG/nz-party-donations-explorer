@@ -12,8 +12,9 @@ export function formatCompactNzd(amount: number): string {
   const abs = Math.abs(amount);
   if (abs >= 1_000_000) {
     const millions = abs / 1_000_000;
-    const digits = millions >= 10 ? 1 : 2;
-    const formatted = millions.toLocaleString("en-NZ", {
+    const round = Math.round(millions * 100) / 100;
+    const digits = Number.isInteger(round) ? 0 : round * 10 === Math.round(round * 10) ? 1 : 2;
+    const formatted = round.toLocaleString("en-NZ", {
       minimumFractionDigits: digits,
       maximumFractionDigits: digits,
     });

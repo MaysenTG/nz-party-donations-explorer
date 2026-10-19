@@ -6,7 +6,7 @@ import { CHART_TOOLTIP_STYLE, CHART_TOOLTIP_STYLE_NARROW } from "../lib/chartToo
 import { formatCompactNzd, formatNzd } from "../lib/format.ts";
 import { OTHER_PARTIES, type PartyYearSeries } from "../lib/insights.ts";
 import { partyColour, shortPartyLabel } from "../lib/parties.ts";
-import { niceMax } from "../lib/scale.ts";
+import { axisTicks } from "../lib/scale.ts";
 
 type Props = { series: PartyYearSeries };
 
@@ -31,7 +31,7 @@ export function PartyYearChart({ series }: Props) {
       series.parties.reduce((sum, party) => sum + Number(row[party] ?? 0), 0),
     ),
   );
-  const yMax = niceMax(stackMax);
+  const yAxis = axisTicks(stackMax);
   return (
     <figure className="series">
       <ul className="legend party-legend">
@@ -58,13 +58,13 @@ export function PartyYearChart({ series }: Props) {
               axisLine={{ stroke: "#ddd6c8" }}
             />
             <YAxis
-              domain={[0, yMax]}
+              domain={[0, yAxis.top]}
+              ticks={yAxis.ticks}
               tickFormatter={(value: number) => formatCompactNzd(value)}
               width={narrow ? 52 : 64}
               tick={{ fill: "#5c645e", fontSize: narrow ? 12 : 11 }}
               tickLine={false}
               axisLine={false}
-              tickCount={narrow ? 4 : undefined}
             />
             <Tooltip
               formatter={(value, name) => {
@@ -90,9 +90,8 @@ export function PartyYearChart({ series }: Props) {
           </BarChart>
         )}
       </div>
-      <figcaption>
-        Amount declared by the year of each return's latest donation date, stacked by party. The
-        Commission lists no returns for 2024 or 2025 (
+      <figcaption className="chart-note">
+        Stacked by party. No 2024 or 2025 (
         <a
           href="#no-2024-2025"
           onClick={(e) => {

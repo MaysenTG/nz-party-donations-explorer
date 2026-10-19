@@ -1859,7 +1859,11 @@ th.num button {
 
   .stat-cards {
     margin: 0.75rem 0 0.65rem;
-    padding-right: 3.5rem;
+  }
+
+  /* Keep the filters FAB from covering rank chart dollar values. */
+  .rank-plot {
+    padding-right: 3.25rem;
   }
 
   .explore-bar {
@@ -2379,12 +2383,89 @@ th.num button {
 .polling-day h1 {
   margin-top: 0;
 }
-.loading {
-  padding: 2rem;
-  text-align: center;
-}
 .polling-day p {
   margin: 0 0 0.9rem;
+}
+
+.loading-screen {
+  min-height: 70vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.25rem;
+}
+
+.loading-screen-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+  max-width: 22rem;
+}
+
+.loading-brand {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 5vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.loading-copy {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
+.loading-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.4rem;
+  height: 2.6rem;
+}
+
+.loading-bars span {
+  display: block;
+  width: 0.7rem;
+  border-radius: 4px 4px 0 0;
+  background: var(--accent);
+  transform-origin: bottom;
+  animation: loading-bar 1.05s ease-in-out infinite;
+}
+
+.loading-bars span:nth-child(1) {
+  height: 42%;
+  animation-delay: 0s;
+}
+
+.loading-bars span:nth-child(2) {
+  height: 68%;
+  animation-delay: 0.14s;
+}
+
+.loading-bars span:nth-child(3) {
+  height: 100%;
+  animation-delay: 0.28s;
+}
+
+@keyframes loading-bar {
+  0%,
+  100% {
+    transform: scaleY(0.45);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-bars span {
+    animation: none;
+    opacity: 0.85;
+  }
 }
 
 /* Compact sheet layout so the filters fit a phone screen */
@@ -2440,6 +2521,10 @@ html.js .seo-shell {
   margin: 0 0 1.5rem;
   color: var(--muted);
   max-width: 60ch;
+}
+
+.party-extra {
+  color: var(--muted);
 }
 
 .year-select {

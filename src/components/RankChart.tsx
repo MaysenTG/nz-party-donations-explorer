@@ -82,7 +82,6 @@ export function RankChart({ items, pressedId, onSelect, empty }: Props) {
         </span>
         <span className="rank-scale-value" />
       </div>
-      <figcaption className="chart-note">Amounts in NZD.</figcaption>
     </figure>
   );
 }

@@ -14,6 +14,36 @@ import {
 const VIRTUAL_DONATIONS = "virtual:donations";
 const RESOLVED_VIRTUAL_DONATIONS = "\0virtual:donations";
 
+type RawRow = Record<string, unknown>;
+
+function readDonationRows(): RawRow[] {
+  const file = path.resolve("src/data/donations.json");
+  const parsed: unknown = JSON.parse(fs.readFileSync(file, "utf8"));
+  if (!Array.isArray(parsed)) {
+    throw new Error("donations.json must be an array");
+  }
+  return parsed.filter(
+    (row): row is RawRow => typeof row === "object" && row !== null && !Array.isArray(row),
+  );
+}
+
+function withPrivacy(rows: RawRow[], cutoff: string): RawRow[] {
+  return rows.map((row) => {
+    const copy = { ...row };
+    delete copy.donor_address;
+    const name = String(copy.donor_name ?? "");
+    const returned = String(copy.return_received_date ?? "");
+    if (
+      withholdName(classifyDonor(name) === "individual", name) &&
+      isPastInspection(nzDateToIso(returned), cutoff)
+    ) {
+      copy.donor_name = OLD_INDIVIDUAL_LABEL;
+      copy.name_withheld = true;
+    }
+    return copy;
+  });
+}
+
 /**
  * Serves donation rows to the app.
  * - Drops any donor_address field (the committed file no longer has one; this stays as a guard).
@@ -31,51 +61,37 @@ function publicDonations(): Plugin {
       if (id !== RESOLVED_VIRTUAL_DONATIONS) return null;
       const file = path.resolve("src/data/donations.json");
       this.addWatchFile(file);
-      const parsed: unknown = JSON.parse(fs.readFileSync(file, "utf8"));
-      if (!Array.isArray(parsed)) {
-        throw new Error("donations.json must be an array");
-      }
       const cutoff = inspectionCutoffIso(new Date());
-      const rows = parsed.map((row) => {
-        if (typeof row !== "object" || row === null || Array.isArray(row)) return row;
-        const copy = { ...(row as Record<string, unknown>) };
-        delete copy.donor_address;
-        const name = String(copy.donor_name ?? "");
-        const returned = String(copy.return_received_date ?? "");
-        if (
-          withholdName(classifyDonor(name) === "individual", name) &&
-          isPastInspection(nzDateToIso(returned), cutoff)
-        ) {
-          copy.donor_name = OLD_INDIVIDUAL_LABEL;
-          copy.name_withheld = true;
-        }
-        return copy;
-      });
+      const rows = withPrivacy(readDonationRows(), cutoff);
       return `export default ${JSON.stringify(rows)}`;
     },
   };
 }
 
-/** Fills the no-JS SEO shell with live totals so crawlers see real numbers. */
-function seoShellStats(): Plugin {
+function csvEscape(value: string): string {
+  if (/[",\n\r]/.test(value)) return `"${value.replaceAll('"', '""')}"`;
+  return value;
+}
+
+/** Writes a public CSV and fills the no-JS SEO shell with privacy-aware totals. */
+function seoShellAndCsv(): Plugin {
   return {
-    name: "seo-shell-stats",
+    name: "seo-shell-and-csv",
     transformIndexHtml(html) {
-      const file = path.resolve("src/data/donations.json");
-      const parsed: unknown = JSON.parse(fs.readFileSync(file, "utf8"));
-      if (!Array.isArray(parsed)) return html;
+      const cutoff = inspectionCutoffIso(new Date());
+      const rows = withPrivacy(readDonationRows(), cutoff);
       let totalCents = 0;
       let counted = 0;
       const parties = new Set<string>();
       const donors = new Set<string>();
-      for (const row of parsed) {
-        if (typeof row !== "object" || row === null || Array.isArray(row)) continue;
-        const r = row as Record<string, unknown>;
+      for (const r of rows) {
         if (r.returned_to_donor === true) continue;
         counted += 1;
         parties.add(String(r.party ?? ""));
-        const name = String(r.donor_name ?? "");
-        if (name && r.name_withheld !== true) donors.add(name);
+        if (r.name_withheld !== true) {
+          const name = String(r.donor_name ?? "");
+          if (name) donors.add(name);
+        }
         if (r.party_to_party === true) continue;
         totalCents += Math.round(Number(r.amount) * 100);
       }
@@ -88,7 +104,7 @@ function seoShellStats(): Plugin {
       return html
         .replace(
           /<span data-seo-count>[\s\S]*?<\/span>/,
-          `<span data-seo-count>${nz(counted)} returns in totals (${nz(parsed.length)} filed) · Electoral Commission data</span>`,
+          `<span data-seo-count>${nz(counted)} returns in totals (${nz(rows.length)} filed) · Electoral Commission data</span>`,
         )
         .replace(
           /<section class="stat-cards" aria-label="Summary" data-seo-stats>[\s\S]*?<\/section>/,
@@ -112,9 +128,47 @@ function seoShellStats(): Plugin {
         </section>`,
         );
     },
+    closeBundle() {
+      const cutoff = inspectionCutoffIso(new Date());
+      const rows = withPrivacy(readDonationRows(), cutoff);
+      const header = [
+        "party",
+        "donor_name",
+        "amount",
+        "latest_donation_date_in_return",
+        "return_received_date",
+        "amended_return_received_date",
+        "returned_to_donor",
+        "donor_is_party",
+        "notes",
+        "source_pdf_url",
+      ];
+      const lines = [
+        header.join(","),
+        ...rows.map((row) =>
+          [
+            String(row.party ?? ""),
+            String(row.donor_name ?? ""),
+            String(row.amount ?? ""),
+            String(row.donation_received_date ?? ""),
+            String(row.return_received_date ?? ""),
+            String(row.amended_return_received_date ?? ""),
+            row.returned_to_donor === true ? "yes" : "",
+            row.party_to_party === true ? "yes" : "",
+            Array.isArray(row.notes) ? row.notes.join(" ") : "",
+            String(row.source_pdf_url ?? ""),
+          ]
+            .map((cell) => csvEscape(cell))
+            .join(","),
+        ),
+      ];
+      const outDir = path.resolve("dist");
+      fs.mkdirSync(outDir, { recursive: true });
+      fs.writeFileSync(path.join(outDir, "donations.csv"), `${lines.join("\n")}\n`);
+    },
   };
 }
 
 export default defineConfig({
-  plugins: [publicDonations(), seoShellStats(), react()],
+  plugins: [publicDonations(), seoShellAndCsv(), react()],
 });

@@ -13,7 +13,7 @@ import { useMatchMedia } from "../hooks/useMatchMedia.ts";
 import { CHART_TOOLTIP_STYLE, CHART_TOOLTIP_STYLE_NARROW } from "../lib/chartTooltip.ts";
 import { formatCompactNzd, formatCount, formatNzd } from "../lib/format.ts";
 import { darkenColour } from "../lib/parties.ts";
-import { niceMax } from "../lib/scale.ts";
+import { axisTicks } from "../lib/scale.ts";
 import type { MonthPoint } from "../types.ts";
 
 type Props = {
@@ -49,8 +49,8 @@ export function TimeSeries({ points, grain, colour }: Props) {
   const barColour = colour ?? DEFAULT_BAR;
   const lineColour = colour ? darkenColour(colour, 0.28) : DEFAULT_LINE;
   const periodLabel = grain === "year" ? "year" : "month";
-  const periodMax = niceMax(Math.max(0, ...rows.map((row) => row.amount)));
-  const totalMax = niceMax(Math.max(0, ...rows.map((row) => row.cumulative)));
+  const periodAxis = axisTicks(Math.max(0, ...rows.map((row) => row.amount)));
+  const totalAxis = axisTicks(Math.max(0, ...rows.map((row) => row.cumulative)));
 
   // Fewer X labels on narrow screens so remaining ticks stay readable.
   const tickInterval = narrow
@@ -91,18 +91,19 @@ export function TimeSeries({ points, grain, colour }: Props) {
             />
             <YAxis
               yAxisId="period"
-              domain={[0, periodMax]}
+              domain={[0, periodAxis.top]}
+              ticks={periodAxis.ticks}
               tickFormatter={(value: number) => formatCompactNzd(value)}
               tick={{ fill: barColour, fontSize: narrow ? 12 : 11 }}
               tickLine={false}
               axisLine={false}
               width={narrow ? 44 : 48}
-              tickCount={narrow ? 4 : undefined}
             />
             <YAxis
               yAxisId="total"
               orientation="right"
-              domain={[0, totalMax]}
+              domain={[0, totalAxis.top]}
+              ticks={totalAxis.ticks}
               tickFormatter={(value: number) => formatCompactNzd(value)}
               tick={{ fill: lineColour, fontSize: 11 }}
               tickLine={false}
@@ -146,23 +147,7 @@ export function TimeSeries({ points, grain, colour }: Props) {
         ) : null}
       </div>
       <figcaption className="chart-note">
-        {narrow ? (
-          <>
-            Bars: amount received that {periodLabel} (left axis). Line: running total on its own
-            scale. Tap for exact dollars. NZD.
-          </>
-        ) : (
-          <>
-            Bars use the left axis (amount received that {periodLabel}). The line uses the right
-            axis (running total). NZD.
-          </>
-        )}
-        {grain === "year"
-          ? " Only years with matching returns are shown. Long ranges group by year."
-          : " Empty months in range stay at zero."}{" "}
-        Each return is placed by its latest donation date. A return that adds up several donations
-        sits wholly in that period, and a few early parts date from 2007. Only returns above the
-        threshold for their year are included. No bars for 2024 or 2025 (
+        Latest donation date in each return. No 2024 or 2025 (
         <a
           href="#no-2024-2025"
           onClick={(e) => {

@@ -74,9 +74,8 @@ export function FilterFields({
                     checked={filters.parties.includes(party)}
                     onChange={() => toggleParty(party)}
                   />
-                  <span>
+                  <span className={extra ? "party-extra" : undefined} title={extra ? "No current seats in Parliament" : undefined}>
                     {party}
-                    {extra && <small className="party-seat-note"> no current seats</small>}
                   </span>
                   <span className="count">{count.toLocaleString("en-NZ")}</span>
                 </label>
