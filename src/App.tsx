@@ -39,7 +39,8 @@ import {
   topDonors,
   partyMergeGroups,
 } from "./lib/donations.ts";
-import { ELECTION_CYCLE_SUMMARIES } from "./lib/elections.ts";
+import { electionCycleSummaries } from "./lib/elections.ts";
+import { QueryBanner } from "./components/QueryBanner.tsx";
 import { formatCount, formatShare } from "./lib/format.ts";
 import { partyColour } from "./lib/parties.ts";
 import {
@@ -131,6 +132,7 @@ export default function App() {
   const parties = useMemo(() => partyTotals(filtered), [filtered]);
   const donors = useMemo(() => topDonors(filtered, TOP_DONOR_LIMIT), [filtered]);
   const timeSeries = useMemo(() => donationSeries(filtered), [filtered]);
+  const electionCycles = useMemo(() => electionCycleSummaries(filtered), [filtered]);
   const rangeLabel = useMemo(() => filterRangeLabel(filters), [filters]);
   const partyFacet = useMemo(
     () => partyCounts(applyFilters(donations, filters, { party: true })),
@@ -219,6 +221,12 @@ export default function App() {
               onChange={setFilters}
               onReset={() => setFilters(createDefaultFilters())}
             />
+            <QueryBanner
+              query={filters.query}
+              partyTotals={parties}
+              filters={filters}
+              onChange={setFilters}
+            />
 
             <div className="chart-grid">
               <section className="card" aria-labelledby="party-chart-title">
@@ -276,7 +284,8 @@ export default function App() {
                 {!focusedDonor && hiddenDonors > 0 && (
                   <p className="chart-note">
                     {formatCount(hiddenDonors)} other{" "}
-                    {hiddenDonors === 1 ? "donor is" : "donors are"} in the table below.
+                    {hiddenDonors === 1 ? "donor is" : "donors are"} in the table below (withheld
+                    names omitted from this chart).
                   </p>
                 )}
               </section>
@@ -357,7 +366,7 @@ export default function App() {
                 <SizeChart buckets={sizes} />
               </section>
 
-              <ElectionCycles cycles={ELECTION_CYCLE_SUMMARIES} />
+              <ElectionCycles cycles={electionCycles} />
 
               <section className="card wide table-card" aria-labelledby="table-title">
                 <div className="toolbar">
@@ -451,79 +460,97 @@ export default function App() {
             amended figure where a return was amended. We do not estimate any figure. We do make
             these changes:
           </p>
-          <ul className="about-list">
-            <li>
-              Party names (the only names we merge). The same party is sometimes labelled in different ways, so these variants
-              are merged into one name. Every merge is listed below. Any party name not listed is
-              shown as published.
-            </li>
-            <li>
-              Dates. Where a return adds up several donations, the date shown is the latest donation
-              date in that return, and the charts place the whole amount in that month or year. Some
-              of these returns include parts from 2007. For two returns (Hon Robert Smellie QC, 2020,
-              and NZ Public Party, 2020) the Commission lists dates with no year, so the date shown is
-              the date the return was filed.
-            </li>
-            <li>
-              Returned donations. The Commission notes that 2 donations in 2023 were given back to
-              the donor (Buen Holdings Limited to National, Z A Unkovich to NZ First). They are
-              flagged and left out of totals unless you include them in the filters.
-            </li>
-            <li>
-              Notes. Other Commission notes are shown on the row: amended return dates, a withdrawn
-              amendment, an extra $15,200 noted on one return, and rows where the donor is itself a
-              registered party (Internet Party to Internet MANA in 2014, Vision New Zealand to
-              Freedoms New Zealand in 2023).
-            </li>
-            <li>
-              Donor names are shown exactly as filed. We do not merge donor names, so one donor
-              can appear under more than one spelling, and each spelling counts as a separate
-              name. The only change is that the HTML code “&amp;amp;” in four names is shown as “&amp;”.
-            </li>
-            <li>
-              Donor type (individual or organisation) is our guess from words in the name, such as
-              Limited or Trust, plus a short list checked by hand. It is not an official label.
-            </li>
-            <li>
-              Older returns. Returns are open for public inspection for {INSPECTION_YEARS} years
-              <Ref n={6} />.
-              After that we do not name individual donors, or organisations whose listed name
-              includes a person: {formatCount(WITHHELD_COUNT)} rows show “Name withheld (return
-              over 6 years old)” instead. Their amounts and parties stay
-              in the totals. Organisations stay named. The donor view only lists returns from the
-              last {INSPECTION_YEARS} years.
-            </li>
-            <li>We do not show donor addresses. The official return for each row has the full record.</li>
-            <li>
-              Party colours come from the{" "}
-              <a
-                href="https://en.wikipedia.org/wiki/Wikipedia:Index_of_New_Zealand_political_party_meta_attributes"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Wikipedia NZ party colour index
-              </a>
-              .
-            </li>
-          </ul>
+          <details className="footer-fold">
+            <summary>
+              <span className="footer-fold-title">Changes we make</span>
+              <span className="summary-meta">
+                <span className="when-open">Hide</span>
+                <span className="when-closed">Show</span>
+              </span>
+            </summary>
+            <ul className="about-list">
+              <li>
+                Party names (the only names we merge). The same party is sometimes labelled in different ways, so these variants
+                are merged into one name. Every merge is listed below. Any party name not listed is
+                shown as published.
+              </li>
+              <li>
+                Dates. Where a return adds up several donations, the date shown is the latest donation
+                date in that return, and the charts place the whole amount in that month or year. Some
+                of these returns include parts from 2007. For two returns (Hon Robert Smellie QC, 2020,
+                and NZ Public Party, 2020) the Commission lists dates with no year, so the date shown is
+                the date the return was filed.
+              </li>
+              <li>
+                Returned donations. The Commission notes that 2 donations in 2023 were given back to
+                the donor (Buen Holdings Limited to National, Z A Unkovich to NZ First). They are
+                flagged and left out of totals unless you include them in the filters.
+              </li>
+              <li>
+                Notes. Other Commission notes are shown on the row: amended return dates, a withdrawn
+                amendment, an extra $15,200 noted on one return, and rows where the donor is itself a
+                registered party (Internet Party to Internet MANA in 2014, Vision New Zealand to
+                Freedoms New Zealand in 2023).
+              </li>
+              <li>
+                Donor names are shown exactly as filed. We do not merge donor names, so one donor
+                can appear under more than one spelling, and each spelling counts as a separate
+                name. The only change is that the HTML code “&amp;amp;” in four names is shown as “&amp;”.
+              </li>
+              <li>
+                Donor type (individual or organisation) is our guess from words in the name, such as
+                Limited or Trust, plus a short list checked by hand. It is not an official label.
+              </li>
+              <li>
+                Older returns. Returns are open for public inspection for {INSPECTION_YEARS} years
+                <Ref n={6} />.
+                After that we do not name individual donors, or organisations whose listed name
+                includes a person: {formatCount(WITHHELD_COUNT)} rows show “Name withheld (return
+                over 6 years old)” instead. Their amounts and parties stay
+                in the totals. Organisations stay named. The donor view only lists returns from the
+                last {INSPECTION_YEARS} years.
+              </li>
+              <li>We do not show donor addresses. The official return for each row has the full record.</li>
+              <li>
+                Party colours come from the{" "}
+                <a
+                  href="https://en.wikipedia.org/wiki/Wikipedia:Index_of_New_Zealand_political_party_meta_attributes"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Wikipedia NZ party colour index
+                </a>
+                .
+              </li>
+            </ul>
+          </details>
           <References />
-          <h3>Party name merges</h3>
-          <ul className="about-list merge-list">
-            {PARTY_MERGE_GROUPS.map((group) =>
-              group.aliases.map((alias) => (
-                <li key={alias}>
-                  “{alias}” is shown as “{group.canonical}”
-                </li>
-              )),
-            )}
-          </ul>
-          <p>
-            Internet MANA was a separate combined party registered for the 2014 election, so it is
-            shown on its own.{" "}
-            <button type="button" className="text-button" onClick={() => setMergesOpen(true)}>
-              Open merge list
-            </button>
-          </p>
+          <details className="footer-fold">
+            <summary>
+              <span className="footer-fold-title">Party name merges</span>
+              <span className="summary-meta">
+                <span className="badge">{PARTY_MERGE_GROUPS.reduce((n, g) => n + g.aliases.length, 0)}</span>
+                <span className="when-open">Hide</span>
+                <span className="when-closed">Show</span>
+              </span>
+            </summary>
+            <ul className="about-list merge-list">
+              {PARTY_MERGE_GROUPS.map((group) =>
+                group.aliases.map((alias) => (
+                  <li key={alias}>
+                    “{alias}” is shown as “{group.canonical}”
+                  </li>
+                )),
+              )}
+            </ul>
+            <p>
+              Internet MANA was a separate combined party registered for the 2014 election, so it is
+              shown on its own.{" "}
+              <button type="button" className="text-button" onClick={() => setMergesOpen(true)}>
+                Open merge list
+              </button>
+            </p>
+          </details>
           <p>
             Being listed means only that a party reported receiving a donation. It does not suggest
             any wrongdoing by the donor or the party.
@@ -548,6 +575,7 @@ export default function App() {
       <PartyMergesModal open={mergesOpen} onClose={() => setMergesOpen(false)} />
       <DonorDetail
         name={openDonor}
+        sourceRows={filtered}
         onClose={closeDonor}
         onFilterToDonor={(name) => {
           setFilters((current) => ({ ...current, query: name }));

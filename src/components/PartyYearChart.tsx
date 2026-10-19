@@ -2,6 +2,8 @@ import { Ref } from "./Ref.tsx";
 import { jumpTo } from "../lib/jump.ts";
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
 import { useElementWidth } from "../hooks/useElementWidth.ts";
+import { useMatchMedia } from "../hooks/useMatchMedia.ts";
+import { CHART_TOOLTIP_STYLE, CHART_TOOLTIP_STYLE_NARROW } from "../lib/chartTooltip.ts";
 import { formatCompactNzd, formatNzd } from "../lib/format.ts";
 import { OTHER_PARTIES, type PartyYearSeries } from "../lib/insights.ts";
 import { partyColour, shortPartyLabel } from "../lib/parties.ts";
@@ -12,19 +14,24 @@ function colourFor(party: string): string {
   return party === OTHER_PARTIES ? "#a8a196" : partyColour(party);
 }
 
+function partyTipName(party: string): string {
+  return party === OTHER_PARTIES ? party : shortPartyLabel(party);
+}
+
 export function PartyYearChart({ series }: Props) {
   const [ref, width] = useElementWidth<HTMLDivElement>();
+  const isPhone = useMatchMedia("(max-width: 760px)");
   if (series.rows.length === 0) {
     return <p className="empty-inline">No returns in these filters.</p>;
   }
-  const narrow = width > 0 && width < 560;
+  const narrow = isPhone || (width > 0 && width < 560);
   return (
     <figure className="series">
       <ul className="legend party-legend">
         {series.parties.map((party) => (
           <li key={party}>
             <i className="party-dot" style={{ background: colourFor(party) }} aria-hidden="true" />
-            {party === OTHER_PARTIES ? party : shortPartyLabel(party)}
+            {partyTipName(party)}
           </li>
         ))}
       </ul>
@@ -36,21 +43,35 @@ export function PartyYearChart({ series }: Props) {
             data={series.rows}
             margin={{ top: 8, right: 8, bottom: 12, left: narrow ? 0 : 8 }}
           >
-            <CartesianGrid vertical={false} stroke="#e6e0d4" />
-            <XAxis dataKey="year" tick={{ fontSize: 12 }} />
+            <CartesianGrid vertical={false} stroke="#e2ddd2" />
+            <XAxis
+              dataKey="year"
+              tick={{ fill: "#5c645e", fontSize: narrow ? 11 : 12 }}
+              tickLine={false}
+              axisLine={{ stroke: "#ddd6c8" }}
+            />
             <YAxis
               tickFormatter={(value: number) => formatCompactNzd(value)}
               width={narrow ? 52 : 64}
-              tick={{ fontSize: 12 }}
+              tick={{ fill: "#5c645e", fontSize: narrow ? 12 : 11 }}
+              tickLine={false}
+              axisLine={false}
+              tickCount={narrow ? 4 : undefined}
             />
             <Tooltip
-              formatter={(value, name) => [formatNzd(Number(value)), String(name)]}
+              formatter={(value, name) => {
+                const amount = Number(value);
+                if (!Number.isFinite(amount) || amount === 0) return [null, null];
+                return [formatNzd(amount), partyTipName(String(name))];
+              }}
               labelFormatter={(label) => `Received in ${label}`}
+              contentStyle={narrow ? CHART_TOOLTIP_STYLE_NARROW : CHART_TOOLTIP_STYLE}
             />
             {series.parties.map((party) => (
               <Bar
                 key={party}
                 dataKey={party}
+                name={party}
                 stackId="party"
                 fill={colourFor(party)}
                 stroke="#fbfaf6"

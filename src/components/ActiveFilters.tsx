@@ -75,7 +75,7 @@ export function ActiveFilters({ filters, onChange, onReset }: Props) {
   if (filters.query.trim()) {
     chips.push({
       key: "query",
-      label: `Contains “${filters.query.trim()}”`,
+      label: `Donor name contains “${filters.query.trim()}”`,
       onRemove: () => onChange({ ...filters, query: "" }),
     });
   }

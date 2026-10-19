@@ -57,7 +57,5 @@ function publicDonations(): Plugin {
 }
 
 export default defineConfig({
-  // GitHub Pages project site: https://maysentg.github.io/nz-party-donations-explorer/
-  base: "/nz-party-donations-explorer/",
   plugins: [publicDonations(), react()],
 });

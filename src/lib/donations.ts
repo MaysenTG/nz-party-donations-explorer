@@ -419,10 +419,6 @@ function monthPoint(
   };
 }
 
-function nextYearKey(year: string): string {
-  return String(Number(year) + 1);
-}
-
 export type DonationSeries = {
   points: MonthPoint[];
   grain: "month" | "year";
@@ -461,9 +457,10 @@ export function donationSeries(rows: readonly Donation[]): DonationSeries {
       current.count += bucket.count;
       yearBuckets.set(year, current);
     }
-    const minYear = minMonth.slice(0, 4);
-    const maxYear = maxMonth.slice(0, 4);
-    for (let year = minYear; year <= maxYear; year = nextYearKey(year)) {
+    // Only years with returns — do not invent $0 years (e.g. 2024–2025) that read as
+    // “nobody donated” when the Commission simply published no year bucket.
+    const years = [...yearBuckets.keys()].sort((a, b) => a.localeCompare(b));
+    for (const year of years) {
       const bucket = yearBuckets.get(year) ?? { cents: 0, count: 0 };
       cumulative += bucket.cents;
       points.push(monthPoint(year, bucket, cumulative, "year"));

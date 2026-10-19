@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { useElementWidth } from "../hooks/useElementWidth.ts";
 import { useMatchMedia } from "../hooks/useMatchMedia.ts";
+import { CHART_TOOLTIP_STYLE, CHART_TOOLTIP_STYLE_NARROW } from "../lib/chartTooltip.ts";
 import { formatCompactNzd, formatCount, formatNzd } from "../lib/format.ts";
 import { darkenColour } from "../lib/parties.ts";
 import type { MonthPoint } from "../types.ts";
@@ -113,12 +114,7 @@ export function TimeSeries({ points, grain, colour }: Props) {
               labelFormatter={(label) =>
                 rows.find((point) => point.label === label)?.fullLabel ?? String(label)
               }
-              contentStyle={{
-                border: "1px solid #ddd6c8",
-                borderRadius: 10,
-                background: "#fbfaf6",
-                fontSize: narrow ? 15 : 14,
-              }}
+              contentStyle={narrow ? CHART_TOOLTIP_STYLE_NARROW : CHART_TOOLTIP_STYLE}
             />
             <Bar
               yAxisId="period"
@@ -158,12 +154,12 @@ export function TimeSeries({ points, grain, colour }: Props) {
           </>
         )}
         {grain === "year"
-          ? " Empty years stay at zero. Long ranges group by year."
+          ? " Only years with matching returns are shown. Long ranges group by year."
           : " Empty months in range stay at zero."}{" "}
         Each return is placed by its latest donation date. A return that adds up several donations
         sits wholly in that period, and a few early parts date from 2007. Only returns above the
         threshold for their year are included. The Commission lists none for 2024 or 2025
-        <Ref n={5} />, so those years stay at zero (<a href="#no-2024-2025" onClick={(e) => jumpTo("no-2024-2025", e)}>why</a>).
+        <Ref n={5} />, so those years have no bar (<a href="#no-2024-2025" onClick={(e) => jumpTo("no-2024-2025", e)}>why</a>).
       </figcaption>
       <div className="visually-hidden">
         <table>

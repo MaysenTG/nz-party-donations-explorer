@@ -18,8 +18,8 @@ export function ElectionCycles({ cycles }: Props) {
         <h2 id="election-cycles-title">Election cycles</h2>
         <p>
           Returns with a donation date from the day after the previous election through election
-          day. Donations the party gave back are left out. This is not full campaign funding.
-          Parties are listed by amount disclosed.
+          day, using the current filters. Donations the party gave back are left out. This is not
+          full campaign funding. Parties are listed by amount disclosed.
         </p>
       </div>
 

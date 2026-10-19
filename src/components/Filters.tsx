@@ -91,12 +91,12 @@ export function FilterFields({
   return (
     <div className="filter-body">
       <div className="field">
-        <label htmlFor={searchId}>Search donor</label>
+        <label htmlFor={searchId}>Search donor name</label>
         <div className="search-row">
           <input
             id={searchId}
             type="search"
-            placeholder="Donor name"
+            placeholder="Donor name, not party"
             value={filters.query}
             onChange={(event) => onChange({ ...filters, query: event.target.value })}
             autoComplete="off"
@@ -112,8 +112,10 @@ export function FilterFields({
           )}
         </div>
         <p className="field-help">
-          Matches the donor name as filed. Individuals on returns over 6
-          years old are not named, so they do not match. The search is not saved in the page link.
+          Matches the donor name as filed — not the party. Searching “national” finds names like
+          National Urban Māori Authority, not every National Party return. Use the party checklist
+          for that. Individuals on returns over 6 years old are not named, so they do not match.
+          The search is not saved in the page link.
         </p>
       </div>
 

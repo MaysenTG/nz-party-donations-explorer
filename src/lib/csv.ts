@@ -13,6 +13,7 @@ export function donationsToCsv(rows: readonly Donation[]): string {
   const header = [
     "party",
     "donor_name",
+    "name_withheld",
     "amount",
     "latest_donation_date_in_return",
     "return_received_date",
@@ -26,7 +27,9 @@ export function donationsToCsv(rows: readonly Donation[]): string {
   const lines = rows.map((row) =>
     [
       row.party,
-      row.donor_name,
+      // Keep withheld rows distinct so a pivot on donor_name cannot treat many people as one.
+      row.nameWithheld ? `${row.donor_name} · return ${row.id}` : row.donor_name,
+      row.nameWithheld ? "yes" : "",
       row.amount,
       row.donation_received_date,
       row.return_received_date,

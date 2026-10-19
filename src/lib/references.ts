@@ -1,6 +1,8 @@
 /** Numbered sources for factual claims on the page. Quotes are copied exactly from the source. */
 export type Reference = {
   n: number;
+  /** Short label for what this source supports on the page. */
+  label: string;
   title: string;
   publisher: string;
   url: string;
@@ -17,6 +19,7 @@ const ACCESSED = "18 October 2026";
 export const REFERENCES: Reference[] = [
   {
     n: 1,
+    label: "2026 rule — more than $20,000 in election year, report in 20 working days",
     title: "Donations exceeding $20,000",
     publisher: "Electoral Commission",
     url: P20,
@@ -26,6 +29,7 @@ export const REFERENCES: Reference[] = [
   },
   {
     n: 2,
+    label: "2023 rule — more than $20,000 in election year, report in 10 working days",
     title: "Donations exceeding $20,000",
     publisher: "Electoral Commission",
     url: P20,
@@ -35,6 +39,7 @@ export const REFERENCES: Reference[] = [
   },
   {
     n: 3,
+    label: "2011–2022 rule — more than $30,000 in any 12 months",
     title: "Donations exceeding $30,000",
     publisher: "Electoral Commission",
     url: P30,
@@ -44,6 +49,7 @@ export const REFERENCES: Reference[] = [
   },
   {
     n: 4,
+    label: "Until 2010 — more than $20,000 in any 12 months",
     title: "Donations exceeding $30,000",
     publisher: "Electoral Commission",
     url: P30,
@@ -53,6 +59,7 @@ export const REFERENCES: Reference[] = [
   },
   {
     n: 5,
+    label: "Years the Commission lists on its donation pages",
     title: "Donations exceeding $20,000 and Donations exceeding $30,000 (table headings)",
     publisher: "Electoral Commission",
     url: P20,
@@ -62,6 +69,7 @@ export const REFERENCES: Reference[] = [
   },
   {
     n: 6,
+    label: "Public inspection period — 6 years after a return is filed",
     title: "Electoral Act 1993, section 3 (public inspection period)",
     publisher: "New Zealand Legislation (Parliamentary Counsel Office)",
     url: "https://www.legislation.govt.nz/act/public/1993/0087/latest/DLM1712301.html",

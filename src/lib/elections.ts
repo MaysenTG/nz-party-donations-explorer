@@ -44,9 +44,13 @@ function inCycle(row: Donation, cycle: ElectionCycle): boolean {
 /**
  * Totals by party for one cycle. Parties are the same merged names used everywhere else
  * on the site. Donations the party returned to the donor are left out.
+ * Pass filtered rows so the section matches the rest of the page.
  */
-export function summariseElectionCycle(cycle: ElectionCycle): ElectionCycleSummary {
-  const rows = donations.filter((row) => inCycle(row, cycle) && !row.returned_to_donor);
+export function summariseElectionCycle(
+  cycle: ElectionCycle,
+  sourceRows: readonly Donation[] = donations,
+): ElectionCycleSummary {
+  const rows = sourceRows.filter((row) => inCycle(row, cycle) && !row.returned_to_donor);
   const buckets = new Map<string, { cents: number; count: number }>();
   let totalCents = 0;
   for (const row of rows) {
@@ -86,5 +90,11 @@ export function summariseElectionCycle(cycle: ElectionCycle): ElectionCycleSumma
   return { cycle, rows, parties, total: totalCents / 100 };
 }
 
-export const ELECTION_CYCLE_SUMMARIES: ElectionCycleSummary[] =
-  ELECTION_CYCLES.map(summariseElectionCycle);
+export function electionCycleSummaries(
+  sourceRows: readonly Donation[] = donations,
+): ElectionCycleSummary[] {
+  return ELECTION_CYCLES.map((cycle) => summariseElectionCycle(cycle, sourceRows));
+}
+
+/** Unfiltered cycle totals (about text / static uses). */
+export const ELECTION_CYCLE_SUMMARIES: ElectionCycleSummary[] = electionCycleSummaries();

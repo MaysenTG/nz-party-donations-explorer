@@ -675,10 +675,34 @@ input[type="date"] {
 }
 
 .hint summary {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   cursor: pointer;
   color: var(--accent-ink);
   font-size: 0.88rem;
   font-weight: 600;
+  list-style: none;
+}
+
+.hint summary::-webkit-details-marker {
+  display: none;
+}
+
+.hint summary::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  flex-shrink: 0;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  translate: 0 -0.05rem;
+}
+
+.hint[open] summary::before {
+  transform: rotate(45deg);
+  translate: 0 0.05rem;
 }
 
 .hint p {
@@ -1732,6 +1756,65 @@ th.num button {
   color: var(--ink);
 }
 
+.footer-fold {
+  max-width: 75ch;
+  margin: 0.85rem 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.footer-fold > summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.footer-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+.footer-fold-title {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.footer-fold .about-list,
+.footer-fold .ref-list,
+.footer-fold > p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.footer-fold .about-list {
+  padding: 0 0.9rem 0.9rem 2.15rem;
+}
+
+.footer-fold .ref-intro {
+  padding: 0 0.9rem 0.65rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.footer-fold .ref-list {
+  list-style: none;
+  padding: 0 0.9rem 0.9rem;
+}
+
+.footer-fold > p {
+  padding: 0 0.9rem 0.9rem;
+}
+
+.footer-fold > p:last-child {
+  margin-bottom: 0;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -1924,6 +2007,25 @@ th.num button {
     box-shadow: none;
     break-inside: avoid;
   }
+}
+
+.query-banner {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.9rem;
+  background: var(--accent-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  max-width: 75ch;
+}
+
+.query-banner p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.query-banner p + p {
+  margin-top: 0.45rem;
 }
 
 .about-list {
@@ -2343,12 +2445,72 @@ th.num button {
 .ref-mark { font-size: 0.7em; line-height: 0; margin-left: 0.1em; }
 .ref-mark a { text-decoration: none; padding: 0.2em 0.1em; }
 .ref-mark a:hover, .ref-mark a:focus-visible { text-decoration: underline; }
-.references { margin-top: 2rem; }
-.ref-list { padding-left: 1.6rem; }
-.ref-list li { margin-bottom: 1rem; scroll-margin-top: 5rem; }
-.ref-list li:target { background: rgba(255, 220, 120, 0.35); border-radius: 4px; }
-.ref-title { font-weight: 600; }
-.ref-url { overflow-wrap: anywhere; word-break: break-word; }
-.ref-list blockquote { margin: 0.4rem 0 0; padding-left: 0.8rem; border-left: 3px solid currentColor; opacity: 0.85; font-style: italic; }
+.references { margin-top: 0.85rem; }
+.ref-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.ref-item {
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  scroll-margin-top: 5rem;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.ref-item:target {
+  background: rgba(255, 220, 120, 0.35);
+  border-color: #d4b45a;
+}
+.ref-label {
+  margin: 0 0 0.4rem;
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+.ref-num {
+  color: var(--accent-ink);
+  font-weight: 800;
+}
+.ref-source {
+  margin: 0 0 0.55rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+.ref-source cite {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink);
+}
+.ref-publisher::before {
+  content: " · ";
+}
+.ref-quote {
+  margin: 0 0 0.55rem;
+  padding: 0.45rem 0 0.45rem 0.75rem;
+  border-left: 3px solid var(--line);
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-style: italic;
+  line-height: 1.45;
+  opacity: 0.92;
+}
+.ref-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.85rem;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.ref-meta a {
+  font-weight: 700;
+}
 .year-gap-note { font-size: 0.9em; margin-top: 0.4rem; }
 #no-2024-2025 { scroll-margin-top: 5rem; }
