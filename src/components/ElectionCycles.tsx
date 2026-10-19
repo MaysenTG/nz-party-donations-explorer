@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { formatCompactNzd, formatCount, formatNzd, formatShare } from "../lib/format.ts";
 import type { ElectionCycleSummary } from "../lib/elections.ts";
+import { darkenColour, partyColour, partyColourInk } from "../lib/parties.ts";
 import { axisTicks } from "../lib/scale.ts";
 
 type Props = {
@@ -19,13 +20,16 @@ export function ElectionCycles({ cycles }: Props) {
         <p>
           Returns with a donation date from the day after the previous election through election
           day, using the current filters. Donations the party gave back are left out. This is not
-          full campaign funding. Parties are listed by amount disclosed.
+          full campaign funding. Parties are listed by amount disclosed; the winner pill is who
+          formed the government afterward.
         </p>
       </div>
 
       <div className="election-list">
         {cycles.map((summary) => {
-          const { cycle, parties, total, rows } = summary;
+          const { cycle, parties, total, rows, winnerTotal, winnerShare, winnerRank, hadMostDonations } =
+            summary;
+          const winnerColour = partyColour(cycle.winnerLabel);
           const isOpen = openYear === cycle.year;
           const topParties = parties;
           const { top, ticks } = axisTicks(
@@ -46,91 +50,126 @@ export function ElectionCycles({ cycles }: Props) {
                 <span className="election-summary-main">
                   <span className="election-summary-year">{cycle.year}</span>
                   <span className="election-summary-copy">
-                    <span className="election-summary-gov">Election on {cycle.electionLabel}</span>
+                    <span className="election-summary-gov">{cycle.government}</span>
                     <span className="election-summary-meta">
+                      Election on {cycle.electionLabel}
                       {total === 0
-                        ? "No disclosed returns in this data"
-                        : `${formatCompactNzd(total)} disclosed in ${formatCount(rows.length)} ${
+                        ? " · no disclosed returns in this data"
+                        : ` · ${formatCompactNzd(total)} in ${formatCount(rows.length)} ${
                             rows.length === 1 ? "return" : "returns"
                           }`}
                     </span>
                   </span>
                 </span>
+                <span
+                  className="winner-pill"
+                  style={{
+                    background: winnerColour,
+                    color: partyColourInk(winnerColour),
+                  }}
+                >
+                  {cycle.winnerLabel}
+                </span>
               </button>
 
               <div className="election-detail" hidden={!isOpen}>
-                  {topParties.length === 0 ? (
-                    <p className="empty-inline">
-                      No disclosed returns in this data fall in this campaign cycle.
-                    </p>
-                  ) : (
-                    <figure className="rank-chart election-rank">
-                      <ol className="rank-rows">
-                        {topParties.map((party) => {
-                          const width =
-                            top === 0
-                              ? 0
-                              : Math.max((party.value / top) * 100, party.value > 0 ? 1.2 : 0);
-                          return (
-                            <li key={party.id}>
-                              <div className="rank-row static">
-                                <span className="rank-copy">
-                                  <span className="rank-label">
-                                    {party.shortLabel}
-                                  </span>
-                                  <span className="rank-meta">
-                                    {formatCount(party.count)}{" "}
-                                    {party.count === 1 ? "return" : "returns"} ·{" "}
-                                    {formatShare(party.share)}
+                <dl className="election-stats">
+                  <div>
+                    <dt>{cycle.winnerLabel} disclosed</dt>
+                    <dd>{formatNzd(winnerTotal)}</dd>
+                  </div>
+                  <div>
+                    <dt>Share of cycle total</dt>
+                    <dd>{total === 0 ? "—" : formatShare(winnerShare)}</dd>
+                  </div>
+                  <div>
+                    <dt>Among parties</dt>
+                    <dd>
+                      {winnerRank == null || total === 0
+                        ? "No returns in range"
+                        : hadMostDonations
+                          ? "Most disclosed"
+                          : `Ranked #${winnerRank}`}
+                    </dd>
+                  </div>
+                </dl>
+
+                {topParties.length === 0 ? (
+                  <p className="empty-inline">
+                    No disclosed returns in this data fall in this campaign cycle.
+                  </p>
+                ) : (
+                  <figure className="rank-chart election-rank">
+                    <ol className="rank-rows">
+                      {topParties.map((party) => {
+                        const width =
+                          top === 0
+                            ? 0
+                            : Math.max((party.value / top) * 100, party.value > 0 ? 1.2 : 0);
+                        const isWinner = party.family === cycle.winnerFamily;
+                        return (
+                          <li key={party.id}>
+                            <div className={`rank-row static${isWinner ? " is-winner" : ""}`}>
+                              <span className="rank-copy">
+                                <span className="rank-label">
+                                  {party.shortLabel}
+                                  {isWinner ? " · formed government" : ""}
+                                </span>
+                                <span className="rank-meta">
+                                  {formatCount(party.count)}{" "}
+                                  {party.count === 1 ? "return" : "returns"} ·{" "}
+                                  {formatShare(party.share)}
+                                </span>
+                              </span>
+                              <span className="rank-plot">
+                                <span className="rank-track" aria-hidden="true">
+                                  <span
+                                    className="rank-fill"
+                                    style={{
+                                      width: `${width}%`,
+                                      background: isWinner
+                                        ? darkenColour(party.colour, 0.08)
+                                        : party.colour,
+                                    }}
+                                  />
+                                </span>
+                                <span className="rank-value">
+                                  {formatCompactNzd(party.value)}
+                                  <span className="visually-hidden">
+                                    {" "}
+                                    ({formatNzd(party.value)})
                                   </span>
                                 </span>
-                                <span className="rank-plot">
-                                  <span className="rank-track" aria-hidden="true">
-                                    <span
-                                      className="rank-fill"
-                                      style={{
-                                        width: `${width}%`,
-                                        background: party.colour,
-                                      }}
-                                    />
-                                  </span>
-                                  <span className="rank-value">
-                                    {formatCompactNzd(party.value)}
-                                    <span className="visually-hidden">
-                                      {" "}
-                                      ({formatNzd(party.value)})
-                                    </span>
-                                  </span>
-                                </span>
-                              </div>
-                            </li>
-                          );
-                        })}
-                      </ol>
-                      <div className="rank-scale" aria-hidden="true">
-                        <span className="rank-scale-spacer" />
-                        <span className="rank-scale-axis">
-                          {ticks.map((tick, index) => (
-                            <span
-                              key={tick}
-                              className={
-                                index === 0
-                                  ? "is-start"
-                                  : index === ticks.length - 1
-                                    ? "is-end"
-                                    : undefined
-                              }
-                              style={{ left: `${top === 0 ? 0 : (tick / top) * 100}%` }}
-                            >
-                              {formatCompactNzd(tick)}
-                            </span>
-                          ))}
-                        </span>
-                        <span className="rank-scale-value" />
-                      </div>
-                    </figure>
-                  )}
-                </div>
+                              </span>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                    <div className="rank-scale" aria-hidden="true">
+                      <span className="rank-scale-spacer" />
+                      <span className="rank-scale-axis">
+                        {ticks.map((tick, index) => (
+                          <span
+                            key={tick}
+                            className={
+                              index === 0
+                                ? "is-start"
+                                : index === ticks.length - 1
+                                  ? "is-end"
+                                  : undefined
+                            }
+                            style={{ left: `${top === 0 ? 0 : (tick / top) * 100}%` }}
+                          >
+                            {formatCompactNzd(tick)}
+                          </span>
+                        ))}
+                      </span>
+                      <span className="rank-scale-value" />
+                    </div>
+                  </figure>
+                )}
+              </div>
             </article>
           );
         })}

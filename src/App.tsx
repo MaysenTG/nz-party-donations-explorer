@@ -177,11 +177,11 @@ export default function App() {
       </a>
       <header className="site-header">
         <div className="wrap">
-          <p className="eyebrow">Elections NZ disclosures · unofficial view</p>
-          <h1>Declared party donations</h1>
+          <p className="eyebrow">Declared party donations · unofficial view</p>
+          <h1>Who Funds NZ</h1>
           <p className="lede">
-            Large donations to registered parties, as published by the Electoral Commission. The
-            threshold has changed over time: more than $20,000 until 2010
+            Large donations to registered New Zealand political parties, as published by the
+            Electoral Commission. The threshold has changed over time: more than $20,000 until 2010
             <Ref n={4} />, more than $30,000 from 2011 to 2022
             <Ref n={3} />, and more than $20,000 in election years from 2023
             <Ref n={2} />
