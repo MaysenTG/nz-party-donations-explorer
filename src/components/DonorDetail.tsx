@@ -1,7 +1,7 @@
 import { useEffect, useId, useMemo, useRef } from "react";
-import { INSPECTION_CUTOFF_ISO, safeHttps } from "../lib/donations.ts";
+import { safeHttps } from "../lib/donations.ts";
 import { donorTypeLabel } from "../lib/donors.ts";
-import { INSPECTION_YEARS, isPastInspection, OLD_INDIVIDUAL_LABEL } from "../lib/privacy.ts";
+import { OLD_INDIVIDUAL_LABEL } from "../lib/privacy.ts";
 import { formatCount, formatNzd, toCents } from "../lib/format.ts";
 import { partyColour } from "../lib/parties.ts";
 import type { Donation } from "../types.ts";
@@ -15,21 +15,20 @@ type Props = {
 };
 
 /**
- * Returns filed under one exact donor name within the current filters, limited to returns
- * still inside the 6 year public inspection period. Opening this view does not change the URL.
+ * Returns filed under one exact donor name within the current filters. Names already
+ * withheld for privacy cannot be opened. Opening this view does not change the URL.
  */
 export function DonorDetail({ name, sourceRows, onClose, onFilterToDonor }: Props) {
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
-  const { rows, older, blocked } = useMemo(() => {
+  const { rows, blocked } = useMemo(() => {
     if (!name || name === OLD_INDIVIDUAL_LABEL) {
-      return { rows: [], older: 0, blocked: Boolean(name) };
+      return { rows: [] as Donation[], blocked: Boolean(name) };
     }
-    const matching = sourceRows.filter((row) => !row.nameWithheld && row.donor_name === name);
-    const recent = matching
-      .filter((row) => !isPastInspection(row.returnIso, INSPECTION_CUTOFF_ISO))
+    const matching = sourceRows
+      .filter((row) => !row.nameWithheld && row.donor_name === name)
       .sort((a, b) => b.receivedIso.localeCompare(a.receivedIso));
-    return { rows: recent, older: matching.length - recent.length, blocked: false };
+    return { rows: matching, blocked: false };
   }, [name, sourceRows]);
   const counted = rows.filter((row) => !row.returned_to_donor && !row.party_to_party);
 
@@ -80,16 +79,11 @@ export function DonorDetail({ name, sourceRows, onClose, onFilterToDonor }: Prop
         ) : (
           <>
             <p className="modal-lede">
-              Returns under this name that match the current filters, from the last {INSPECTION_YEARS}{" "}
-              years.
+              Returns under this name that match the current filters.
               {" The same donor may appear under other spellings; those are listed separately."}
               {rows[0] && ` Donor type is a name-based guess: ${donorTypeLabel(rows[0].donorType)}.`}
-              {older > 0 &&
-                ` ${formatCount(older)} older matching ${
-                  older === 1 ? "return is" : "returns are"
-                } outside the inspection window and ${older === 1 ? "is" : "are"} not listed here.`}
               {rows.length === 0 &&
-                " None of the returns under this name match the current filters in the inspection window."}
+                " None of the returns under this name match the current filters."}
               {counted.length < rows.length &&
                 " Donations returned to the donor are listed but not added to the total."}
             </p>

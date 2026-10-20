@@ -16,7 +16,7 @@ Browse totals, filter by party, year, amount and donor type, compare charts, and
 - Filter by party, donation date, amount, donor name, and whether a donor looks like an individual or an organisation.
 - Sort the table and export the filtered rows as CSV.
 - Compare party totals, the largest donor names, party totals by year, donor names that gave to more than one party, and return sizes.
-- Select a party bar to focus that party. Select a donor to see their returns from the last 6 years.
+- Select a party bar to focus that party. Select a donor to see their returns that match the current filters.
 
 ## About the data
 
@@ -88,8 +88,7 @@ Internet MANA was a separate combined party registered for the 2014 election, so
 ## Privacy
 
 - Donor addresses are not stored in the data file, and the build would drop the field if it came back. Older commits in this public repository still contain the addresses that were in earlier versions of the file.
-- Returns are open for public inspection for 6 years (Electoral Act 1993, s 3). After that the site does not name individual donors, or organisations whose listed name includes a person (via, trustee, directors). Those rows show "Name withheld (return over 6 years old)"; their amounts and parties stay in totals. The cutoff is worked out from the build date (so withheld names are not in the published bundle) and again from the visitor's clock. Rebuild the site from time to time so the bundle keeps up.
-- The donor view lists only returns from the last 6 years.
+- Returns are open for public inspection for 6 years (Electoral Act 1993, s 3). After that the site does not name individual donors, or organisations whose listed name includes a person (via, trustee, directors). Those rows show "Name withheld (return over 6 years old)"; their amounts and parties stay in totals. Organisation names that do not name a person stay visible, and the donor view lists their matching returns like any other named donor. The cutoff is worked out from the build date (so withheld names are not in the published bundle) and again from the visitor's clock. Rebuild the site from time to time so the bundle keeps up.
 - Donor names are never written to the page URL. The donor view and the donor search box are not saved in shared links.
 
 ## Polling day mode
