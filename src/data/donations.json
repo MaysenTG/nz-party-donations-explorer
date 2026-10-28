@@ -1,6 +1,22 @@
 [
   {
     "party": "The Green Party of Aotearoa New Zealand",
+    "return_received_date": "20 October 2026",
+    "donor_name": "Brian Graham",
+    "amount": 27514,
+    "donation_received_date": "18 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/B_Graham_20_October_2026.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "19 October 2026",
+    "donor_name": "PCKC Limited",
+    "amount": 22374.74,
+    "donation_received_date": "30 September 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/PCKC_Limited_30_September_2026.pdf"
+  },
+  {
+    "party": "The Green Party of Aotearoa New Zealand",
     "return_received_date": "16 October 2026",
     "donor_name": "Michael Lookman",
     "amount": 50000,
