@@ -13,6 +13,7 @@ import { ExploreBar } from "./components/ExploreBar.tsx";
 import { Filters } from "./components/Filters.tsx";
 import { FiltersFab } from "./components/FiltersFab.tsx";
 import { FiltersSheet } from "./components/FiltersSheet.tsx";
+import { DonorGroupsModal } from "./components/DonorGroupsModal.tsx";
 import { PartyMergesModal } from "./components/PartyMergesModal.tsx";
 import { RankChart } from "./components/RankChart.tsx";
 import { ScrollToTop } from "./components/ScrollToTop.tsx";
@@ -23,6 +24,7 @@ import {
   ALL_PARTIES,
   activeFilterCount,
   applyFilters,
+  applyNamePrivacy,
   createDefaultFilters,
   donations,
   donorCount,
@@ -36,17 +38,18 @@ import {
   topDonors,
   partyMergeGroups,
 } from "./lib/donations.ts";
+import { donorMergeGroups } from "./lib/donorGroups.ts";
 import { electionCycleSummaries } from "./lib/elections.ts";
 import { QueryBanner } from "./components/QueryBanner.tsx";
 import { formatCount, formatShare } from "./lib/format.ts";
-import { partyColour } from "./lib/parties.ts";
+import { partyColour, shortPartyLabel } from "./lib/parties.ts";
 import {
   SOURCE_30K_LABEL,
   SOURCE_30K_URL,
   SOURCE_LABEL,
   SOURCE_URL,
   CONTACT_URL,
-  DATA_RETRIEVED,
+  DATA_UPDATED,
   PRIVATE_REPORT_URL,
 } from "./lib/source.ts";
 import { INSPECTION_YEARS } from "./lib/privacy.ts";
@@ -59,8 +62,11 @@ import type {
   SortState,
 } from "./types.ts";
 
-function stats(rows: readonly Donation[]): Stats {
-  const base = summarise(rows);
+function stats(
+  rows: readonly Donation[],
+  options: { groupRelatedDonors?: boolean } = {},
+): Stats {
+  const base = summarise(rows, options);
   const amounts = rows.filter((row) => !row.party_to_party).map((row) => row.amount);
   return {
     ...base,
@@ -72,8 +78,9 @@ function stats(rows: readonly Donation[]): Stats {
 const INITIAL = readUrlState(window.location.search);
 
 const OVERALL = stats(applyFilters(donations, createDefaultFilters()));
-const WITHHELD_COUNT = donations.filter((row) => row.nameWithheld).length;
+const PAST_INSPECTION_COUNT = donations.filter((row) => row.pastInspection).length;
 const PARTY_MERGE_GROUPS = partyMergeGroups();
+const DONOR_MERGE_GROUPS = donorMergeGroups();
 const TOP_DONOR_LIMIT = 15;
 
 function nextSort(current: SortState, key: SortKey): SortState {
@@ -89,10 +96,32 @@ function focusParty(filters: FilterState, party: string): FilterState {
   return { ...filters, parties: onlyThis ? [...ALL_PARTIES] : [party] };
 }
 
+/** Section titles. A single selected party is named in the title. */
+function sectionTitles(party: string | null) {
+  if (!party) {
+    return {
+      amount: "Amount by party",
+      donors: "Largest donors",
+      time: "Returns over time",
+      year: "Party totals by year",
+      sizes: "Return sizes",
+      table: "All matching returns",
+    };
+  }
+  return {
+    amount: `Amount given to ${party}`,
+    donors: `Largest donors to ${party}`,
+    time: `Returns to ${party} over time`,
+    year: `${party} totals by year`,
+    sizes: `Return sizes to ${party}`,
+    table: `Returns to ${party}`,
+  };
+}
+
 export default function App() {
   const isMobile = useMatchMedia("(max-width: 760px)");
   const [filters, setFilters] = useState<FilterState>(INITIAL.filters);
-  // The donor view is never stored in the URL, so shared links do not name a person.
+  // The donor detail modal is never stored in the URL; the donor search query can be.
   const [openDonor, setOpenDonor] = useState<string | null>(null);
 
   // Keep the URL in step with filters so a view can be shared or bookmarked.
@@ -116,28 +145,47 @@ export default function App() {
   const closeDonor = useCallback(() => setOpenDonor(null), []);
   const [sort, setSort] = useState<SortState>({ key: "date", dir: "desc" });
   const [mergesOpen, setMergesOpen] = useState(false);
+  const [donorGroupsOpen, setDonorGroupsOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [filtersSheetOpen, setFiltersSheetOpen] = useState(false);
 
   const problem = filterProblem(filters);
-  const filtered = useMemo(() => applyFilters(donations, filters), [filters]);
+  const groupOpts = useMemo(
+    () => ({ groupRelatedDonors: filters.groupRelatedDonors }),
+    [filters.groupRelatedDonors],
+  );
+  const visibleDonations = useMemo(
+    () => applyNamePrivacy(donations, filters.withholdOldNames),
+    [filters.withholdOldNames],
+  );
+  const filtered = useMemo(
+    () => applyFilters(visibleDonations, filters),
+    [visibleDonations, filters],
+  );
   const sorted = useMemo(() => sortDonations(filtered, sort), [filtered, sort]);
-  const summary = useMemo(() => stats(filtered), [filtered]);
+  const summary = useMemo(() => stats(filtered, groupOpts), [filtered, groupOpts]);
   const partyYears = useMemo(() => partyYearSeries(filtered), [filtered]);
-  const multiDonors = useMemo(() => multiPartyDonors(filtered), [filtered]);
+  const multiDonors = useMemo(() => multiPartyDonors(filtered, groupOpts), [filtered, groupOpts]);
   const sizes = useMemo(() => sizeDistribution(filtered), [filtered]);
   const parties = useMemo(() => partyTotals(filtered), [filtered]);
-  const donors = useMemo(() => topDonors(filtered, TOP_DONOR_LIMIT), [filtered]);
+  const donors = useMemo(
+    () => topDonors(filtered, TOP_DONOR_LIMIT, groupOpts),
+    [filtered, groupOpts],
+  );
   const timeSeries = useMemo(() => donationSeries(filtered), [filtered]);
-  const electionCycles = useMemo(() => electionCycleSummaries(filtered), [filtered]);
+  // Election cycles compare parties side by side, so keep other filters but not party.
+  const electionCycles = useMemo(
+    () => electionCycleSummaries(applyFilters(visibleDonations, filters, { party: true })),
+    [visibleDonations, filters],
+  );
   const rangeLabel = useMemo(() => filterRangeLabel(filters), [filters]);
   const partyFacet = useMemo(
-    () => partyCounts(applyFilters(donations, filters, { party: true })),
-    [filters],
+    () => partyCounts(applyFilters(visibleDonations, filters, { party: true })),
+    [visibleDonations, filters],
   );
   const donorFacetRows = useMemo(
-    () => applyFilters(donations, filters, { donorType: true }),
-    [filters],
+    () => applyFilters(visibleDonations, filters, { donorType: true }),
+    [visibleDonations, filters],
   );
   const donorTypeCounts = useMemo<Record<DonorTypeFilter, number>>(() => {
     let individual = 0;
@@ -150,8 +198,10 @@ export default function App() {
   }, [donorFacetRows]);
 
   const focusedParty = filters.parties.length === 1 ? filters.parties[0] : null;
+  const focusedShort = focusedParty ? shortPartyLabel(focusedParty) : null;
+  const titles = sectionTitles(focusedShort);
   const focusedDonor = filters.query.trim();
-  const hiddenDonors = Math.max(0, donorCount(filtered) - donors.length);
+  const hiddenDonors = Math.max(0, donorCount(filtered, groupOpts) - donors.length);
   const activeFilters = activeFilterCount(filters);
 
   function exportCsv() {
@@ -163,8 +213,10 @@ export default function App() {
     partyCounts: partyFacet,
     donorTypeCounts,
     problem,
+    matchCount: filtered.length,
     onChange: setFilters,
     onReset: () => setFilters(createDefaultFilters()),
+    onViewDonorGroups: () => setDonorGroupsOpen(true),
   };
 
   return (
@@ -185,15 +237,19 @@ export default function App() {
             <a href={SOURCE_30K_URL} target="_blank" rel="noopener noreferrer">
               {SOURCE_30K_LABEL}
             </a>
-            <span>
-              {formatCount(OVERALL.donations)} returns · checked {DATA_RETRIEVED}
-            </span>
+          </p>
+          <p className="source-meta">
+            {formatCount(OVERALL.donations)} returns · Last updated: {DATA_UPDATED}
           </p>
         </div>
       </header>
 
       <main className="wrap">
-        <StatCards stats={summary} overall={OVERALL} />
+        <StatCards
+          stats={summary}
+          overall={OVERALL}
+          donorsAreGrouped={filters.groupRelatedDonors}
+        />
         <ExploreBar filters={filters} onChange={setFilters} />
 
         <div className="layout">
@@ -221,7 +277,7 @@ export default function App() {
             <div className="chart-grid">
               <section className="card" aria-labelledby="party-chart-title">
                 <div className="card-head">
-                  <h2 id="party-chart-title">Amount by party</h2>
+                  <h2 id="party-chart-title">{titles.amount}</h2>
                 </div>
                 <RankChart
                   items={parties.map((party) => ({
@@ -239,9 +295,14 @@ export default function App() {
 
               <section className="card" aria-labelledby="donor-chart-title">
                 <div className="card-head">
-                  <h2 id="donor-chart-title">Largest donors</h2>
+                  <h2 id="donor-chart-title">{titles.donors}</h2>
                   {donors.length > 0 && donors.length >= TOP_DONOR_LIMIT && (
-                    <p>Top {TOP_DONOR_LIMIT} as filed.</p>
+                    <p>
+                      Top {TOP_DONOR_LIMIT}
+                      {filters.groupRelatedDonors
+                        ? ", with related names grouped."
+                        : ", as filed."}
+                    </p>
                   )}
                 </div>
                 <RankChart
@@ -251,7 +312,19 @@ export default function App() {
                     value: donor.value,
                     meta: `${formatCount(donor.count)} ${donor.count === 1 ? "return" : "returns"}${
                       donor.partyCount > 1 ? ` · ${donor.partyCount} parties` : ""
+                    }${
+                      donor.members && donor.members.length > 1
+                        ? ` · ${donor.members.length} names as filed`
+                        : ""
                     }`,
+                    children: donor.members?.map((member) => ({
+                      id: member.id,
+                      label: member.label,
+                      value: member.value,
+                      meta: `${formatCount(member.count)} ${
+                        member.count === 1 ? "return" : "returns"
+                      } · ${member.donorType === "organisation" ? "Organisation" : "Individual"}`,
+                    })),
                   }))}
                   pressedId={donors.some((donor) => donor.id === focusedDonor) ? focusedDonor : null}
                   onSelect={(id) => setOpenDonor(id)}
@@ -274,7 +347,7 @@ export default function App() {
               <section className="card wide" aria-labelledby="time-title">
                 <div className="card-head card-head-row">
                   <div>
-                    <h2 id="time-title">Returns over time</h2>
+                    <h2 id="time-title">{titles.time}</h2>
                   </div>
                   <ul className="legend">
                     <li>
@@ -312,7 +385,7 @@ export default function App() {
 
               <section className="card wide" aria-labelledby="party-year-title">
                 <div className="card-head">
-                  <h2 id="party-year-title">Party totals by year</h2>
+                  <h2 id="party-year-title">{titles.year}</h2>
                 </div>
                 <PartyYearChart series={partyYears} />
               </section>
@@ -321,22 +394,26 @@ export default function App() {
                 <div className="card-head">
                   <h2 id="multi-title">Donors giving to more than one party</h2>
                 </div>
-                <MultiPartyDonors donors={multiDonors} onOpenDonor={setOpenDonor} />
+                <MultiPartyDonors
+                  donors={multiDonors}
+                  onOpenDonor={setOpenDonor}
+                  singleParty={focusedShort}
+                />
               </section>
 
               <section className="card" aria-labelledby="size-title">
                 <div className="card-head">
-                  <h2 id="size-title">Return sizes</h2>
+                  <h2 id="size-title">{titles.sizes}</h2>
                 </div>
                 <SizeChart buckets={sizes} />
               </section>
 
-              <ElectionCycles cycles={electionCycles} />
+              <ElectionCycles cycles={electionCycles} ignoredParty={focusedShort} />
 
               <section className="card wide table-card" aria-labelledby="table-title">
                 <div className="toolbar">
                   <div>
-                    <h2 id="table-title">All matching returns</h2>
+                    <h2 id="table-title">{titles.table}</h2>
                     <p aria-live="polite">
                       {formatCount(filtered.length)} of {formatCount(donations.length)} ·{" "}
                       {rangeLabel}
@@ -371,6 +448,7 @@ export default function App() {
                   <DonationsTable
                     rows={sorted}
                     sort={sort}
+                    groupRelatedDonors={filters.groupRelatedDonors}
                     onSort={(key) => setSort((current) => nextSort(current, key))}
                     onOpenDonor={setOpenDonor}
                   />
@@ -417,11 +495,14 @@ export default function App() {
             </p>
             <p>
               <strong>What we change:</strong> amounts and donor names as filed (amended figure
-              where amended). Party name spellings are merged; donor names are not. Returned
-              donations are left out of totals unless you include them. Party-to-party transfers are
-              listed but left out of money totals. After {INSPECTION_YEARS} years
-              <Ref n={6} />, {formatCount(WITHHELD_COUNT)} individual names are withheld. No donor
-              addresses are shown.
+              where amended). Party name spellings are merged. Donor names stay as filed in each
+              return; an optional “Group related donors” setting can combine curated same-person or
+              same-entity spellings in charts and the table. Returned donations are left out of
+              totals unless you include them. Party-to-party transfers are listed but left out of
+              money totals. Names are shown as filed by default. An optional setting can hide{" "}
+              {formatCount(PAST_INSPECTION_COUNT)} individual names on returns older than{" "}
+              {INSPECTION_YEARS} years
+              <Ref n={6} />. No donor addresses are shown.
             </p>
             <p>
               <strong>Filing quirks:</strong> Two returns list a received date that conflicts with
@@ -439,6 +520,10 @@ export default function App() {
               .{" "}
               <button type="button" className="text-button" onClick={() => setMergesOpen(true)}>
                 View party name merges
+              </button>
+              {" · "}
+              <button type="button" className="text-button" onClick={() => setDonorGroupsOpen(true)}>
+                View related donor groups
               </button>
             </p>
           </details>
@@ -466,12 +551,34 @@ export default function App() {
               shown on its own.
             </p>
           </details>
+          <details className="footer-fold">
+            <summary>
+              <span className="footer-fold-title">Related donor groups</span>
+              <span className="summary-meta">
+                <span className="badge">{DONOR_MERGE_GROUPS.length}</span>
+                <span className="when-open">Hide</span>
+                <span className="when-closed">Show</span>
+              </span>
+            </summary>
+            <p>
+              Used only when “Group related donors” is on. Each return still shows the name as
+              filed. Spouses and other family members are not combined.
+            </p>
+            <ul className="about-list merge-list">
+              {DONOR_MERGE_GROUPS.map((group) => (
+                <li key={group.id}>
+                  <strong>{group.label}</strong>: {group.members.map((m) => `“${m}”`).join(", ")}
+                  {group.note ? `. ${group.note}` : ""}
+                </li>
+              ))}
+            </ul>
+          </details>
           <p className="site-notice">
-            Independent of the Electoral Commission. Have some feedback? {" "}
+            Independent of the Electoral Commission. Send a correction as a{" "}
             <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer">
               GitHub issue
             </a>{" "}
-            or{" "}
+            or a{" "}
             <a href={PRIVATE_REPORT_URL} target="_blank" rel="noopener noreferrer">
               private report
             </a>
@@ -480,9 +587,11 @@ export default function App() {
         </div>
       </footer>
       <PartyMergesModal open={mergesOpen} onClose={() => setMergesOpen(false)} />
+      <DonorGroupsModal open={donorGroupsOpen} onClose={() => setDonorGroupsOpen(false)} />
       <DonorDetail
         name={openDonor}
         sourceRows={filtered}
+        groupRelatedDonors={filters.groupRelatedDonors}
         onClose={closeDonor}
         onFilterToDonor={(name) => {
           setFilters((current) => ({ ...current, query: name }));

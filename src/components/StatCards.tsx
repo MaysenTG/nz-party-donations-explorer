@@ -9,9 +9,9 @@ export type Stats = {
   largest: number;
 };
 
-type Props = { stats: Stats; overall: Stats };
+type Props = { stats: Stats; overall: Stats; donorsAreGrouped?: boolean };
 
-export function StatCards({ stats, overall }: Props) {
+export function StatCards({ stats, overall, donorsAreGrouped = false }: Props) {
   const narrowed = stats.donations !== overall.donations;
   const cards: { label: string; value: string; title: string; of?: string }[] = [
     {
@@ -27,9 +27,11 @@ export function StatCards({ stats, overall }: Props) {
       of: narrowed ? `of ${formatCount(overall.donations)}` : undefined,
     },
     {
-      label: "Donor names",
+      label: donorsAreGrouped ? "Donors" : "Donor names",
       value: formatCount(stats.donors),
-      title: "Distinct donor names as filed. One donor can appear under more than one spelling. Withheld names (returns over 6 years old) are not counted.",
+      title: donorsAreGrouped
+        ? "Related names are counted as one donor. If old-name hiding is on, those blanked names are not counted."
+        : "Distinct donor names as filed. If old-name hiding is on, those blanked names are not counted.",
       of: narrowed ? `of ${formatCount(overall.donors)}` : undefined,
     },
     {

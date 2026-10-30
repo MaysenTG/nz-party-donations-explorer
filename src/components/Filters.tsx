@@ -6,6 +6,7 @@ import {
   RECEIVED_MIN,
 } from "../lib/donations.ts";
 import { ORGANISATION_TERMS } from "../lib/donors.ts";
+import { formatCount } from "../lib/format.ts";
 import { hasParliamentarySeats } from "../lib/partyMeta.ts";
 import type { DonorTypeFilter, Filters as FilterState } from "../types.ts";
 
@@ -14,11 +15,14 @@ export type FilterFieldsProps = {
   partyCounts: Record<string, number>;
   donorTypeCounts: Record<DonorTypeFilter, number>;
   problem: string | null;
+  /** Matching returns for the current filters (used for live search feedback). */
+  matchCount: number;
   idPrefix?: string;
   /** Compact layout for the mobile sheet: help text hidden, party list collapsed. */
   compact?: boolean;
   onChange: (filters: FilterState) => void;
   onReset: () => void;
+  onViewDonorGroups?: () => void;
 };
 
 export function FilterFields({
@@ -26,14 +30,23 @@ export function FilterFields({
   partyCounts,
   donorTypeCounts,
   problem,
+  matchCount,
   idPrefix = "",
   compact = false,
   onChange,
   onReset,
+  onViewDonorGroups,
 }: FilterFieldsProps) {
   const allSelected = filters.parties.length === ALL_PARTIES.length;
   const searchId = `${idPrefix}donor-search`;
   const donorTypeName = `${idPrefix}donor-type`;
+  const searchQuery = filters.query.trim();
+  const searchStatus =
+    searchQuery === ""
+      ? null
+      : matchCount === 0
+        ? `No returns match “${searchQuery}”`
+        : `${formatCount(matchCount)} ${matchCount === 1 ? "return matches" : "returns match"} “${searchQuery}”`;
 
   function toggleParty(party: string) {
     const selected = filters.parties.includes(party)
@@ -76,7 +89,12 @@ export function FilterFields({
                   />
                   <span>
                     {party}
-                    {extra && <small className="party-seat-note"> no seats</small>}
+                    {extra && (
+                      <>
+                        <span className="visually-hidden">, </span>
+                        <small className="party-seat-note">No seats</small>
+                      </>
+                    )}
                   </span>
                   <span className="count">{count.toLocaleString("en-NZ")}</span>
                 </label>
@@ -110,6 +128,14 @@ export function FilterFields({
             </button>
           )}
         </div>
+        {searchStatus && (
+          <p
+            className={`search-status${matchCount === 0 ? " is-empty" : ""}`}
+            aria-live="polite"
+          >
+            {searchStatus}
+          </p>
+        )}
       </div>
 
       <fieldset className="field">
@@ -159,10 +185,71 @@ export function FilterFields({
                 checked={filters.includeReturned}
                 onChange={(event) => onChange({ ...filters, includeReturned: event.target.checked })}
               />
-              <span>Include donations returned to the donor</span>
+              <span>Include returned donations</span>
             </label>
           </li>
         </ul>
+      </fieldset>
+
+      <fieldset className="field">
+        <legend>Related donors</legend>
+        <ul className="filter-list">
+          <li>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.groupRelatedDonors}
+                onChange={(event) =>
+                  onChange({ ...filters, groupRelatedDonors: event.target.checked })
+                }
+              />
+              <span>Group related donors</span>
+            </label>
+          </li>
+        </ul>
+        <details className="hint">
+          <summary>How related donors are grouped</summary>
+          <p>
+            Optional reading aid for charts and the table. Only listed same-person or same-entity
+            name variants are combined (for example spelling differences, Ltd vs Limited, or a
+            person and their company). Spouses and other family members stay separate. Each return
+            still shows the name as filed. Not an Electoral Commission classification.
+          </p>
+          {onViewDonorGroups && (
+            <p>
+              <button type="button" className="text-button" onClick={onViewDonorGroups}>
+                View related donor groups
+              </button>
+            </p>
+          )}
+        </details>
+      </fieldset>
+
+      <fieldset className="field">
+        <legend>Older names</legend>
+        <ul className="filter-list">
+          <li>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.withholdOldNames}
+                onChange={(event) =>
+                  onChange({ ...filters, withholdOldNames: event.target.checked })
+                }
+              />
+              <span>Hide names older than 6 years</span>
+            </label>
+          </li>
+        </ul>
+        <details className="hint">
+          <summary>Why this exists</summary>
+          <p>
+            Returns stay open for public inspection for 6 years. This site shows older names by
+            default so the history stays clear. Turn this on to hide individual names (and
+            organisation names that include a person) on returns older than that. Amounts and
+            parties stay visible either way.
+          </p>
+        </details>
       </fieldset>
 
       <fieldset className="field">
@@ -177,10 +264,13 @@ export function FilterFields({
                   onChange({ ...filters, hideExtraParliamentary: event.target.checked })
                 }
               />
-              <span>Hide parties with no current seats in Parliament</span>
+              <span>Parliamentary parties only</span>
             </label>
           </li>
         </ul>
+        {!compact && (
+          <p className="field-help">Hides parties with no current seats.</p>
+        )}
       </fieldset>
 
       <fieldset className="field">
@@ -279,10 +369,12 @@ export function Filters({
   partyCounts,
   donorTypeCounts,
   problem,
+  matchCount,
   open,
   onOpenChange,
   onChange,
   onReset,
+  onViewDonorGroups,
 }: Props) {
   const active = activeFilterCount(filters);
 
@@ -307,8 +399,10 @@ export function Filters({
         partyCounts={partyCounts}
         donorTypeCounts={donorTypeCounts}
         problem={problem}
+        matchCount={matchCount}
         onChange={onChange}
         onReset={onReset}
+        onViewDonorGroups={onViewDonorGroups}
       />
     </details>
   );

@@ -18,5 +18,5 @@ export const CONTACT_URL = "https://github.com/MaysenTG/nz-party-donations-explo
 export const PRIVATE_REPORT_URL =
   "https://github.com/MaysenTG/nz-party-donations-explorer/security/advisories/new";
 
-/** Date the Commission tables were last fetched and checked against this data. */
-export const DATA_RETRIEVED = "29 October 2026";
+/** Date the donation data in this app was last updated from the Commission tables. */
+export const DATA_UPDATED = "29 October 2026";

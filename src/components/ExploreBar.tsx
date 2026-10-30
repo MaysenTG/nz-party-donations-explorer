@@ -88,7 +88,7 @@ export function ExploreBar({ filters, onChange }: Props) {
           </div>
         )}
         <p className="year-filter-note year-gap-note">
-          No 2024 or 2025 (
+          No returns for 2024 or 2025 (
           <a
             href="#no-2024-2025"
             onClick={(e) => {

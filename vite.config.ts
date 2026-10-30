@@ -2,14 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
-import { nzDateToIso } from "./src/lib/dates.ts";
-import { classifyDonor } from "./src/lib/donors.ts";
-import {
-  OLD_INDIVIDUAL_LABEL,
-  inspectionCutoffIso,
-  isPastInspection,
-  withholdName,
-} from "./src/lib/privacy.ts";
+import { DATA_UPDATED } from "./src/lib/source.ts";
 
 const VIRTUAL_DONATIONS = "virtual:donations";
 const RESOLVED_VIRTUAL_DONATIONS = "\0virtual:donations";
@@ -27,19 +20,12 @@ function readDonationRows(): RawRow[] {
   );
 }
 
-function withPrivacy(rows: RawRow[], cutoff: string): RawRow[] {
+/** Drop any donor_address field; keep filed donor names for the optional privacy setting. */
+function forPublicBundle(rows: RawRow[]): RawRow[] {
   return rows.map((row) => {
     const copy = { ...row };
     delete copy.donor_address;
-    const name = String(copy.donor_name ?? "");
-    const returned = String(copy.return_received_date ?? "");
-    if (
-      withholdName(classifyDonor(name) === "individual", name) &&
-      isPastInspection(nzDateToIso(returned), cutoff)
-    ) {
-      copy.donor_name = OLD_INDIVIDUAL_LABEL;
-      copy.name_withheld = true;
-    }
+    delete copy.name_withheld;
     return copy;
   });
 }
@@ -47,8 +33,7 @@ function withPrivacy(rows: RawRow[], cutoff: string): RawRow[] {
 /**
  * Serves donation rows to the app.
  * - Drops any donor_address field (the committed file no longer has one; this stays as a guard).
- * - Withholds individual donors' names (and organisation names that name a person) on returns past the 6 year inspection period,
- *   using the build date, so those names are not shipped in the bundle.
+ * - Keeps donor names as filed so the in-app privacy toggle can hide older names.
  */
 function publicDonations(): Plugin {
   return {
@@ -61,8 +46,7 @@ function publicDonations(): Plugin {
       if (id !== RESOLVED_VIRTUAL_DONATIONS) return null;
       const file = path.resolve("src/data/donations.json");
       this.addWatchFile(file);
-      const cutoff = inspectionCutoffIso(new Date());
-      const rows = withPrivacy(readDonationRows(), cutoff);
+      const rows = forPublicBundle(readDonationRows());
       return `export default ${JSON.stringify(rows)}`;
     },
   };
@@ -73,13 +57,12 @@ function csvEscape(value: string): string {
   return value;
 }
 
-/** Writes a public CSV and fills the no-JS SEO shell with privacy-aware totals. */
+/** Writes a public CSV and fills the no-JS SEO shell with totals. */
 function seoShellAndCsv(): Plugin {
   return {
     name: "seo-shell-and-csv",
     transformIndexHtml(html) {
-      const cutoff = inspectionCutoffIso(new Date());
-      const rows = withPrivacy(readDonationRows(), cutoff);
+      const rows = forPublicBundle(readDonationRows());
       let totalCents = 0;
       let counted = 0;
       const parties = new Set<string>();
@@ -88,10 +71,8 @@ function seoShellAndCsv(): Plugin {
         if (r.returned_to_donor === true) continue;
         counted += 1;
         parties.add(String(r.party ?? ""));
-        if (r.name_withheld !== true) {
-          const name = String(r.donor_name ?? "");
-          if (name) donors.add(name);
-        }
+        const name = String(r.donor_name ?? "");
+        if (name) donors.add(name);
         if (r.party_to_party === true) continue;
         totalCents += Math.round(Number(r.amount) * 100);
       }
@@ -107,7 +88,7 @@ function seoShellAndCsv(): Plugin {
       return html
         .replace(
           /<span data-seo-count>[\s\S]*?<\/span>/,
-          `<span data-seo-count>${nz(counted)} returns in totals (${nz(rows.length)} filed) · Electoral Commission data</span>`,
+          `<span data-seo-count>${nz(counted)} returns · Last updated: ${DATA_UPDATED}</span>`,
         )
         .replace(
           /<section class="stat-cards" aria-label="Summary" data-seo-stats>[\s\S]*?<\/section>/,
@@ -132,8 +113,7 @@ function seoShellAndCsv(): Plugin {
         );
     },
     closeBundle() {
-      const cutoff = inspectionCutoffIso(new Date());
-      const rows = withPrivacy(readDonationRows(), cutoff);
+      const rows = forPublicBundle(readDonationRows());
       const header = [
         "party",
         "donor_name",
