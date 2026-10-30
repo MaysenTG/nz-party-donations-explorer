@@ -4,7 +4,7 @@
 
 Browse totals, filter by party, year, amount and donor type, compare charts, and open a donor’s recent returns. Built for clarity, not spin: amounts and names are shown as filed.
 
-> Independent project. Not an Electoral Commission website, and not affiliated with or endorsed by the Commission. Only party names are merged for consistency; donor names are never merged. See [Merges and other changes](#merges-and-other-changes).
+> Independent project. Not an Electoral Commission website, and not affiliated with or endorsed by the Commission. Party names are merged for consistency. Donor names stay as filed in each return; an optional filter can group curated related spellings. See [Merges and other changes](#merges-and-other-changes).
 
 ## Live site
 
@@ -13,7 +13,7 @@ Browse totals, filter by party, year, amount and donor type, compare charts, and
 ## What you can do
 
 - See the total amount, number of returns, parties and distinct donor names as filed (all update with your filters).
-- Filter by party, donation date, amount, donor name, and whether a donor looks like an individual or an organisation.
+- Filter by party, donation date, amount, donor name, and whether a donor looks like an individual or an organisation. Optionally group curated related donor names.
 - Sort the table and export the filtered rows as CSV.
 - Compare party totals, the largest donor names, party totals by year, donor names that gave to more than one party, and return sizes.
 - Select a party bar to focus that party. Select a donor to see their returns that match the current filters.
@@ -76,7 +76,7 @@ Things to keep in mind:
 
 Internet MANA was a separate combined party registered for the 2014 election, so it is kept apart from the Internet Party. Any party name not in this table is shown as published.
 
-**Donor names are not merged.** Only party names are merged. Donor names are kept exactly as filed in the Commission's tables, so one donor can appear under more than one spelling (for example with or without a middle name), and the donor count counts distinct names as filed. The only change to donor names is decoding the HTML entity `&amp;` to `&` in four names (the Christopher & Banks names and EPMU).
+**Donor names stay as filed in the data.** The JSON and each table row keep the Commission spelling. By default the donor count and largest-donors chart also use exact names. An optional “Group related donors” filter combines only curated same-person or same-entity variants listed in [`src/lib/donorGroups.ts`](src/lib/donorGroups.ts) (for example spelling differences, Ltd vs Limited, or Graeme Hart with Rank Group). Spouses and other family members are not combined. CSV export always uses names as filed. The only change to stored donor names is decoding the HTML entity `&amp;` to `&` in four names (the Christopher & Banks names and EPMU).
 
 **Other changes:**
 
@@ -88,8 +88,8 @@ Internet MANA was a separate combined party registered for the 2014 election, so
 ## Privacy
 
 - Donor addresses are not stored in the data file, and the build would drop the field if it came back. Older commits in this public repository still contain the addresses that were in earlier versions of the file.
-- Returns are open for public inspection for 6 years (Electoral Act 1993, s 3). After that the site does not name individual donors, or organisations whose listed name includes a person (via, trustee, directors). Those rows show "Name withheld (return over 6 years old)"; their amounts and parties stay in totals. Organisation names that do not name a person stay visible, and the donor view lists their matching returns like any other named donor. The cutoff is worked out from the build date (so withheld names are not in the published bundle) and again from the visitor's clock. Rebuild the site from time to time so the bundle keeps up.
-- Donor names are never written to the page URL. The donor view and the donor search box are not saved in shared links.
+- Returns are open for public inspection for 6 years (Electoral Act 1993, s 3). That is a Commission inspection rule, not a ban on republishing older names. This site shows filed names by default. An optional “Hide names older than 6 years” filter blanks individual names (and organisation names that include a person) on returns past that period; amounts and parties stay visible. Organisation names that do not name a person stay visible either way.
+- The donor search query can be stored in the URL as `q`. The donor detail modal is not.
 
 ## Polling day mode
 

@@ -1,4 +1,5 @@
 import { countsInTotals } from "./donations.ts";
+import { donorKey, donorLabel } from "./donorGroups.ts";
 import { toCents } from "./format.ts";
 import type { Donation } from "../types.ts";
 
@@ -40,35 +41,74 @@ export function partyYearSeries(rows: readonly Donation[], maxParties = 8): Part
 
 export const OTHER_PARTIES = "Other parties";
 
+export type MultiPartyDonorMember = {
+  id: string;
+  name: string;
+  total: number;
+  count: number;
+};
+
 export type MultiPartyDonor = {
+  /** Aggregation key: group id when grouping is on, else filed name. */
+  id: string;
   name: string;
   total: number;
   count: number;
   parties: { party: string; amount: number }[];
+  /** Filed names inside a related-donor group, when grouping combined more than one. */
+  members?: MultiPartyDonorMember[];
 };
 
-/** Donors (exact name as filed) who gave to more than one party in the rows. Withheld names and party donors are skipped. */
-export function multiPartyDonors(rows: readonly Donation[]): MultiPartyDonor[] {
-  const byDonor = new Map<string, Map<string, number>>();
-  const counts = new Map<string, number>();
+/** Donors who gave to more than one party in the rows. Withheld names and party donors are skipped. */
+export function multiPartyDonors(
+  rows: readonly Donation[],
+  options: { groupRelatedDonors?: boolean } = {},
+): MultiPartyDonor[] {
+  const groupRelated = options.groupRelatedDonors === true;
+  type Bucket = {
+    parties: Map<string, number>;
+    count: number;
+    members: Map<string, { cents: number; count: number }>;
+  };
+  const byDonor = new Map<string, Bucket>();
   for (const row of rows) {
     if (row.nameWithheld || row.party_to_party) continue;
-    const parties = byDonor.get(row.donor_name) ?? new Map<string, number>();
-    parties.set(row.party, (parties.get(row.party) ?? 0) + toCents(row.amount));
-    byDonor.set(row.donor_name, parties);
-    counts.set(row.donor_name, (counts.get(row.donor_name) ?? 0) + 1);
+    const key = donorKey(row.donor_name, groupRelated);
+    const current = byDonor.get(key) ?? {
+      parties: new Map<string, number>(),
+      count: 0,
+      members: new Map(),
+    };
+    const cents = toCents(row.amount);
+    current.parties.set(row.party, (current.parties.get(row.party) ?? 0) + cents);
+    current.count += 1;
+    const member = current.members.get(row.donor_name) ?? { cents: 0, count: 0 };
+    member.cents += cents;
+    member.count += 1;
+    current.members.set(row.donor_name, member);
+    byDonor.set(key, current);
   }
   const result: MultiPartyDonor[] = [];
-  for (const [name, parties] of byDonor) {
-    if (parties.size < 2) continue;
-    const list = [...parties.entries()]
+  for (const [id, bucket] of byDonor) {
+    if (bucket.parties.size < 2) continue;
+    const list = [...bucket.parties.entries()]
       .map(([party, cents]) => ({ party, amount: cents / 100 }))
       .sort((a, b) => b.amount - a.amount);
+    const members = [...bucket.members.entries()]
+      .map(([memberId, member]) => ({
+        id: memberId,
+        name: memberId,
+        total: member.cents / 100,
+        count: member.count,
+      }))
+      .sort((a, b) => b.total - a.total || a.name.localeCompare(b.name, "en-NZ"));
     result.push({
-      name,
+      id,
+      name: donorLabel(id, groupRelated),
       total: list.reduce((sum, item) => sum + item.amount, 0),
-      count: counts.get(name) ?? 0,
+      count: bucket.count,
       parties: list,
+      members: members.length > 1 ? members : undefined,
     });
   }
   return result.sort((a, b) => b.parties.length - a.parties.length || b.total - a.total);

@@ -100,6 +100,20 @@ export function ActiveFilters({ filters, onChange, onReset }: Props) {
       onRemove: () => onChange({ ...filters, includeReturned: false }),
     });
   }
+  if (filters.groupRelatedDonors) {
+    chips.push({
+      key: "grouped",
+      label: "Related donors grouped",
+      onRemove: () => onChange({ ...filters, groupRelatedDonors: false }),
+    });
+  }
+  if (filters.withholdOldNames) {
+    chips.push({
+      key: "hide-old-names",
+      label: "Old names hidden",
+      onRemove: () => onChange({ ...filters, withholdOldNames: false }),
+    });
+  }
   if (filters.hideExtraParliamentary) {
     chips.push({
       key: "extra-parliamentary",

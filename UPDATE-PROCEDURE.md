@@ -32,8 +32,8 @@ How it works:
 - The 2008 to 2022 page has not changed in years. To audit it, use `/workspace/audit/compare_v2.py`: copy the raw files to /tmp/a20.html and /tmp/a30.html and set REPO.
 
 ## Rules
-- Never alias, group or merge donor names. Keep them exactly as filed. Only party names may be merged, and only through `PARTY_ALIASES`, which feeds the merge list on the site.
-- Leave the 6 year name withholding to `src/lib/privacy.ts`.
+- Never alias, group or merge donor names in the JSON. Keep them exactly as filed. Only party names may be merged in the data, and only through `PARTY_ALIASES`. Optional UI grouping of related donors lives in `src/lib/donorGroups.ts` and must not rewrite stored names.
+- Keep filed donor names in the JSON. Optional hiding of names older than 6 years is an in-app setting (`src/lib/privacy.ts`), not a build-time strip.
 - Update the README count and `DATA_RETRIEVED` in `src/lib/source.ts`.
 
 ## Checks

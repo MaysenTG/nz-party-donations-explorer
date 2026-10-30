@@ -25,7 +25,12 @@ export type Donation = Omit<RawDonation, "notes" | "name_withheld"> & {
   receivedIso: string;
   returnIso: string;
   donorType: DonorType;
-  /** True when the donor is an individual and the return is past the 6 year inspection period. */
+  /**
+   * Eligible for the optional “hide names older than 6 years” setting
+   * (individual, or an organisation name that includes a person).
+   */
+  pastInspection: boolean;
+  /** True in the current view when that setting is on and pastInspection is true. */
   nameWithheld: boolean;
 };
 
@@ -43,6 +48,16 @@ export type Filters = {
   includeReturned: boolean;
   /** Drop parties that currently hold no seats in Parliament. */
   hideExtraParliamentary: boolean;
+  /**
+   * Opt-in reading aid: aggregate curated same-person/entity name variants.
+   * Exact filed names stay in each return row. Off by default.
+   */
+  groupRelatedDonors: boolean;
+  /**
+   * Optional: hide individual names (and organisation names that include a person)
+   * on returns older than the 6 year public inspection period. Off by default.
+   */
+  withholdOldNames: boolean;
 };
 
 export type SortKey = "party" | "donor" | "amount" | "date";
@@ -68,12 +83,23 @@ export type PartyTotal = {
   share: number;
 };
 
+export type DonorMemberTotal = {
+  /** Filed donor name as published. */
+  id: string;
+  label: string;
+  value: number;
+  count: number;
+  donorType: DonorType;
+};
+
 export type DonorTotal = {
   id: string;
   label: string;
   value: number;
   count: number;
   partyCount: number;
+  /** Present when related-donor grouping combined more than one filed name. */
+  members?: DonorMemberTotal[];
 };
 
 export type MonthPoint = {

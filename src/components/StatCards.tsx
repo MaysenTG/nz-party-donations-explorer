@@ -29,7 +29,8 @@ export function StatCards({ stats, overall }: Props) {
     {
       label: "Donor names",
       value: formatCount(stats.donors),
-      title: "Distinct donor names as filed. One donor can appear under more than one spelling. Withheld names (returns over 6 years old) are not counted.",
+      title:
+        "Distinct donor names as filed, or related-donor groups when that setting is on. If old-name hiding is on, those blanked names are not counted.",
       of: narrowed ? `of ${formatCount(overall.donors)}` : undefined,
     },
     {
