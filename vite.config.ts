@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
+import { DATA_UPDATED } from "./src/lib/source.ts";
 
 const VIRTUAL_DONATIONS = "virtual:donations";
 const RESOLVED_VIRTUAL_DONATIONS = "\0virtual:donations";
@@ -87,7 +88,7 @@ function seoShellAndCsv(): Plugin {
       return html
         .replace(
           /<span data-seo-count>[\s\S]*?<\/span>/,
-          `<span data-seo-count>${nz(counted)} returns in totals (${nz(rows.length)} filed) · Electoral Commission data</span>`,
+          `<span data-seo-count>${nz(counted)} returns · Last updated: ${DATA_UPDATED}</span>`,
         )
         .replace(
           /<section class="stat-cards" aria-label="Summary" data-seo-stats>[\s\S]*?<\/section>/,

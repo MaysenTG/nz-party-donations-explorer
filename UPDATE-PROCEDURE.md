@@ -34,7 +34,7 @@ How it works:
 ## Rules
 - Never alias, group or merge donor names in the JSON. Keep them exactly as filed. Only party names may be merged in the data, and only through `PARTY_ALIASES`. Optional UI grouping of related donors lives in `src/lib/donorGroups.ts` and must not rewrite stored names.
 - Keep filed donor names in the JSON. Optional hiding of names older than 6 years is an in-app setting (`src/lib/privacy.ts`), not a build-time strip.
-- Update the README count and `DATA_RETRIEVED` in `src/lib/source.ts`.
+- Update the README count and `DATA_UPDATED` in `src/lib/source.ts`.
 
 ## Checks
 - `npm ci && npm run build && npm run lint`

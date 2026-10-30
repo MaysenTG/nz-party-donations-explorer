@@ -71,7 +71,8 @@ function RankBar({
 }
 
 export function RankChart({ items, pressedId, onSelect, empty }: Props) {
-  const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(() => new Set());
+  /** Groups start collapsed; ids in this set are expanded. */
+  const [expanded, setExpanded] = useState<ReadonlySet<string>>(() => new Set());
 
   if (items.length === 0) {
     return <p className="empty-inline">{empty}</p>;
@@ -80,7 +81,7 @@ export function RankChart({ items, pressedId, onSelect, empty }: Props) {
   const { top, ticks } = axisTicks(Math.max(...items.map((item) => item.value)));
 
   function toggleGroup(id: string) {
-    setCollapsed((current) => {
+    setExpanded((current) => {
       const next = new Set(current);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -95,7 +96,7 @@ export function RankChart({ items, pressedId, onSelect, empty }: Props) {
           const pressed = item.id === pressedId;
           const children = item.children?.filter((child) => child.value > 0) ?? [];
           const nestTop = Math.max(item.value, ...children.map((child) => child.value));
-          const open = children.length > 0 && !collapsed.has(item.id);
+          const open = children.length > 0 && expanded.has(item.id);
 
           return (
             <li key={item.id} className={children.length > 0 ? "rank-group" : undefined}>

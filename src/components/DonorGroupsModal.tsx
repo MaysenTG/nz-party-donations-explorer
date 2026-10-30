@@ -58,7 +58,7 @@ export function DonorGroupsModal({ open, onClose }: Props) {
             <li key={group.id}>
               <p className="merge-canonical">{group.label}</p>
               {group.note && <p className="merge-note">{group.note}</p>}
-              <ul className="merge-aliases">
+              <ul className="merge-aliases merge-aliases-plain">
                 {group.members.map((member) => (
                   <li key={member}>
                     <span className="merge-from">{member}</span>

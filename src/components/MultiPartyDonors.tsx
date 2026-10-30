@@ -6,18 +6,27 @@ import { partyColour, shortPartyLabel } from "../lib/parties.ts";
 type Props = {
   donors: MultiPartyDonor[];
   limit?: number;
+  /** Set when the page is filtered to one party, so an empty list has a reason. */
+  singleParty?: string | null;
   onOpenDonor: (name: string) => void;
 };
 
-export function MultiPartyDonors({ donors, limit = 12, onOpenDonor }: Props) {
-  const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(() => new Set());
+export function MultiPartyDonors({ donors, limit = 12, singleParty, onOpenDonor }: Props) {
+  /** Groups start collapsed; ids in this set are expanded. */
+  const [expanded, setExpanded] = useState<ReadonlySet<string>>(() => new Set());
 
   if (donors.length === 0) {
-    return <p className="empty-inline">No donor name appears with more than one party here.</p>;
+    return (
+      <p className="empty-inline">
+        {singleParty
+          ? `Each return goes to one party, so this list is empty while only ${singleParty} is selected.`
+          : "No donor in these filters gave to more than one party."}
+      </p>
+    );
   }
 
   function toggleGroup(id: string) {
-    setCollapsed((current) => {
+    setExpanded((current) => {
       const next = new Set(current);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -31,7 +40,7 @@ export function MultiPartyDonors({ donors, limit = 12, onOpenDonor }: Props) {
       <ul className="multi-list">
         {shown.map((donor) => {
           const members = donor.members ?? [];
-          const open = members.length > 0 && !collapsed.has(donor.id);
+          const open = members.length > 0 && expanded.has(donor.id);
           return (
             <li key={donor.id} className={members.length > 0 ? "multi-group" : undefined}>
               <button type="button" className="multi-row" onClick={() => onOpenDonor(donor.id)}>

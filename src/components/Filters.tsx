@@ -89,7 +89,12 @@ export function FilterFields({
                   />
                   <span>
                     {party}
-                    {extra && <small className="party-seat-note"> no seats</small>}
+                    {extra && (
+                      <>
+                        <span className="visually-hidden">, </span>
+                        <small className="party-seat-note">No seats</small>
+                      </>
+                    )}
                   </span>
                   <span className="count">{count.toLocaleString("en-NZ")}</span>
                 </label>
@@ -180,7 +185,7 @@ export function FilterFields({
                 checked={filters.includeReturned}
                 onChange={(event) => onChange({ ...filters, includeReturned: event.target.checked })}
               />
-              <span>Include donations returned to the donor</span>
+              <span>Include returned donations</span>
             </label>
           </li>
         </ul>
@@ -259,10 +264,13 @@ export function FilterFields({
                   onChange({ ...filters, hideExtraParliamentary: event.target.checked })
                 }
               />
-              <span>Hide parties with no current seats in Parliament</span>
+              <span>Parliamentary parties only</span>
             </label>
           </li>
         </ul>
+        {!compact && (
+          <p className="field-help">Hides parties with no current seats.</p>
+        )}
       </fieldset>
 
       <fieldset className="field">

@@ -144,10 +144,10 @@ export function DonorDetail({
           <>
             <p className="modal-lede">
               {grouped
-                ? "Returns under related filed names that match the current filters."
+                ? "Returns under the filed names in this group that match the current filters."
                 : "Returns under this name that match the current filters."}
               {!grouped &&
-                " The same donor may appear under other spellings; those are listed separately unless related-donor grouping is on."}
+                " Other spellings of the same donor stay separate unless related-donor grouping is on."}
               {rows[0] &&
                 !grouped &&
                 ` Donor type is a name-based guess: ${donorTypeLabel(rows[0].donorType)}.`}
@@ -247,7 +247,7 @@ export function DonorDetail({
                                   View return
                                 </a>
                               ) : (
-                                <span className="muted">Not published as a file</span>
+                                <span className="muted">Not published</span>
                               )}
                             </td>
                           </tr>

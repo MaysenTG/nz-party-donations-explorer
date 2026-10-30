@@ -18,7 +18,7 @@ const COLUMNS: { key: SortKey; label: string }[] = [
   { key: "party", label: "Party" },
   { key: "donor", label: "Donor" },
   { key: "amount", label: "Amount" },
-  { key: "date", label: "Received" },
+  { key: "date", label: "Donation date" },
 ];
 
 const PAGE_SIZE = 25;
@@ -158,10 +158,10 @@ function pageItems(items: readonly DisplayItem[], start: number, end: number): D
 }
 
 function PdfLink({ url, donor }: { url: string | null; donor: string }) {
-  if (!url) return <span className="muted">PDF not published</span>;
+  if (!url) return <span className="muted">Not published</span>;
   return (
     <a href={url} target="_blank" rel="noopener noreferrer">
-      View PDF
+      View return
       <span className="visually-hidden"> for {donor}</span>
     </a>
   );
@@ -273,7 +273,8 @@ function GroupBanner({
 export function DonationsTable({ rows, sort, groupRelatedDonors, onSort, onOpenDonor }: Props) {
   const cards = useMatchMedia("(max-width: 760px)");
   const [page, setPage] = useState(0);
-  const [collapsed, setCollapsed] = useState<ReadonlySet<string>>(() => new Set());
+  /** Groups start collapsed; ids in this set are expanded. */
+  const [expanded, setExpanded] = useState<ReadonlySet<string>>(() => new Set());
   const [activeRows, setActiveRows] = useState(rows);
   const [activeGrouped, setActiveGrouped] = useState(groupRelatedDonors);
 
@@ -281,7 +282,7 @@ export function DonationsTable({ rows, sort, groupRelatedDonors, onSort, onOpenD
     setActiveRows(rows);
     setActiveGrouped(groupRelatedDonors);
     setPage(0);
-    if (!groupRelatedDonors) setCollapsed(new Set());
+    if (!groupRelatedDonors) setExpanded(new Set());
   }
 
   const clusteredRows = useMemo(
@@ -296,18 +297,19 @@ export function DonationsTable({ rows, sort, groupRelatedDonors, onSort, onOpenD
   const pageCount = Math.max(1, Math.ceil(clusteredRows.length / PAGE_SIZE));
   const current = Math.min(page, pageCount - 1);
   const start = current * PAGE_SIZE;
+  const end = Math.min(start + PAGE_SIZE, clusteredRows.length);
   const visibleItems = useMemo(() => {
     const slice = pageItems(items, start, start + PAGE_SIZE);
     return slice.filter((item) => {
       if (item.kind !== "row" || !item.nested) return true;
       const group = donorGroup(item.row.donor_name);
-      return !group || !collapsed.has(group.id);
+      return !group || expanded.has(group.id);
     });
-  }, [items, start, collapsed]);
+  }, [items, start, expanded]);
   const visibleRowCount = visibleItems.filter((item) => item.kind === "row").length;
 
   function toggleGroup(id: string) {
-    setCollapsed((current) => {
+    setExpanded((current) => {
       const next = new Set(current);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -339,7 +341,7 @@ export function DonationsTable({ rows, sort, groupRelatedDonors, onSort, onOpenD
     clusteredRows.length > PAGE_SIZE ? (
       <nav className="pager" aria-label="Table pages">
         <p>
-          Showing {formatCount(start + 1)} to {formatCount(start + visibleRowCount)} of{" "}
+          Returns {formatCount(start + 1)} to {formatCount(end)} of{" "}
           {formatCount(clusteredRows.length)}
         </p>
         <div className="pager-buttons">
@@ -377,7 +379,7 @@ export function DonationsTable({ rows, sort, groupRelatedDonors, onSort, onOpenD
         <ol className="donation-cards">
           {visibleItems.map((item, index) => {
             if (item.kind === "header") {
-              const open = !collapsed.has(item.group.id);
+              const open = expanded.has(item.group.id);
               return (
                 <li
                   key={`group-${item.group.id}-${index}`}
@@ -439,7 +441,7 @@ export function DonationsTable({ rows, sort, groupRelatedDonors, onSort, onOpenD
                       className={column.key === "amount" ? "num" : undefined}
                     >
                       <button type="button" onClick={() => onSort(column.key)}>
-                        {column.label === "Received" ? "Latest donation date in return" : column.label}
+                        {column.label}
                         <span aria-hidden="true" className="sort-mark">
                           {active ? (sort.dir === "asc" ? "↑" : "↓") : "↕"}
                         </span>
@@ -453,7 +455,7 @@ export function DonationsTable({ rows, sort, groupRelatedDonors, onSort, onOpenD
             <tbody>
               {visibleItems.map((item, index) => {
                 if (item.kind === "header") {
-                  const open = !collapsed.has(item.group.id);
+                  const open = expanded.has(item.group.id);
                   return (
                     <tr
                       key={`group-${item.group.id}-${index}`}

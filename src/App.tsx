@@ -42,14 +42,14 @@ import { donorMergeGroups } from "./lib/donorGroups.ts";
 import { electionCycleSummaries } from "./lib/elections.ts";
 import { QueryBanner } from "./components/QueryBanner.tsx";
 import { formatCount, formatShare } from "./lib/format.ts";
-import { partyColour } from "./lib/parties.ts";
+import { partyColour, shortPartyLabel } from "./lib/parties.ts";
 import {
   SOURCE_30K_LABEL,
   SOURCE_30K_URL,
   SOURCE_LABEL,
   SOURCE_URL,
   CONTACT_URL,
-  DATA_RETRIEVED,
+  DATA_UPDATED,
   PRIVATE_REPORT_URL,
 } from "./lib/source.ts";
 import { INSPECTION_YEARS } from "./lib/privacy.ts";
@@ -96,9 +96,26 @@ function focusParty(filters: FilterState, party: string): FilterState {
   return { ...filters, parties: onlyThis ? [...ALL_PARTIES] : [party] };
 }
 
-/** Append the focused party so filtered section titles stay clear. */
-function titleForParty(base: string, party: string | null): string {
-  return party ? `${base} to ${party}` : base;
+/** Section titles. A single selected party is named in the title. */
+function sectionTitles(party: string | null) {
+  if (!party) {
+    return {
+      amount: "Amount by party",
+      donors: "Largest donors",
+      time: "Returns over time",
+      year: "Party totals by year",
+      sizes: "Return sizes",
+      table: "All matching returns",
+    };
+  }
+  return {
+    amount: `Amount given to ${party}`,
+    donors: `Largest donors to ${party}`,
+    time: `Returns to ${party} over time`,
+    year: `${party} totals by year`,
+    sizes: `Return sizes to ${party}`,
+    table: `Returns to ${party}`,
+  };
 }
 
 export default function App() {
@@ -181,6 +198,8 @@ export default function App() {
   }, [donorFacetRows]);
 
   const focusedParty = filters.parties.length === 1 ? filters.parties[0] : null;
+  const focusedShort = focusedParty ? shortPartyLabel(focusedParty) : null;
+  const titles = sectionTitles(focusedShort);
   const focusedDonor = filters.query.trim();
   const hiddenDonors = Math.max(0, donorCount(filtered, groupOpts) - donors.length);
   const activeFilters = activeFilterCount(filters);
@@ -218,15 +237,19 @@ export default function App() {
             <a href={SOURCE_30K_URL} target="_blank" rel="noopener noreferrer">
               {SOURCE_30K_LABEL}
             </a>
-            <span>
-              {formatCount(OVERALL.donations)} returns · checked {DATA_RETRIEVED}
-            </span>
+          </p>
+          <p className="source-meta">
+            {formatCount(OVERALL.donations)} returns · Last updated: {DATA_UPDATED}
           </p>
         </div>
       </header>
 
       <main className="wrap">
-        <StatCards stats={summary} overall={OVERALL} />
+        <StatCards
+          stats={summary}
+          overall={OVERALL}
+          donorsAreGrouped={filters.groupRelatedDonors}
+        />
         <ExploreBar filters={filters} onChange={setFilters} />
 
         <div className="layout">
@@ -254,9 +277,7 @@ export default function App() {
             <div className="chart-grid">
               <section className="card" aria-labelledby="party-chart-title">
                 <div className="card-head">
-                  <h2 id="party-chart-title">
-                    {focusedParty ? titleForParty("Amount", focusedParty) : "Amount by party"}
-                  </h2>
+                  <h2 id="party-chart-title">{titles.amount}</h2>
                 </div>
                 <RankChart
                   items={parties.map((party) => ({
@@ -274,11 +295,13 @@ export default function App() {
 
               <section className="card" aria-labelledby="donor-chart-title">
                 <div className="card-head">
-                  <h2 id="donor-chart-title">{titleForParty("Largest donors", focusedParty)}</h2>
+                  <h2 id="donor-chart-title">{titles.donors}</h2>
                   {donors.length > 0 && donors.length >= TOP_DONOR_LIMIT && (
                     <p>
                       Top {TOP_DONOR_LIMIT}
-                      {filters.groupRelatedDonors ? " (related names grouped)." : " as filed."}
+                      {filters.groupRelatedDonors
+                        ? ", with related names grouped."
+                        : ", as filed."}
                     </p>
                   )}
                 </div>
@@ -324,7 +347,7 @@ export default function App() {
               <section className="card wide" aria-labelledby="time-title">
                 <div className="card-head card-head-row">
                   <div>
-                    <h2 id="time-title">{titleForParty("Returns over time", focusedParty)}</h2>
+                    <h2 id="time-title">{titles.time}</h2>
                   </div>
                   <ul className="legend">
                     <li>
@@ -362,11 +385,7 @@ export default function App() {
 
               <section className="card wide" aria-labelledby="party-year-title">
                 <div className="card-head">
-                  <h2 id="party-year-title">
-                    {focusedParty
-                      ? titleForParty("Totals by year", focusedParty)
-                      : "Party totals by year"}
-                  </h2>
+                  <h2 id="party-year-title">{titles.year}</h2>
                 </div>
                 <PartyYearChart series={partyYears} />
               </section>
@@ -375,22 +394,26 @@ export default function App() {
                 <div className="card-head">
                   <h2 id="multi-title">Donors giving to more than one party</h2>
                 </div>
-                <MultiPartyDonors donors={multiDonors} onOpenDonor={setOpenDonor} />
+                <MultiPartyDonors
+                  donors={multiDonors}
+                  onOpenDonor={setOpenDonor}
+                  singleParty={focusedShort}
+                />
               </section>
 
               <section className="card" aria-labelledby="size-title">
                 <div className="card-head">
-                  <h2 id="size-title">{titleForParty("Return sizes", focusedParty)}</h2>
+                  <h2 id="size-title">{titles.sizes}</h2>
                 </div>
                 <SizeChart buckets={sizes} />
               </section>
 
-              <ElectionCycles cycles={electionCycles} />
+              <ElectionCycles cycles={electionCycles} ignoredParty={focusedShort} />
 
               <section className="card wide table-card" aria-labelledby="table-title">
                 <div className="toolbar">
                   <div>
-                    <h2 id="table-title">{titleForParty("All matching returns", focusedParty)}</h2>
+                    <h2 id="table-title">{titles.table}</h2>
                     <p aria-live="polite">
                       {formatCount(filtered.length)} of {formatCount(donations.length)} ·{" "}
                       {rangeLabel}
@@ -545,17 +568,17 @@ export default function App() {
               {DONOR_MERGE_GROUPS.map((group) => (
                 <li key={group.id}>
                   <strong>{group.label}</strong>: {group.members.map((m) => `“${m}”`).join(", ")}
-                  {group.note ? ` — ${group.note}` : ""}
+                  {group.note ? `. ${group.note}` : ""}
                 </li>
               ))}
             </ul>
           </details>
           <p className="site-notice">
-            Independent of the Electoral Commission. Have some feedback? {" "}
+            Independent of the Electoral Commission. Send a correction as a{" "}
             <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer">
               GitHub issue
             </a>{" "}
-            or{" "}
+            or a{" "}
             <a href={PRIVATE_REPORT_URL} target="_blank" rel="noopener noreferrer">
               private report
             </a>
