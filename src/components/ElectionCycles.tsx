@@ -6,9 +6,11 @@ import { axisTicks } from "../lib/scale.ts";
 
 type Props = {
   cycles: ElectionCycleSummary[];
+  /** Party filter is ignored here; name it when one party is selected. */
+  ignoredParty?: string | null;
 };
 
-export function ElectionCycles({ cycles }: Props) {
+export function ElectionCycles({ cycles, ignoredParty }: Props) {
   const [openYear, setOpenYear] = useState<number | null>(
     () => cycles[cycles.length - 1]?.cycle.year ?? null,
   );
@@ -20,6 +22,9 @@ export function ElectionCycles({ cycles }: Props) {
         <p>
           From the day after the previous election through election day. Returned and
           party-to-party transfers are left out.
+          {ignoredParty
+            ? ` This still compares every party. Selecting ${ignoredParty} does not change it.`
+            : ""}
         </p>
       </div>
 

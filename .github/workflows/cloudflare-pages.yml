@@ -1,4 +1,5 @@
-# Builds the Vite app and publishes dist/ to Cloudflare Pages (Direct Upload).
+# Builds the Vite app and publishes dist/ to Cloudflare Pages production (Direct Upload).
+# Pull request previews use cloudflare-pages-preview.yml → https://preview.whofunds.nz
 name: Deploy to Cloudflare Pages
 
 on:

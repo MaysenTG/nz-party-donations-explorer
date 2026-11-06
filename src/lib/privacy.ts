@@ -1,8 +1,9 @@
 /**
  * Returns stay open for public inspection for 6 years after the Commission receives them
- * (Electoral Act 1993, s 3, "public inspection period"). After that, this site does not
- * name individual donors, or organisations whose listed name includes a person (via, trustee,
- * directors). Organisations stay named. Amounts and parties stay in totals.
+ * (Electoral Act 1993, s 3, "public inspection period"). That is a Commission inspection
+ * rule, not a ban on republishing older names. This site shows filed names by default and
+ * offers an optional setting to hide individual names (and organisation names that include
+ * a person) on returns past that period. Amounts and parties always stay visible.
  */
 export const INSPECTION_YEARS = 6;
 
@@ -28,7 +29,7 @@ export function isPastInspection(returnIso: string, cutoffIso: string): boolean 
 /** Organisation names that also name a person, such as "X Trust via Jane Smith". */
 const NAMES_A_PERSON = /\bvia\b|\btrustee\b|\bdirectors?\b/i;
 
-/** True when an old return's donor name should be withheld. */
+/** True when a name is eligible for the optional old-name hiding setting. */
 export function withholdName(isIndividual: boolean, name: string): boolean {
   return isIndividual || NAMES_A_PERSON.test(name);
 }

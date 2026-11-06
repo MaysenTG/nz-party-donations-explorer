@@ -26,8 +26,8 @@ export function QueryBanner({ query, partyTotals, filters, onChange }: Props) {
   return (
     <div className="query-banner" role="status">
       <p>
-        Showing returns where the <strong>donor name</strong> contains “{trimmed}” - not a party
-        filter.
+        Showing returns whose <strong>donor name</strong> contains “{trimmed}”. This is not a
+        party filter.
         {parts.length > 1 && <> Matching money went to more than one party ({parts.join("; ")}).</>}
         {parts.length === 1 && total > 0 && <> All matching money went to {parts[0]}.</>}
       </p>

@@ -3,6 +3,7 @@ import { useEffect, useId, useRef } from "react";
 const FOCUSABLE =
   'button:not([disabled]), input:not([disabled]), summary, a[href], [tabindex]:not([tabindex="-1"])';
 import { activeFilterCount } from "../lib/donations.ts";
+import { formatCount } from "../lib/format.ts";
 import { FilterFields, type FilterFieldsProps } from "./Filters.tsx";
 
 type Props = FilterFieldsProps & {
@@ -17,8 +18,10 @@ export function FiltersSheet({
   partyCounts,
   donorTypeCounts,
   problem,
+  matchCount,
   onChange,
   onReset,
+  onViewDonorGroups,
 }: Props) {
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -124,11 +127,25 @@ export function FiltersSheet({
           partyCounts={partyCounts}
           donorTypeCounts={donorTypeCounts}
           problem={problem}
+          matchCount={matchCount}
           idPrefix="sheet-"
           compact
           onChange={onChange}
           onReset={onReset}
+          onViewDonorGroups={onViewDonorGroups}
         />
+        <div className="filters-sheet-foot" aria-live="polite">
+          <p className={matchCount === 0 && filters.query.trim() ? "is-empty" : undefined}>
+            {matchCount === 0
+              ? filters.query.trim()
+                ? `No returns match “${filters.query.trim()}”`
+                : "No returns match these filters"
+              : `${formatCount(matchCount)} ${matchCount === 1 ? "return matches" : "returns match"} these filters`}
+          </p>
+          <button type="button" className="export-button" onClick={onClose}>
+            {matchCount === 0 ? "Close" : "Show results"}
+          </button>
+        </div>
       </div>
     </div>
   );

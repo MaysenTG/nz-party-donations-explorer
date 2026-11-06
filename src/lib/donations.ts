@@ -1,5 +1,6 @@
 import rawDonations from "virtual:donations";
 import { formatIsoLong, monthKey, monthLabels, nextMonthKey, nzDateToIso } from "./dates.ts";
+import { donorKey, donorLabel, donorQueryMatches } from "./donorGroups.ts";
 import { classifyDonor } from "./donors.ts";
 import { OLD_INDIVIDUAL_LABEL, inspectionCutoffIso, isPastInspection, withholdName } from "./privacy.ts";
 import { toCents } from "./format.ts";
@@ -102,21 +103,18 @@ function loadDonations(value: unknown): Donation[] {
     const extra = row as Record<string, unknown>;
     const returnIso = nzDateToIso(row.return_received_date);
     const publishedType = classifyDonor(row.donor_name);
-    // The build already withholds names past the inspection period; this catches returns
-    // that cross the 6 year line after the last build.
-    const nameWithheld =
-      extra.name_withheld === true ||
-      (withholdName(publishedType === "individual", row.donor_name) &&
-        isPastInspection(returnIso, INSPECTION_CUTOFF_ISO));
-    const donorName = nameWithheld ? OLD_INDIVIDUAL_LABEL : row.donor_name;
+    const pastInspection =
+      withholdName(publishedType === "individual", row.donor_name) &&
+      isPastInspection(returnIso, INSPECTION_CUTOFF_ISO);
     const notes = Array.isArray(extra.notes)
       ? extra.notes.filter((note): note is string => typeof note === "string")
       : [];
     // Build the record field by field so no other source field (such as an address) is read.
+    // Filed names stay as published; optional hiding is applied in applyNamePrivacy.
     return {
       party: normalizeParty(row.party),
       return_received_date: row.return_received_date,
-      donor_name: donorName,
+      donor_name: row.donor_name,
       amount: row.amount,
       donation_received_date: row.donation_received_date,
       source_pdf_url: row.source_pdf_url,
@@ -127,8 +125,29 @@ function loadDonations(value: unknown): Donation[] {
       id: String(index),
       receivedIso: nzDateToIso(row.donation_received_date),
       returnIso,
-      donorType: nameWithheld ? "individual" : publishedType,
-      nameWithheld,
+      donorType: publishedType,
+      pastInspection,
+      nameWithheld: false,
+    };
+  });
+}
+
+/**
+ * When withholdOldNames is on, blank eligible names past the inspection period.
+ * Amounts and parties are unchanged. Default view leaves names as filed.
+ */
+export function applyNamePrivacy(
+  rows: readonly Donation[],
+  withholdOldNames: boolean,
+): Donation[] {
+  if (!withholdOldNames) return [...rows];
+  return rows.map((row) => {
+    if (!row.pastInspection || row.nameWithheld) return row;
+    return {
+      ...row,
+      donor_name: OLD_INDIVIDUAL_LABEL,
+      donorType: "individual",
+      nameWithheld: true,
     };
   });
 }
@@ -210,6 +229,8 @@ export function createDefaultFilters(): Filters {
     donorType: "all",
     includeReturned: false,
     hideExtraParliamentary: false,
+    groupRelatedDonors: false,
+    withholdOldNames: false,
   };
 }
 
@@ -226,7 +247,9 @@ export function filtersAreDefault(filters: Filters): boolean {
     filters.query.trim() === "" &&
     filters.donorType === "all" &&
     !filters.includeReturned &&
-    !filters.hideExtraParliamentary
+    !filters.hideExtraParliamentary &&
+    !filters.groupRelatedDonors &&
+    !filters.withholdOldNames
   );
 }
 
@@ -246,6 +269,8 @@ export function activeFilterCount(filters: Filters): number {
   if (filters.donorType !== "all") count += 1;
   if (filters.hideExtraParliamentary) count += 1;
   if (filters.includeReturned) count += 1;
+  if (filters.groupRelatedDonors) count += 1;
+  if (filters.withholdOldNames) count += 1;
   return count;
 }
 
@@ -311,8 +336,7 @@ export function applyFilters(
     }
     if (query) {
       if (row.nameWithheld) return false;
-      const haystack = row.donor_name.toLowerCase();
-      if (!haystack.includes(query)) return false;
+      if (!donorQueryMatches(row.donor_name, query, filters.groupRelatedDonors)) return false;
     }
     if (filters.from && row.receivedIso < filters.from) return false;
     if (filters.to && row.receivedIso > filters.to) return false;
@@ -330,13 +354,17 @@ export function countsInTotals(row: Donation): boolean {
   return !row.party_to_party;
 }
 
-export function summarise(rows: readonly Donation[]): Summary {
+export function summarise(
+  rows: readonly Donation[],
+  options: { groupRelatedDonors?: boolean } = {},
+): Summary {
+  const groupRelated = options.groupRelatedDonors === true;
   let cents = 0;
   const parties = new Set<string>();
   const donors = new Set<string>();
   for (const row of rows) {
     parties.add(row.party);
-    if (!row.nameWithheld) donors.add(row.donor_name);
+    if (!row.nameWithheld) donors.add(donorKey(row.donor_name, groupRelated));
     if (!countsInTotals(row)) continue;
     cents += toCents(row.amount);
   }
@@ -369,34 +397,74 @@ export function partyTotals(rows: readonly Donation[]): PartyTotal[] {
     .sort((a, b) => b.value - a.value || a.label.localeCompare(b.label, "en-NZ"));
 }
 
-export function topDonors(rows: readonly Donation[], limit = 15): DonorTotal[] {
-  const buckets = new Map<string, { cents: number; count: number; parties: Set<string> }>();
+export function topDonors(
+  rows: readonly Donation[],
+  limit = 15,
+  options: { groupRelatedDonors?: boolean } = {},
+): DonorTotal[] {
+  const groupRelated = options.groupRelatedDonors === true;
+  type Bucket = {
+    cents: number;
+    count: number;
+    parties: Set<string>;
+    members: Map<string, { cents: number; count: number; donorType: Donation["donorType"] }>;
+  };
+  const buckets = new Map<string, Bucket>();
   for (const row of rows) {
     if (row.nameWithheld || !countsInTotals(row)) continue;
-    const current = buckets.get(row.donor_name) ?? {
+    const key = donorKey(row.donor_name, groupRelated);
+    const current = buckets.get(key) ?? {
       cents: 0,
       count: 0,
       parties: new Set<string>(),
+      members: new Map(),
     };
-    current.cents += toCents(row.amount);
+    const cents = toCents(row.amount);
+    current.cents += cents;
     current.count += 1;
     current.parties.add(row.party);
-    buckets.set(row.donor_name, current);
+    const member = current.members.get(row.donor_name) ?? {
+      cents: 0,
+      count: 0,
+      donorType: row.donorType,
+    };
+    member.cents += cents;
+    member.count += 1;
+    current.members.set(row.donor_name, member);
+    buckets.set(key, current);
   }
   return [...buckets.entries()]
-    .map(([id, bucket]) => ({
-      id,
-      label: id,
-      value: bucket.cents / 100,
-      count: bucket.count,
-      partyCount: bucket.parties.size,
-    }))
+    .map(([id, bucket]) => {
+      const members = [...bucket.members.entries()]
+        .map(([memberId, member]) => ({
+          id: memberId,
+          label: memberId,
+          value: member.cents / 100,
+          count: member.count,
+          donorType: member.donorType,
+        }))
+        .sort((a, b) => b.value - a.value || a.label.localeCompare(b.label, "en-NZ"));
+      return {
+        id,
+        label: donorLabel(id, groupRelated),
+        value: bucket.cents / 100,
+        count: bucket.count,
+        partyCount: bucket.parties.size,
+        members: members.length > 1 ? members : undefined,
+      };
+    })
     .sort((a, b) => b.value - a.value || a.label.localeCompare(b.label, "en-NZ"))
     .slice(0, limit);
 }
 
-export function donorCount(rows: readonly Donation[]): number {
-  return new Set(rows.filter((row) => !row.nameWithheld).map((row) => row.donor_name)).size;
+export function donorCount(
+  rows: readonly Donation[],
+  options: { groupRelatedDonors?: boolean } = {},
+): number {
+  const groupRelated = options.groupRelatedDonors === true;
+  return new Set(
+    rows.filter((row) => !row.nameWithheld).map((row) => donorKey(row.donor_name, groupRelated)),
+  ).size;
 }
 
 const MONTH_SERIES_LIMIT = 24;
