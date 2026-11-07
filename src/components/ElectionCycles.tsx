@@ -72,7 +72,7 @@ export function ElectionCycles({ cycles, ignoredParty }: Props) {
                     color: partyColourInk(winnerColour),
                   }}
                 >
-                  {upcoming ? "Upcoming" : cycle.winnerLabel}
+                  {upcoming ? "Pending" : cycle.winnerLabel}
                 </span>
               </button>
 
