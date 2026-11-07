@@ -1,5 +1,101 @@
 [
   {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "6 November 2026",
+    "donor_name": "David Silverman",
+    "amount": 24100,
+    "donation_received_date": "21 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/D_Silverman_6_November_2026.pdf"
+  },
+  {
+    "party": "New Zealand Labour Party",
+    "return_received_date": "6 November 2026",
+    "donor_name": "Rt Hon Trevor Mallard",
+    "amount": 21850,
+    "donation_received_date": "16 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/T_Mallard_6_November_2026.pdf"
+  },
+  {
+    "party": "New Zealand First Party",
+    "return_received_date": "5 November 2026",
+    "donor_name": "Rank Group Limited",
+    "amount": 100000,
+    "donation_received_date": "16 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Rank-Group_05.11.2026_.pdf"
+  },
+  {
+    "party": "New Zealand First Party",
+    "return_received_date": "5 November 2026",
+    "donor_name": "J Swap Contractors",
+    "amount": 22000,
+    "donation_received_date": "2 November 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/J-Swap-Contractors_05.11.2026_.pdf"
+  },
+  {
+    "party": "The Green Party of Aotearoa New Zealand",
+    "return_received_date": "2 November 2026",
+    "donor_name": "Erika and Robin Congreve",
+    "amount": 30000,
+    "donation_received_date": "29 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/E_and_R_Congreve_2_November_2026_.pdf.pdf"
+  },
+  {
+    "party": "The Green Party of Aotearoa New Zealand",
+    "return_received_date": "29 October 2026",
+    "donor_name": "Phillip Mills",
+    "amount": 40000,
+    "donation_received_date": "27 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/P_Mills_29_October_2026.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "28 October 2026",
+    "donor_name": "Mansons TCLM Limited",
+    "amount": 75000,
+    "donation_received_date": "12 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Mansons_TCLM_Limited_28_October_2026.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "28 October 2026",
+    "donor_name": "Richard John Didsbury",
+    "amount": 25000,
+    "donation_received_date": "13 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Richard_John_Didsbury_28_October_2026.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "28 October 2026",
+    "donor_name": "Gary Rodney Lane",
+    "amount": 120000,
+    "donation_received_date": "9 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Gary_Rodney_Lane_28_October_2026.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "28 October 2026",
+    "donor_name": "Trevor Michael Farmer",
+    "amount": 100000,
+    "donation_received_date": "8 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/T_Farmer_28_October_2026_.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "28 October 2026",
+    "donor_name": "Mark Andrew Wilson",
+    "amount": 100000,
+    "donation_received_date": "6 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/M_Wilson_28_October_2026_.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "28 October 2026",
+    "donor_name": "Oregon Group Limited",
+    "amount": 79000,
+    "donation_received_date": "2 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Oregon_Group_Limited_28_October_2026_.pdf"
+  },
+  {
     "party": "The Green Party of Aotearoa New Zealand",
     "return_received_date": "20 October 2026",
     "donor_name": "Brian Graham",
