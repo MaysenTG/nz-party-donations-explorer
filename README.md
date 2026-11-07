@@ -20,9 +20,9 @@ Browse totals, filter by party, year, amount and donor type, compare charts, and
 
 ## About the data
 
-Source: [Donations exceeding $20,000](https://elections.nz/democracy-in-nz/political-parties-in-new-zealand/donations-exceeding-20000) and the linked [Donations exceeding $30,000](https://elections.nz/democracy-in-nz/political-parties-in-new-zealand/donations-exceeding-20000/donations-exceeding-30000) page, published by the Electoral Commission. Last updated: 29 October 2026.
+Source: [Donations exceeding $20,000](https://elections.nz/democracy-in-nz/political-parties-in-new-zealand/donations-exceeding-20000) and the linked [Donations exceeding $30,000](https://elections.nz/democracy-in-nz/political-parties-in-new-zealand/donations-exceeding-20000/donations-exceeding-30000) page, published by the Electoral Commission. Last updated: 7 November 2026.
 
-The app reads [`src/data/donations.json`](src/data/donations.json), built from those pages (currently 522 returns: 244 from 2008 to 2022, 131 from the 2023 table and 147 from the 2026 table). The threshold depends on the year: see Years covered below.
+The app reads [`src/data/donations.json`](src/data/donations.json), built from those pages (currently 534 returns: 244 from 2008 to 2022, 131 from the 2023 table and 159 from the 2026 table). The threshold depends on the year: see Years covered below.
 
 Each row is one return a party filed about one donor. A return can add up several donations from that donor. Each record has:
 

@@ -60,7 +60,7 @@ export const DONOR_GROUPS: readonly DonorGroup[] = [
   {
     id: "trevor-farmer",
     label: "Trevor Farmer",
-    members: ["T Farmer", "Trevor Farmer"],
+    members: ["T Farmer", "Trevor Farmer", "Trevor Michael Farmer"],
   },
   {
     id: "bruce-plested",
