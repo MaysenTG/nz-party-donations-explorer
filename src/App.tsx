@@ -39,7 +39,7 @@ import {
   partyMergeGroups,
 } from "./lib/donations.ts";
 import { donorMergeGroups } from "./lib/donorGroups.ts";
-import { electionCycleSummaries } from "./lib/elections.ts";
+import { ELECTION_CYCLE_SUMMARIES } from "./lib/elections.ts";
 import { QueryBanner } from "./components/QueryBanner.tsx";
 import { formatCount, formatShare } from "./lib/format.ts";
 import { partyColour, shortPartyLabel } from "./lib/parties.ts";
@@ -173,11 +173,6 @@ export default function App() {
     [filtered, groupOpts],
   );
   const timeSeries = useMemo(() => donationSeries(filtered), [filtered]);
-  // Election cycles compare parties side by side, so keep other filters but not party.
-  const electionCycles = useMemo(
-    () => electionCycleSummaries(applyFilters(visibleDonations, filters, { party: true })),
-    [visibleDonations, filters],
-  );
   const rangeLabel = useMemo(() => filterRangeLabel(filters), [filters]);
   const partyFacet = useMemo(
     () => partyCounts(applyFilters(visibleDonations, filters, { party: true })),
@@ -408,7 +403,10 @@ export default function App() {
                 <SizeChart buckets={sizes} />
               </section>
 
-              <ElectionCycles cycles={electionCycles} ignoredParty={focusedShort} />
+              <ElectionCycles
+                cycles={ELECTION_CYCLE_SUMMARIES}
+                filtersActive={activeFilters > 0}
+              />
 
               <section className="card wide table-card" aria-labelledby="table-title">
                 <div className="toolbar">
