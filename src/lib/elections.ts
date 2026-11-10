@@ -125,7 +125,7 @@ function inCycle(row: Donation, cycle: ElectionCycle): boolean {
 /**
  * Totals by party for one cycle. Parties are the same merged names used everywhere else
  * on the site. Donations the party returned to the donor are left out.
- * Pass filtered rows so the section matches the rest of the page.
+ * Uses the full donation set by default; page filters do not apply to this section.
  */
 export function summariseElectionCycle(
   cycle: ElectionCycle,
@@ -210,5 +210,5 @@ export function electionCycleSummaries(
   return ELECTION_CYCLES.map((cycle) => summariseElectionCycle(cycle, sourceRows));
 }
 
-/** Unfiltered cycle totals (about text / static uses). */
+/** Unfiltered cycle totals for the elections section (ignores page filters). */
 export const ELECTION_CYCLE_SUMMARIES: ElectionCycleSummary[] = electionCycleSummaries();
