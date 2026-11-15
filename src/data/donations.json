@@ -1,5 +1,77 @@
 [
   {
+    "party": "The Opportunities Party",
+    "return_received_date": "12 November 2026",
+    "donor_name": "David Glover",
+    "amount": 20998,
+    "donation_received_date": "3 November 2026",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2026-over-20K/D_Glover_12_November_2026.pdf"
+  },
+  {
+    "party": "The Opportunities Party",
+    "return_received_date": "12 November 2026",
+    "donor_name": "Alajamber Limited",
+    "amount": 21000,
+    "donation_received_date": "4 November 2026",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2026-over-20K/Alajamber_Limited_12_November_2026.pdf"
+  },
+  {
+    "party": "The Green Party of Aotearoa New Zealand",
+    "return_received_date": "11 November 2026",
+    "donor_name": "Marama Davidson",
+    "amount": 20490.48,
+    "donation_received_date": "20 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2026-over-20K/M_Davidson_11_November_2026_.pdf.pdf"
+  },
+  {
+    "party": "The Green Party of Aotearoa New Zealand",
+    "return_received_date": "11 November 2026",
+    "donor_name": "Chlöe Swarbrick",
+    "amount": 20914.57,
+    "donation_received_date": "3 November 2026",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2026-over-20K/C_Swarbrick_11_November_2026_.pdf.pdf"
+  },
+  {
+    "party": "The Green Party of Aotearoa New Zealand",
+    "return_received_date": "11 November 2026",
+    "donor_name": "Ricardo Menéndez March",
+    "amount": 20399.34,
+    "donation_received_date": "3 November 2026",
+    "source_pdf_url": "https://elections.nz/assets/Donation-returns/2026-over-20K/R_M_March_11_November_2026_.pdf.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "10 November 2026",
+    "donor_name": "Kevler Homes New Zealand Limited",
+    "amount": 22580,
+    "donation_received_date": "19 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Kevler_Homes_New_Zealand_Limited_19_October_2026.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "10 November 2026",
+    "donor_name": "AJR Finance Limited",
+    "amount": 59425,
+    "donation_received_date": "14 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/AJR_Finance_Limited_14_October_2026.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "10 November 2026",
+    "donor_name": "Rank Group",
+    "amount": 75000,
+    "donation_received_date": "30 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Rank-Group-Ltd_30_October_2026.pdf"
+  },
+  {
+    "party": "ACT New Zealand",
+    "return_received_date": "10 November 2026",
+    "donor_name": "Rank Group",
+    "amount": 70000,
+    "donation_received_date": "27 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/Rank-Group-Ltd_27_October_2026.pdf"
+  },
+  {
     "party": "New Zealand Labour Party",
     "return_received_date": "6 November 2026",
     "donor_name": "David Silverman",
