@@ -1530,6 +1530,12 @@ tr.is-grouped-child td:nth-child(2) .donor-name {
   border: 1px solid var(--line);
   border-radius: 12px;
   background: white;
+}
+
+/* Desktop table only: scroll inside a capped viewport.
+   Mobile cards paginate in normal flow. A max-height on the cards list lets
+   overflowing card content extend the page past the footer. */
+.donations-viewport.table-scroll {
   max-height: min(32rem, 62vh);
   overflow: auto;
   overscroll-behavior: contain;
