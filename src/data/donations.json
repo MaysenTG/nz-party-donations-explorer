@@ -1,5 +1,53 @@
 [
   {
+    "party": "The New Zealand National Party",
+    "return_received_date": "18 November 2026",
+    "donor_name": "R Richardson Limited",
+    "amount": 25000,
+    "donation_received_date": "21 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/R_Richardson_Limited_18_November_2026.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "18 November 2026",
+    "donor_name": "James Francis Speedy",
+    "amount": 120000,
+    "donation_received_date": "27 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/J_F_Speedy_18_November_2026.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "18 November 2026",
+    "donor_name": "Barbara Joan Kuriger",
+    "amount": 20020.3,
+    "donation_received_date": "24 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/B_J_Kuriger_18_November_2026.pdf"
+  },
+  {
+    "party": "The New Zealand National Party",
+    "return_received_date": "18 November 2026",
+    "donor_name": "Sir Paul Hunter Adams",
+    "amount": 25000,
+    "donation_received_date": "26 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/P_H_Adams_18_November_2026.pdf"
+  },
+  {
+    "party": "New Zealand First Party",
+    "return_received_date": "16 November 2026",
+    "donor_name": "Ngati Manuhiri Settlement Trust c/- Terrence Hohneck",
+    "amount": 22000,
+    "donation_received_date": "20 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/T_Hohneck_Ngati_Manuhiri_Trust_16_November_2026.pdf"
+  },
+  {
+    "party": "New Zealand First Party",
+    "return_received_date": "16 November 2026",
+    "donor_name": "Tracey Coxhead",
+    "amount": 22850,
+    "donation_received_date": "26 October 2026",
+    "source_pdf_url": "https://elections.nz/assets/2026-20k+-donations/T_Coxhead_16_November_2026.pdf"
+  },
+  {
     "party": "The Opportunities Party",
     "return_received_date": "12 November 2026",
     "donor_name": "David Glover",
