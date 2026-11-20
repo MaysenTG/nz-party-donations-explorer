@@ -54,6 +54,15 @@ body {
   line-height: 1.5;
 }
 
+/* Keep the footer at the bottom of the viewport on short pages.
+   100dvh avoids the iOS 100vh address-bar gap. */
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
 h1,
 h2,
 h3 {
@@ -1536,6 +1545,11 @@ tr.is-grouped-child td:nth-child(2) .donor-name {
    Mobile cards paginate in normal flow. A max-height on the cards list lets
    overflowing card content extend the page past the footer. */
 .donations-viewport.table-scroll {
+  /* Positioned so absolutely placed children inside .table-min (the visually
+     hidden caption and "View return" labels) are contained here. Without
+     this, those nodes sit in the page's containing block and extend the
+     document past the footer by the table's full height. */
+  position: relative;
   max-height: min(32rem, 62vh);
   overflow: auto;
   overscroll-behavior: contain;
@@ -1871,6 +1885,7 @@ th.num button {
 }
 
 .site-footer {
+  margin-top: auto;
   border-top: 1px solid var(--line);
   padding: 1.6rem 0 max(1.5rem, env(safe-area-inset-bottom));
   background: #e7e2d6;
