@@ -18,7 +18,7 @@ const COLUMNS: { key: SortKey; label: string }[] = [
   { key: "party", label: "Party" },
   { key: "donor", label: "Donor" },
   { key: "amount", label: "Amount" },
-  { key: "date", label: "Donation date" },
+  { key: "date", label: "Return received" },
 ];
 
 const PAGE_SIZE = 25;
@@ -198,10 +198,11 @@ function DonorName({
 function ReturnDates({ row }: { row: Donation }) {
   return (
     <>
-      <span className="return-date">Return received {row.return_received_date}</span>
+      <span className="received-date">Return received {row.return_received_date}</span>
       {row.amended_return_received_date && (
         <span className="return-date">Amended return received {row.amended_return_received_date}</span>
       )}
+      <span className="return-date">Latest donation date {row.donation_received_date}</span>
     </>
   );
 }
@@ -407,7 +408,6 @@ export function DonationsTable({ rows, sort, groupRelatedDonors, onSort, onOpenD
                   groupRelatedDonors={groupRelatedDonors}
                 />
                 <span className="donation-card-party">{row.party}</span>
-                <span className="received-date">Latest donation date {row.donation_received_date}</span>
                 <ReturnDates row={row} />
                 <RowNotes row={row} />
                 <PdfLink url={safeHttps(row.source_pdf_url)} donor={row.donor_name} />
@@ -488,7 +488,6 @@ export function DonationsTable({ rows, sort, groupRelatedDonors, onSort, onOpenD
                     </td>
                     <td className="num">{formatNzd(row.amount)}</td>
                     <td>
-                      <span className="received-date">{row.donation_received_date}</span>
                       <ReturnDates row={row} />
                       <RowNotes row={row} />
                     </td>
