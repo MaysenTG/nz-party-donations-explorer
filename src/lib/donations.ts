@@ -577,12 +577,14 @@ export function sortDonations(rows: readonly Donation[], sort: SortState): Donat
         compared = a.amount - b.amount;
         break;
       case "date":
-        compared = a.receivedIso.localeCompare(b.receivedIso);
+        compared = a.returnIso.localeCompare(b.returnIso);
         break;
     }
     if (compared !== 0) return compared * direction;
-    const byDate = b.receivedIso.localeCompare(a.receivedIso);
-    if (byDate !== 0) return byDate;
+    const byReturn = b.returnIso.localeCompare(a.returnIso);
+    if (byReturn !== 0) return byReturn;
+    const byDonation = b.receivedIso.localeCompare(a.receivedIso);
+    if (byDonation !== 0) return byDonation;
     return a.donor_name.localeCompare(b.donor_name, "en-NZ");
   });
 }
